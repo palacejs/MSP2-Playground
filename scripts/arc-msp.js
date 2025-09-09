@@ -1,7 +1,7 @@
-// ARC MSP functionality
+
 let isAdminLoggedIn = false;
-// "sehan123" için SHA-256 hash
-const PASSWORD_HASH = "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f";
+
+const PASSWORD_HASH = "f7dc02cde06759a946f4dd803f767ed7a061e60558870c724e833a90a56dacec";
 const STORAGE_KEY = 'msp2_arc_photos';
 
 document.addEventListener('DOMContentLoaded', function() {
