@@ -1,6 +1,7 @@
 // ARC MSP functionality
 let isAdminLoggedIn = false;
-const ADMIN_PASSWORD = 'sehan123';
+// "sehan123" için SHA-256 hash
+const PASSWORD_HASH = "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f";
 const STORAGE_KEY = 'msp2_arc_photos';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -97,9 +98,20 @@ function initializeStarfield() {
   animate();
 }
 
-function adminLogin() {
+// Şifreyi hash'leyen fonksiyon
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function adminLogin() {
   const password = document.getElementById('adminPassword').value;
-  if (password === ADMIN_PASSWORD) {
+  const hash = await hashPassword(password);
+
+  if (hash === PASSWORD_HASH) {
     isAdminLoggedIn = true;
     sessionStorage.setItem('msp2_admin', 'true');
     showAdminPanel();
