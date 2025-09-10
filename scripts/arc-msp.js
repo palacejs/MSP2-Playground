@@ -3,7 +3,7 @@ const PASSWORD_HASH = "f7dc02cde06759a946f4dd803f767ed7a061e60558870c724e833a90a
 const DB_NAME = "msp2ArcDB";
 const DB_STORE = "photos";
 
-// --------------------------- IndexedDB Fonksiyonları ---------------------------
+// --------------------------- IndexedDB Functions ---------------------------
 function openDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, 1);
@@ -55,7 +55,7 @@ async function getAllPhotos() {
   });
 }
 
-// --------------------------- Şifre Fonksiyonları ---------------------------
+// --------------------------- Password Functions ---------------------------
 async function hashPassword(password) {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
@@ -98,11 +98,29 @@ function logout() {
   document.getElementById('adminPanel').style.display = 'none';
 }
 
-// --------------------------- Starfield ---------------------------
+// --------------------------- Navigation ---------------------------
+function goBackHome() {
+  // Go directly to main page without loading screen
+  window.location.href = 'index.html?skipLoading=true';
+}
+
+// --------------------------- Initialize ---------------------------
 document.addEventListener('DOMContentLoaded', function() {
   initializeStarfield();
   loadGallery();
   checkAdminStatus();
+
+  // Check if we should skip loading on main page
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('skipLoading') && window.location.pathname.includes('index.html')) {
+    const loadingScreen = document.getElementById('loadingScreen');
+    const mainContent = document.getElementById('mainContent');
+    if (loadingScreen && mainContent) {
+      loadingScreen.style.display = 'none';
+      mainContent.style.display = 'block';
+      mainContent.classList.add('show');
+    }
+  }
 });
 
 function initializeStarfield() {
@@ -165,7 +183,7 @@ function initializeStarfield() {
         conn.alpha = Math.max(0,Math.min(conn.alpha,targetAlpha));
         if(conn.alpha>0){
           ctx.beginPath();
-          ctx.moveTo(stars[i].x,stars[j].y);
+          ctx.moveTo(stars[i].x,stars[i].y);
           ctx.lineTo(stars[j].x,stars[j].y);
           ctx.strokeStyle = `rgba(0,0,139,${conn.alpha})`;
           ctx.lineWidth=0.6;
@@ -184,7 +202,7 @@ function initializeStarfield() {
   animate();
 }
 
-// --------------------------- Fotoğraf Yükleme ---------------------------
+// --------------------------- Photo Management ---------------------------
 async function uploadPhotos() {
   const fileInput = document.getElementById('photoInput');
   const files = fileInput.files;
@@ -215,7 +233,7 @@ async function uploadPhotos() {
   }
 }
 
-// --------------------------- Galeri ---------------------------
+// --------------------------- Gallery ---------------------------
 async function loadGallery() {
   const photos = await getAllPhotos();
   const gallery = document.getElementById('gallery');
@@ -235,7 +253,7 @@ async function loadGallery() {
   });
 }
 
-// --------------------------- Fotoğraf Yönetimi ---------------------------
+// --------------------------- Photo Manager ---------------------------
 async function loadPhotoManager() {
   const photos = await getAllPhotos();
   const container = document.getElementById('photoManager');
@@ -289,7 +307,16 @@ document.getElementById('lightbox').addEventListener('click',function(e){
   if(e.target===this) closeLightbox();
 });
 
-// --------------------------- Enter ile login ---------------------------
+// --------------------------- Enter key login ---------------------------
 document.getElementById('adminPassword').addEventListener('keypress',function(e){
   if(e.key==='Enter') adminLogin();
 });
+
+// Make functions global
+window.goBackHome = goBackHome;
+window.adminLogin = adminLogin;
+window.logout = logout;
+window.uploadPhotos = uploadPhotos;
+window.deleteSelected = deleteSelected;
+window.openLightbox = openLightbox;
+window.closeLightbox = closeLightbox;
