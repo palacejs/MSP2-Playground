@@ -42,16 +42,21 @@ canvas {
   background: rgba(60, 120, 200, 0.23);
 }
 
+/* Düzeltilmiş ve sadeleştirilmiş başlık stili */
 .title {
-  font-size: 2.8em;
+  font-size: 2.6em;
   margin: 40px 0 20px 0;
   text-align: center;
-  text-shadow: 0 0 15px #0ff, 0 0 25px #0ff;
   font-weight: bold;
   letter-spacing: 2px;
-  background: linear-gradient(to right, #9abfff, #6effb2);
+  color: #eaf6ff;
+  text-shadow: 0 2px 8px rgba(0,20,40,0.13);
+  /* Eğer pastel bir gradient istersen aşağıdaki 3 satırı aktif et ve color satırını yoruma al! */
+  /*
+  background: linear-gradient(90deg, #aee6f9, #c0ffe7 70%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  */
 }
 
 .login-section {
