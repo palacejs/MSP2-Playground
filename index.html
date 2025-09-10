@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MSP2 Playground</title>
   <link rel="stylesheet" href="styles/main.css">
+
+  <!-- ✅ Google AdSense Global Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1577065347252131"
+     crossorigin="anonymous"></script>
 </head>
 <body>
   <!-- Loading Screen -->
@@ -30,7 +34,20 @@
   <!-- Main Content (Initially Hidden) -->
   <div id="mainContent" class="main-content" style="display: none;">
     <canvas id="starfield"></canvas>
-    
+
+    <!-- ✅ Google AdSense Reklam Alanı (Sayfanın üstünde) -->
+    <div style="text-align:center; margin: 10px 0;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1577065347252131"
+           data-ad-slot="1234567890"  <!-- 👈 Buraya kendi AdSense reklam birimi slot ID’ni ekle -->
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
     <!-- Music Control Button -->
     <button id="musicToggle" class="music-toggle">
       <span id="musicIcon">🔊</span>
