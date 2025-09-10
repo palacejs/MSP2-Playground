@@ -96,10 +96,105 @@
       </div>
     </div>
 
+    <!-- Shop Modal -->
+    <div id="shopModal" style="display:none;">
+      <div class="modal-bg">
+        <div class="modal shop-modal">
+          <button class="modal-close" onclick="closeModal('shopModal')">&times;</button>
+          
+          <!-- Shop Main View -->
+          <div id="shopMainView">
+            <h2 class="shop-title" id="shopTitle">SHOP</h2>
+            <div class="shop-item">
+              <h3 id="licenseTitle">License for MSP2 Troll</h3>
+              <div class="shop-price">$1.00</div>
+              <button class="buy-btn" onclick="showPurchaseForm()" id="buyBtn">Buy</button>
+            </div>
+          </div>
+
+          <!-- Purchase Form View -->
+          <div id="purchaseFormView" style="display:none;">
+            <h2 class="shop-title" id="purchaseTitle">Purchase Form</h2>
+            <form id="purchaseForm" class="purchase-form">
+              <div class="form-group">
+                <label for="userEmail" id="emailLabel">Email:</label>
+                <input type="email" id="userEmail" required>
+              </div>
+              <div class="form-group">
+                <label for="username" id="usernameLabel">Username:</label>
+                <input type="text" id="username" required>
+              </div>
+              <div class="form-group">
+                <label id="paymentLabel">Payment Method:</label>
+                <div class="payment-options">
+                  <input type="radio" id="paypal" name="payment" value="paypal">
+                  <label for="paypal">PayPal</label>
+                  <input type="radio" id="visa" name="payment" value="visa">
+                  <label for="visa">Visa</label>
+                  <input type="radio" id="mastercard" name="payment" value="mastercard">
+                  <label for="mastercard">MasterCard</label>
+                </div>
+              </div>
+              
+              <!-- Card Details (hidden initially) -->
+              <div id="cardDetails" style="display:none;">
+                <div class="form-group">
+                  <label for="cardNumber" id="cardNumberLabel">Card Number:</label>
+                  <input type="text" id="cardNumber" maxlength="19" placeholder="1234 5678 9012 3456">
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="expiryDate" id="expiryLabel">Expiry Date:</label>
+                    <input type="text" id="expiryDate" maxlength="5" placeholder="MM/YY">
+                  </div>
+                  <div class="form-group">
+                    <label for="cvv" id="cvvLabel">CVV:</label>
+                    <input type="text" id="cvv" maxlength="3" placeholder="123">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Invoice -->
+              <div class="invoice">
+                <h4 id="invoiceTitle">Invoice</h4>
+                <div class="invoice-item">
+                  <span id="productName">MSP2 Troll License</span>
+                  <span class="price">$1.00</span>
+                </div>
+                <div class="invoice-total">
+                  <span id="totalLabel">Total:</span>
+                  <span class="price">$1.00</span>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="back-btn-form" onclick="showShopMain()" id="backBtn">Back</button>
+                <button type="submit" class="purchase-btn" id="purchaseBtn">Purchase</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- 3D Security View -->
+          <div id="securityView" style="display:none;">
+            <h2 class="shop-title" id="securityTitle">3D Security Verification</h2>
+            <div class="security-form">
+              <p id="securityText">Please enter the verification code sent to your device:</p>
+              <div class="form-group">
+                <input type="text" id="securityCode" maxlength="6" placeholder="123456" class="security-input">
+              </div>
+              <div class="form-actions">
+                <button type="button" class="verify-btn" onclick="verifySecurity()" id="verifyBtn">Verify</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="scripts/starfield.js"></script>
   <script src="scripts/language.js"></script>
+  <script src="scripts/shop.js"></script>
   <script src="scripts/main.js"></script>
 </body>
 </html>
