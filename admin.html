@@ -10,7 +10,57 @@
   <canvas id="starfield"></canvas>
   
   <!-- Music Control Button -->
-  <button id="musicToggle" class="music-toggle">
+  <button id="musicToggle" class="mu<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSP2 ARC Admin</title>
+  <link rel="stylesheet" href="styles/arc-msp.css">
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+  
+  <div class="container">
+    <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+    <h1 class="title">MSP2 ARC Admin Panel</h1>
+
+    <!-- Admin Login -->
+    <div id="loginSection" class="login-section">
+      <h2>Admin Access</h2>
+      <div class="login-form">
+        <input type="password" id="adminPassword" placeholder="Enter admin password">
+        <button onclick="adminLogin()">Login</button>
+      </div>
+    </div>
+    
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="admin-panel" style="display: none;">
+      <h2>Control Panel</h2>
+      
+      <!-- Upload Section -->
+      <div class="upload-section">
+        <h3>Upload Photos</h3>
+        <input type="file" id="photoInput" multiple accept="image/*">
+        <button onclick="uploadPhotos()">Upload Selected Photos</button>
+      </div>
+      
+      <!-- Delete Section -->
+      <div class="delete-section">
+        <h3>Manage Photos</h3>
+        <div id="photoManager"></div>
+        <button onclick="deleteSelected()" id="deleteBtn" style="display: none;">Delete Selected</button>
+      </div>
+      
+      <button onclick="logout()" class="logout-btn">Logout</button>
+    </div>
+  </div>
+  
+  <script src="scripts/starfield.js"></script>
+  <script src="scripts/arc-msp.js"></script>
+</body>
+</html>
+sic-toggle">
     <span id="musicIcon">🔊</span>
   </button>
   
