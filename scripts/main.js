@@ -10,6 +10,24 @@ document.addEventListener('DOMContentLoaded', function() {
   
   musicIframe = document.getElementById('backgroundMusic');
 
+  // --- OYNATMAK İÇİN: autoplay & mute ekle ---
+  if (musicIframe) {
+    // iframe src'sine mute parametresi ekle
+    if (!musicIframe.src.includes("mute=1")) {
+      musicIframe.src += "&mute=1";
+    }
+
+    musicIframe.addEventListener('load', function() {
+      // iframe yüklenince play komutu gönder
+      musicIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+
+      // 2 saniye sonra sesi aç
+      setTimeout(() => {
+        musicIframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+      }, 2000);
+    });
+  }
+
   // Show main content after 20 seconds
   setTimeout(() => {
     loadingScreen.style.opacity = '0';
@@ -25,13 +43,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // Music control functionality
   musicToggle.addEventListener('click', function() {
     if (isMusicPlaying) {
-      // Mute music
       musicIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
       musicIcon.textContent = '🔇';
       musicToggle.classList.add('muted');
       isMusicPlaying = false;
     } else {
-      // Unmute music
       musicIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
       musicIcon.textContent = '🔊';
       musicToggle.classList.remove('muted');
@@ -41,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Initialize existing functionality
   initializeModals();
-  initializeTrollButton();
   initializeLanguageSystem();
 });
 
@@ -57,31 +72,6 @@ function closeModal(id) {
 function initializeModals() {
   document.getElementById('aboutBtn').onclick = () => openModal('aboutModal');
   document.getElementById('langBtn').onclick = () => openModal('langModal');
-}
-
-// Troll button notification
-function initializeTrollButton() {
-  document.getElementById('btnTroll').addEventListener('click', function(e) {
-    e.preventDefault();
-    showTrollNotification();
-  });
-}
-
-function showTrollNotification() {
-  const notification = document.getElementById('trollNotification');
-  const notificationText = document.getElementById('trollNotificationText');
-  
-  // Get current language translation
-  const translations = window.TRANSLATIONS ? window.TRANSLATIONS[window.currentLang || 'en-US'] : null;
-  if (translations) {
-    notificationText.textContent = translations.trollExpired;
-  }
-  
-  notification.classList.add('show');
-  
-  setTimeout(() => {
-    notification.classList.remove('show');
-  }, 5000);
 }
 
 function initializeLanguageSystem() {
