@@ -5,7 +5,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #000000;
+  background: radial-gradient(circle at center, #000a1b 1%, #000000 70%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,6 +27,19 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+.loading-info {
+  margin-top: 30px;
+  font-size: 1.1rem;
+  color: #9abfff;
+  min-height: 2em;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes titleGlow {
@@ -83,7 +96,7 @@
 .music-toggle {
   position: fixed;
   top: 11px;
-  right: 160px;
+  right: 260px;
   width: 35px;
   height: 35px;
   border: none;
@@ -107,7 +120,7 @@
   color: #ff6b6b;
 }
 
-/* Main Content Styles (existing styles) */
+/* Main Content Styles */
 .main-content {
   opacity: 0;
   transition: opacity 1s ease-in;
@@ -157,7 +170,13 @@ canvas {
   backdrop-filter: blur(7px);
 }
 
-.about-btn, .lang-btn {
+.top-bar-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.about-btn, .lang-btn, .shop-btn {
   background: rgba(10, 20, 60, 0.6);
   border: 1px solid rgba(150,150,255,0.20);
   border-radius: 8px;
@@ -170,7 +189,7 @@ canvas {
   margin-top: 2px;
 }
 
-.about-btn:hover, .lang-btn:hover {
+.about-btn:hover, .lang-btn:hover, .shop-btn:hover {
   background: rgba(60, 120, 200, 0.23);
 }
 
@@ -232,19 +251,6 @@ canvas {
   box-shadow: 0 0 15px rgba(0, 139, 255, 0.6);
 }
 
-.bookmark-btn.disabled {
-  background: linear-gradient(to right, #666, #777);
-  cursor: not-allowed;
-  position: relative;
-}
-
-.bookmark-btn.disabled:hover {
-  background: linear-gradient(to right, #666, #777);
-  transform: none;
-  box-shadow: none;
-  cursor: not-allowed;
-}
-
 .notification {
   position: fixed;
   top: -100px;
@@ -292,9 +298,13 @@ canvas {
   }
 }
 
+/* Modal Styles */
 .modal-bg {
   position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
+  top: 0; 
+  left: 0; 
+  width: 100vw; 
+  height: 100vh;
   background: rgba(0,0,30,0.45);
   z-index: 99;
   display: flex;
@@ -302,6 +312,7 @@ canvas {
   justify-content: center;
   backdrop-filter: blur(2px);
 }
+
 .modal {
   background: rgba(0,0,30,0.97);
   border-radius: 14px;
@@ -313,7 +324,10 @@ canvas {
   border: 1px solid rgba(150,150,255,0.35);
   position: relative;
   z-index: 100;
+  max-height: 90vh;
+  overflow-y: auto;
 }
+
 .modal-close {
   position: absolute;
   top: 10px;
@@ -325,6 +339,7 @@ canvas {
   border: none;
   font-weight: bold;
 }
+
 .modal-close:hover {
   color: #6effb2;
 }
@@ -336,6 +351,7 @@ canvas {
   margin-top: 18px;
   justify-content: center;
 }
+
 .lang-item {
   display: flex;
   align-items: center;
@@ -350,14 +366,221 @@ canvas {
   min-width: 120px;
   gap: 7px;
 }
+
 .lang-item:hover {
   background: rgba(120,220,180,0.18);
 }
+
 .lang-item.selected {
   background: rgba(110,255,178,0.13);
   color: #6effb2;
   border-color: #6effb2;
   font-weight: 700;
+}
+
+/* Shop Modal Styles */
+.shop-modal {
+  min-width: 400px;
+  max-width: 500px;
+}
+
+.shop-title {
+  text-align: center;
+  color: #6effb2;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+}
+
+.shop-item {
+  text-align: center;
+  padding: 20px;
+  background: rgba(10, 20, 60, 0.3);
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.shop-item h3 {
+  margin: 0 0 15px 0;
+  color: #9abfff;
+}
+
+.shop-price {
+  font-size: 1.5em;
+  color: #6effb2;
+  font-weight: bold;
+  margin: 15px 0;
+}
+
+.buy-btn {
+  padding: 12px 30px;
+  background: linear-gradient(90deg, #0ff, #09f);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.buy-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #09f, #0ff);
+}
+
+/* Purchase Form Styles */
+.purchase-form {
+  max-width: 100%;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #9abfff;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(150, 150, 255, 0.3);
+  border-radius: 6px;
+  background: rgba(10, 20, 60, 0.3);
+  color: #9abfff;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #6effb2;
+  box-shadow: 0 0 5px rgba(110, 255, 178, 0.3);
+}
+
+.payment-options {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.payment-options input[type="radio"] {
+  width: auto;
+  margin-right: 5px;
+}
+
+.payment-options label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.invoice {
+  background: rgba(10, 20, 60, 0.2);
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.invoice h4 {
+  margin: 0 0 10px 0;
+  color: #6effb2;
+}
+
+.invoice-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(150, 150, 255, 0.2);
+}
+
+.invoice-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0 0 0;
+  font-weight: bold;
+  color: #6effb2;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.back-btn-form {
+  padding: 10px 20px;
+  background: rgba(60, 60, 60, 0.8);
+  color: #9abfff;
+  border: 1px solid rgba(150, 150, 255, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-btn-form:hover {
+  background: rgba(80, 80, 80, 0.8);
+}
+
+.purchase-btn {
+  padding: 10px 30px;
+  background: linear-gradient(90deg, #0ff, #09f);
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.purchase-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #09f, #0ff);
+}
+
+/* Security View Styles */
+.security-form {
+  text-align: center;
+  padding: 20px;
+}
+
+.security-input {
+  width: 200px !important;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.verify-btn {
+  padding: 12px 30px;
+  background: linear-gradient(90deg, #0ff, #09f);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+.verify-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #09f, #0ff);
 }
 
 .info {
@@ -375,7 +598,8 @@ canvas {
   z-index: 3;
 }
 
-@media (max-width: 600px) {
+/* Mobile Responsive */
+@media (max-width: 768px) {
   .loading-title {
     font-size: 2rem;
   }
@@ -384,6 +608,7 @@ canvas {
     width: 40px;
     height: 40px;
     font-size: 16px;
+    right: 220px;
   }
   
   .overlay {
@@ -391,26 +616,59 @@ canvas {
     font-size: 13px;
     max-width: 99vw;
   }
+  
   .top-bar {
     height: 44px;
     font-size: 14px;
     padding: 0 6px;
   }
-  .about-btn, .lang-btn {
+  
+  .top-bar-right {
+    gap: 8px;
+  }
+  
+  .about-btn, .lang-btn, .shop-btn {
     font-size: 13px;
     padding: 6px 10px;
   }
+  
   .modal {
     padding: 17px 5px;
     font-size: 13px;
     min-width: 90vw;
   }
+  
+  .shop-modal {
+    min-width: 90vw;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .payment-options {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
   .info {
     padding: 6px 4px;
     font-size: 11px;
   }
+  
   .notification {
     min-width: 250px;
     font-size: 13px;
+  }
+
+  .loading-info {
+    font-size: 1rem;
+    padding: 0 20px;
   }
 }
