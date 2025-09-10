@@ -42,21 +42,38 @@ canvas {
   background: rgba(60, 120, 200, 0.23);
 }
 
-/* Düzeltilmiş ve sadeleştirilmiş başlık stili */
+/* NEON + MAVİ GLOW EFEKTLİ BAŞLIK */
 .title {
-  font-size: 2.6em;
+  font-size: 2.8em;
   margin: 40px 0 20px 0;
   text-align: center;
   font-weight: bold;
   letter-spacing: 2px;
-  color: #eaf6ff;
-  text-shadow: 0 2px 8px rgba(0,20,40,0.13);
-  /* Eğer pastel bir gradient istersen aşağıdaki 3 satırı aktif et ve color satırını yoruma al! */
-  /*
-  background: linear-gradient(90deg, #aee6f9, #c0ffe7 70%);
+  background: linear-gradient(90deg, #00f0ff, #6effb2 80%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  */
+  position: relative;
+  z-index: 1;
+  /* Neon yazının kendi glow'u */
+  text-shadow:
+    0 0 8px #00f0ff,
+    0 0 18px #00f0ff,
+    0 0 38px #00cfff;
+}
+.title::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 130%;
+  height: 120%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  border-radius: 40px;
+  background: radial-gradient(circle, rgba(0,255,255,0.20) 0%, rgba(0,32,128,0.12) 100%);
+  filter: blur(18px);
+  opacity: 1;
+  pointer-events: none;
 }
 
 .login-section {
