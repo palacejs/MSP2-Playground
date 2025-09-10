@@ -6,19 +6,11 @@ body {
   overflow-x: hidden;
 }
 
-/* DÜZGÜN STARFIELD CANVAS */
-canvas#starfield {
+canvas {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw !important;
-  height: 100vh !important;
-  min-width: 100vw;
-  min-height: 100vh;
-  pointer-events: none;
-  z-index: 0;
-  display: block;
-  background: none !important;
+  z-index: -1;
 }
 
 .container {
@@ -336,4 +328,4 @@ canvas#starfield {
     right: 20px;
     font-size: 1.5em;
   }
-}
+} 
