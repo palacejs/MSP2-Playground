@@ -25,15 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
   // Music control functionality
   musicToggle.addEventListener('click', function() {
     if (isMusicPlaying) {
-      // Mute music (hide iframe)
-      musicIframe.style.display = 'none';
+      // Mute music
+      musicIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
       musicIcon.textContent = '🔇';
       musicToggle.classList.add('muted');
       isMusicPlaying = false;
     } else {
-      // Unmute music (show iframe)
-      musicIframe.style.display = 'none'; // Keep hidden but reload
-      musicIframe.src = musicIframe.src; // Reload to restart
+      // Unmute music
+      musicIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
       musicIcon.textContent = '🔊';
       musicToggle.classList.remove('muted');
       isMusicPlaying = true;
