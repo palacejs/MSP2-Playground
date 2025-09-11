@@ -50,18 +50,23 @@
         If nothing happens, install
         <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.
       </p>
-      <a href="https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/msp2soft.user.js" class="bookmark-btn" id="btnSoftShop">
-        Install MSP2 Soft Shop
-      </a>
-      <a href="https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/MSP2.mood.user.js" class="bookmark-btn" id="btnMood">
-        Install MSP2 MOOD
-      </a>
-      <a href="https://cdn.jsdelivr.net/gh/lombard001/soft@refs/heads/main/msp2troll.user.js" class="bookmark-btn" id="btnTroll">
-        Install MSP2 Troll
-      </a>
-      <a href="arc-msp.html" class="bookmark-btn" id="btnArcMSP">
-        ARC MSP
-      </a>
+      
+      <!-- Dynamic Buttons Container -->
+      <div id="dynamicButtons" class="dynamic-buttons-container">
+        <!-- Default buttons -->
+        <a href="https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/msp2soft.user.js" class="bookmark-btn" id="btnSoftShop">
+          Install MSP2 Soft Shop
+        </a>
+        <a href="https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/MSP2.mood.user.js" class="bookmark-btn" id="btnMood">
+          Install MSP2 MOOD
+        </a>
+        <a href="https://cdn.jsdelivr.net/gh/lombard001/soft@refs/heads/main/msp2troll.user.js" class="bookmark-btn" id="btnTroll">
+          Install MSP2 Troll
+        </a>
+        <a href="arc-msp.html" class="bookmark-btn" id="btnArcMSP">
+          ARC MSP
+        </a>
+      </div>
     </div>
 
     <div class="info" id="infoText">
@@ -72,6 +77,12 @@
     <div class="notification" id="trollNotification">
       <div class="notification-icon">ℹ️</div>
       <div class="notification-text" id="trollNotificationText">MSP2 Troll lisans süresi doldu.</div>
+    </div>
+
+    <!-- Button Disabled Notification -->
+    <div class="notification" id="buttonDisabledNotification" style="display: none;">
+      <div class="notification-icon">⚠️</div>
+      <div class="notification-text" id="buttonDisabledText"></div>
     </div>
 
     <!-- About Modal -->
@@ -100,5 +111,6 @@
   <script src="scripts/starfield.js"></script>
   <script src="scripts/language.js"></script>
   <script src="scripts/main.js"></script>
+  <script src="scripts/button-manager.js"></script>
 </body>
 </html>
