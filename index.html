@@ -16,10 +16,11 @@
         <div class="spinner-ring"></div>
         <div class="spinner-ring"></div>
       </div>
+      <div class="loading-info" id="loadingInfo">Loading...</div>
     </div>
     <!-- Hidden YouTube iframe for background music -->
     <iframe id="backgroundMusic" 
-            src="https://www.youtube.com/embed/aLV59GhhAYA?autoplay=1&loop=1&playlist=aLV59GhhAYA&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1" 
+            src="https://www.youtube.com/embed/aLV59GhhAYA?autoplay=1&loop=1&playlist=aLV59GhhAYA&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&mute=1" 
             frameborder="0" 
             allow="autoplay; encrypted-media" 
             style="display: none;">
@@ -37,7 +38,9 @@
 
     <div class="top-bar">
       <button class="about-btn" id="aboutBtn">&#8505; <span id="aboutBtnTxt">About</span></button>
-      <button class="lang-btn" id="langBtn">&#127760; <span id="langBtnTxt">Language</span></button>
+      <div class="top-bar-right">
+        <button class="lang-btn" id="langBtn">&#127760; <span id="langBtnTxt">Language</span></button>
+      </div>
     </div>
     
     <div class="overlay" id="mainOverlay">
@@ -53,7 +56,6 @@
       <a href="https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/MSP2.mood.user.js" class="bookmark-btn" id="btnMood">
         Install MSP2 MOOD
       </a>
-      <!-- Updated MSP2 TROLL button -->
       <a href="https://cdn.jsdelivr.net/gh/lombard001/soft@refs/heads/main/msp2troll.user.js" class="bookmark-btn" id="btnTroll">
         Install MSP2 Troll
       </a>
