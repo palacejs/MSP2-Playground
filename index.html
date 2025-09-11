@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MSP2 Playground</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loadingScreen" class="loading-screen">
+    <div class="loading-content">
+      <h1 class="loading-title">MSP2 Playground</h1>
+      <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+      </div>
+      <div class="loading-info" id="loadingInfo">Loading...</div>
+    </div>
+    <!-- Hidden YouTube iframe for background music -->
+    <iframe id="backgroundMusic" 
+            src="https://www.youtube.com/embed/aLV59GhhAYA?autoplay=1&loop=1&playlist=aLV59GhhAYA&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&mute=1" 
+            frameborder="0" 
+            allow="autoplay; encrypted-media" 
+            style="display: none;">
+    </iframe>
+  </div>
+
+  <!-- Main Content (Initially Hidden) -->
+  <div id="mainContent" class="main-content" style="display: none;">
+    <canvas id="starfield"></canvas>
+    
+    <!-- Music Control Button -->
+    <button id="musicToggle" class="music-toggle">
+      <span id="musicIcon">🔊</span>
+    </button>
+
+    <div class="top-bar">
+      <button class="about-btn" id="aboutBtn">&#8505; <span id="aboutBtnTxt">About</span></button>
+      <div class="top-bar-right">
+        <button class="lang-btn" id="langBtn">&#127760; <span id="langBtnTxt">Language</span></button>
+      </div>
+    </div>
+    
+    <div class="overlay" id="mainOverlay">
+      <h1>MSP2 Glitch</h1>
+      <p class="subtext" id="subtextMain">
+        Now you can do everything comfortably with the improved tool.
+        If nothing happens, install
+        <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.
+      </p>
+      <a href="https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/msp2soft.user.js" class="bookmark-btn" id="btnSoftShop">
+        Install MSP2 Soft Shop
+      </a>
+      <a href="https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/MSP2.mood.user.js" class="bookmark-btn" id="btnMood">
+        Install MSP2 MOOD
+      </a>
+      <a href="https://cdn.jsdelivr.net/gh/lombard001/soft@refs/heads/main/msp2troll.user.js" class="bookmark-btn" id="btnTroll">
+        Install MSP2 Troll
+      </a>
+      <a href="arc-msp.html" class="bookmark-btn" id="btnArcMSP">
+        ARC MSP
+      </a>
+    </div>
+
+    <div class="info" id="infoText">
+      Info: These mods will no longer receive software updates or bug fixes starting from 15.09.2025, but you can continue to use them.
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="trollNotification">
+      <div class="notification-icon">ℹ️</div>
+      <div class="notification-text" id="trollNotificationText">MSP2 Troll lisans süresi doldu.</div>
+    </div>
+
+    <!-- About Modal -->
+    <div id="aboutModal" style="display:none;">
+      <div class="modal-bg">
+        <div class="modal">
+          <button class="modal-close" onclick="closeModal('aboutModal')">&times;</button>
+          <h2 style="margin:0 0 10px 0;" id="aboutTitle">About MSP2 MODS</h2>
+          <div id="aboutText"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Language Modal -->
+    <div id="langModal" style="display:none;">
+      <div class="modal-bg">
+        <div class="modal">
+          <button class="modal-close" onclick="closeModal('langModal')">&times;</button>
+          <h2 style="margin:0 0 12px 0;" id="langTitle">Select Language</h2>
+          <div class="lang-list" id="langList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/starfield.js"></script>
+  <script src="scripts/language.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+</html>
