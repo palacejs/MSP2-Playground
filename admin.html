@@ -5,62 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MSP2 ARC Admin</title>
   <link rel="stylesheet" href="styles/arc-msp.css">
+  <link rel="stylesheet" href="styles/admin.css">
 </head>
 <body>
   <canvas id="starfield"></canvas>
   
   <!-- Music Control Button -->
-  <button id="musicToggle" class="mu<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MSP2 ARC Admin</title>
-  <link rel="stylesheet" href="styles/arc-msp.css">
-</head>
-<body>
-  <canvas id="starfield"></canvas>
-  
-  <div class="container">
-    <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
-    <h1 class="title">MSP2 ARC Admin Panel</h1>
-
-    <!-- Admin Login -->
-    <div id="loginSection" class="login-section">
-      <h2>Admin Access</h2>
-      <div class="login-form">
-        <input type="password" id="adminPassword" placeholder="Enter admin password">
-        <button onclick="adminLogin()">Login</button>
-      </div>
-    </div>
-    
-    <!-- Admin Panel -->
-    <div id="adminPanel" class="admin-panel" style="display: none;">
-      <h2>Control Panel</h2>
-      
-      <!-- Upload Section -->
-      <div class="upload-section">
-        <h3>Upload Photos</h3>
-        <input type="file" id="photoInput" multiple accept="image/*">
-        <button onclick="uploadPhotos()">Upload Selected Photos</button>
-      </div>
-      
-      <!-- Delete Section -->
-      <div class="delete-section">
-        <h3>Manage Photos</h3>
-        <div id="photoManager"></div>
-        <button onclick="deleteSelected()" id="deleteBtn" style="display: none;">Delete Selected</button>
-      </div>
-      
-      <button onclick="logout()" class="logout-btn">Logout</button>
-    </div>
-  </div>
-  
-  <script src="scripts/starfield.js"></script>
-  <script src="scripts/arc-msp.js"></script>
-</body>
-</html>
-sic-toggle">
+  <button id="musicToggle" class="music-toggle">
     <span id="musicIcon">🔊</span>
   </button>
   
@@ -89,26 +40,128 @@ sic-toggle">
     <div id="adminPanel" class="admin-panel" style="display: none;">
       <h2>Control Panel</h2>
       
-      <!-- Upload Section -->
-      <div class="upload-section">
-        <h3>Upload Photos</h3>
-        <input type="file" id="photoInput" multiple accept="image/*">
-        <button onclick="uploadPhotos()">Upload Selected Photos</button>
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button class="tab-btn active" onclick="switchTab('images')">ARC Images</button>
+        <button class="tab-btn" onclick="switchTab('buttons')">Button Manager</button>
       </div>
-      
-      <!-- Delete Section -->
-      <div class="delete-section">
-        <h3>Manage Photos</h3>
-        <div id="photoManager"></div>
-        <button onclick="deleteSelected()" id="deleteBtn" style="display: none;">Delete Selected</button>
+
+      <!-- Images Tab -->
+      <div id="imagesTab" class="tab-content active">
+        <div class="section-title">
+          <h3>ARC Images</h3>
+        </div>
+        
+        <!-- Upload Section -->
+        <div class="upload-section">
+          <h4>Upload Photos</h4>
+          <div class="upload-area" id="uploadArea">
+            <div class="upload-text">
+              <p>Drag & Drop photos here or click to select</p>
+              <p class="upload-hint">Supports multiple files</p>
+            </div>
+            <input type="file" id="photoInput" multiple accept="image/*">
+          </div>
+          <button onclick="uploadPhotos()" class="action-btn">Upload Selected Photos</button>
+        </div>
+        
+        <!-- Delete Section -->
+        <div class="delete-section">
+          <h4>Manage Photos</h4>
+          <div class="photo-actions">
+            <button onclick="selectAllPhotos()" class="action-btn secondary">Select All</button>
+            <button onclick="deselectAllPhotos()" class="action-btn secondary">Deselect All</button>
+            <button onclick="deleteSelected()" id="deleteBtn" class="action-btn danger" style="display: none;">Delete Selected</button>
+            <button onclick="deleteAllPhotos()" id="deleteAllBtn" class="action-btn danger" style="display: none;">Delete All</button>
+          </div>
+          <div id="photoManager"></div>
+        </div>
+      </div>
+
+      <!-- Buttons Tab -->
+      <div id="buttonsTab" class="tab-content">
+        <div class="section-title">
+          <h3>Button Manager</h3>
+        </div>
+        
+        <!-- Add Button Section -->
+        <div class="button-add-section">
+          <h4>Add New Button</h4>
+          <button onclick="openAddButtonModal()" class="action-btn">Add Button</button>
+        </div>
+        
+        <!-- Manage Buttons Section -->
+        <div class="button-manage-section">
+          <h4>Manage Buttons</h4>
+          <div id="buttonManager" class="button-grid"></div>
+        </div>
       </div>
       
       <button onclick="logout()" class="logout-btn">Logout</button>
+    </div>
+  </div>
+
+  <!-- Add/Edit Button Modal -->
+  <div id="buttonModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="buttonModalTitle">Add New Button</h3>
+        <button class="modal-close" onclick="closeButtonModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="buttonForm">
+          <div class="form-group">
+            <label for="buttonName">Button Name:</label>
+            <input type="text" id="buttonName" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="buttonUrl">Button URL:</label>
+            <input type="url" id="buttonUrl" required>
+          </div>
+          
+          <div class="form-group">
+            <label>Button Status:</label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="buttonStatus" value="permanent" checked>
+                <span>Always Active</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="buttonStatus" value="temporary">
+                <span>Temporary</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="buttonStatus" value="disabled">
+                <span>Temporarily Disabled</span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-group" id="expiryGroup" style="display: none;">
+            <label for="expiryDate">Expiry Date:</label>
+            <input type="datetime-local" id="expiryDate">
+          </div>
+          
+          <div class="form-group" id="disabledGroup" style="display: none;">
+            <label for="disabledUntil">Disabled Until:</label>
+            <input type="datetime-local" id="disabledUntil">
+            <label for="disabledReason">Reason for Disabling:</label>
+            <textarea id="disabledReason" rows="3" placeholder="Enter reason for disabling this button..."></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" onclick="closeButtonModal()" class="action-btn secondary">Cancel</button>
+            <button type="submit" class="action-btn">Save Button</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
   
   <script src="scripts/starfield.js"></script>
   <script src="scripts/music-control.js"></script>
   <script src="scripts/arc-msp.js"></script>
+  <script src="scripts/admin-buttons.js"></script>
 </body>
 </html>
