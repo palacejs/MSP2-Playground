@@ -176,7 +176,7 @@ canvas {
   align-items: center;
 }
 
-.about-btn, .lang-btn, .shop-btn {
+.about-btn, .lang-btn {
   background: rgba(10, 20, 60, 0.6);
   border: 1px solid rgba(150,150,255,0.20);
   border-radius: 8px;
@@ -189,7 +189,7 @@ canvas {
   margin-top: 2px;
 }
 
-.about-btn:hover, .lang-btn:hover, .shop-btn:hover {
+.about-btn:hover, .lang-btn:hover {
   background: rgba(60, 120, 200, 0.23);
 }
 
@@ -378,211 +378,6 @@ canvas {
   font-weight: 700;
 }
 
-/* Shop Modal Styles */
-.shop-modal {
-  min-width: 400px;
-  max-width: 500px;
-}
-
-.shop-title {
-  text-align: center;
-  color: #6effb2;
-  margin-bottom: 20px;
-  font-size: 1.8em;
-}
-
-.shop-item {
-  text-align: center;
-  padding: 20px;
-  background: rgba(10, 20, 60, 0.3);
-  border-radius: 10px;
-  margin: 20px 0;
-}
-
-.shop-item h3 {
-  margin: 0 0 15px 0;
-  color: #9abfff;
-}
-
-.shop-price {
-  font-size: 1.5em;
-  color: #6effb2;
-  font-weight: bold;
-  margin: 15px 0;
-}
-
-.buy-btn {
-  padding: 12px 30px;
-  background: linear-gradient(90deg, #0ff, #09f);
-  color: #000;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 16px;
-}
-
-.buy-btn:hover {
-  transform: scale(1.05);
-  background: linear-gradient(90deg, #09f, #0ff);
-}
-
-/* Purchase Form Styles */
-.purchase-form {
-  max-width: 100%;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #9abfff;
-  font-weight: 600;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid rgba(150, 150, 255, 0.3);
-  border-radius: 6px;
-  background: rgba(10, 20, 60, 0.3);
-  color: #9abfff;
-  font-size: 14px;
-  box-sizing: border-box;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #6effb2;
-  box-shadow: 0 0 5px rgba(110, 255, 178, 0.3);
-}
-
-.payment-options {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.payment-options input[type="radio"] {
-  width: auto;
-  margin-right: 5px;
-}
-
-.payment-options label {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0;
-}
-
-.form-row {
-  display: flex;
-  gap: 15px;
-}
-
-.form-row .form-group {
-  flex: 1;
-}
-
-.invoice {
-  background: rgba(10, 20, 60, 0.2);
-  padding: 15px;
-  border-radius: 8px;
-  margin: 20px 0;
-}
-
-.invoice h4 {
-  margin: 0 0 10px 0;
-  color: #6effb2;
-}
-
-.invoice-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 0;
-  border-bottom: 1px solid rgba(150, 150, 255, 0.2);
-}
-
-.invoice-total {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0 0 0;
-  font-weight: bold;
-  color: #6effb2;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.back-btn-form {
-  padding: 10px 20px;
-  background: rgba(60, 60, 60, 0.8);
-  color: #9abfff;
-  border: 1px solid rgba(150, 150, 255, 0.3);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.back-btn-form:hover {
-  background: rgba(80, 80, 80, 0.8);
-}
-
-.purchase-btn {
-  padding: 10px 30px;
-  background: linear-gradient(90deg, #0ff, #09f);
-  color: #000;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.purchase-btn:hover {
-  transform: scale(1.05);
-  background: linear-gradient(90deg, #09f, #0ff);
-}
-
-/* Security View Styles */
-.security-form {
-  text-align: center;
-  padding: 20px;
-}
-
-.security-input {
-  width: 200px !important;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  letter-spacing: 2px;
-}
-
-.verify-btn {
-  padding: 12px 30px;
-  background: linear-gradient(90deg, #0ff, #09f);
-  color: #000;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 16px;
-  margin-top: 15px;
-}
-
-.verify-btn:hover {
-  transform: scale(1.05);
-  background: linear-gradient(90deg, #09f, #0ff);
-}
-
 .info {
   position: fixed;
   bottom: 0;
@@ -627,7 +422,7 @@ canvas {
     gap: 8px;
   }
   
-  .about-btn, .lang-btn, .shop-btn {
+  .about-btn, .lang-btn {
     font-size: 13px;
     padding: 6px 10px;
   }
@@ -636,25 +431,6 @@ canvas {
     padding: 17px 5px;
     font-size: 13px;
     min-width: 90vw;
-  }
-  
-  .shop-modal {
-    min-width: 90vw;
-  }
-  
-  .form-row {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .form-actions {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .payment-options {
-    flex-direction: column;
-    gap: 10px;
   }
   
   .info {
