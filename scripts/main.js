@@ -148,7 +148,6 @@ function closeModal(id) {
 function initializeModals() {
   document.getElementById('aboutBtn').onclick = () => openModal('aboutModal');
   document.getElementById('langBtn').onclick = () => openModal('langModal');
-  document.getElementById('shopBtn').onclick = () => openModal('shopModal');
 }
 
 function initializeLanguageSystem() {
