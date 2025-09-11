@@ -18,6 +18,106 @@ const LANGUAGES = [
   { key: "en-NZ", flag: "🇳🇿", name: "New Zealand" },
 ];
 
+// Loading info messages in different languages
+const LOADING_INFO = {
+  "en-US": [
+    "Welcome to MSP2 Playground - Your ultimate modding destination",
+    "Discover powerful tools to enhance your MSP2 experience",
+    "Install custom mods with just one click using Violentmonkey",
+    "Access exclusive features like Soft Shop, MOOD, and Troll"
+  ],
+  "en-CA": [
+    "Welcome to MSP2 Playground - Your ultimate modding destination",
+    "Discover powerful tools to enhance your MSP2 experience",
+    "Install custom mods with just one click using Violentmonkey",
+    "Access exclusive features like Soft Shop, MOOD, and Troll"
+  ],
+  "en-GB": [
+    "Welcome to MSP2 Playground - Your ultimate modding destination",
+    "Discover powerful tools to enhance your MSP2 experience",
+    "Install custom mods with just one click using Violentmonkey",
+    "Access exclusive features like Soft Shop, MOOD, and Troll"
+  ],
+  "nl-NL": [
+    "Welkom bij MSP2 Playground - Jouw ultieme modding bestemming",
+    "Ontdek krachtige tools om je MSP2 ervaring te verbeteren",
+    "Installeer aangepaste mods met slechts één klik via Violentmonkey",
+    "Krijg toegang tot exclusieve functies zoals Soft Shop, MOOD en Troll"
+  ],
+  "en-IE": [
+    "Welcome to MSP2 Playground - Your ultimate modding destination",
+    "Discover powerful tools to enhance your MSP2 experience",
+    "Install custom mods with just one click using Violentmonkey",
+    "Access exclusive features like Soft Shop, MOOD, and Troll"
+  ],
+  "da-DK": [
+    "Velkommen til MSP2 Playground - Din ultimative modding destination",
+    "Opdag kraftfulde værktøjer til at forbedre din MSP2 oplevelse",
+    "Installer tilpassede mods med bare ét klik ved hjælp af Violentmonkey",
+    "Få adgang til eksklusive funktioner som Soft Shop, MOOD og Troll"
+  ],
+  "fr-FR": [
+    "Bienvenue sur MSP2 Playground - Votre destination de modding ultime",
+    "Découvrez des outils puissants pour améliorer votre expérience MSP2",
+    "Installez des mods personnalisés en un seul clic avec Violentmonkey",
+    "Accédez à des fonctionnalités exclusives comme Soft Shop, MOOD et Troll"
+  ],
+  "pl-PL": [
+    "Witamy w MSP2 Playground - Twoja najlepsza destynacja moddingu",
+    "Odkryj potężne narzędzia do ulepszenia swojego doświadczenia MSP2",
+    "Zainstaluj niestandardowe mody jednym kliknięciem za pomocą Violentmonkey",
+    "Uzyskaj dostęp do ekskluzywnych funkcji takich jak Soft Shop, MOOD i Troll"
+  ],
+  "sv-SE": [
+    "Välkommen till MSP2 Playground - Din ultimata modding destination",
+    "Upptäck kraftfulla verktyg för att förbättra din MSP2-upplevelse",
+    "Installera anpassade mods med bara ett klick med Violentmonkey",
+    "Få tillgång till exklusiva funktioner som Soft Shop, MOOD och Troll"
+  ],
+  "no-NO": [
+    "Velkommen til MSP2 Playground - Din ultimate modding destinasjon",
+    "Oppdag kraftige verktøy for å forbedre din MSP2-opplevelse",
+    "Installer tilpassede mods med bare ett klikk ved hjelp av Violentmonkey",
+    "Få tilgang til eksklusive funksjoner som Soft Shop, MOOD og Troll"
+  ],
+  "fi-FI": [
+    "Tervetuloa MSP2 Playground:iin - Sinun lopullinen modding-kohteesi",
+    "Löydä tehokkaita työkaluja MSP2-kokemuksesi parantamiseksi",
+    "Asenna mukautettuja modeja yhdellä klikkauksella Violentmonkeyn avulla",
+    "Pääse käsiksi eksklusiivisiin ominaisuuksiin kuten Soft Shop, MOOD ja Troll"
+  ],
+  "tr-TR": [
+    "MSP2 Playground'a hoş geldiniz - En iyi modlama destinasyonunuz",
+    "MSP2 deneyiminizi geliştiren güçlü araçları keşfedin",
+    "Violentmonkey kullanarak tek tıkla özel modlar kurun",
+    "Soft Shop, MOOD ve Troll gibi özel özelliklere erişin"
+  ],
+  "es-ES": [
+    "Bienvenido a MSP2 Playground - Tu destino definitivo de modding",
+    "Descubre herramientas poderosas para mejorar tu experiencia MSP2",
+    "Instala mods personalizados con solo un clic usando Violentmonkey",
+    "Accede a características exclusivas como Soft Shop, MOOD y Troll"
+  ],
+  "de-DE": [
+    "Willkommen im MSP2 Playground - Ihr ultimatives Modding-Ziel",
+    "Entdecken Sie leistungsstarke Tools zur Verbesserung Ihres MSP2-Erlebnisses",
+    "Installieren Sie benutzerdefinierte Mods mit nur einem Klick mit Violentmonkey",
+    "Zugriff auf exklusive Funktionen wie Soft Shop, MOOD und Troll"
+  ],
+  "en-AU": [
+    "Welcome to MSP2 Playground - Your ultimate modding destination",
+    "Discover powerful tools to enhance your MSP2 experience",
+    "Install custom mods with just one click using Violentmonkey",
+    "Access exclusive features like Soft Shop, MOOD, and Troll"
+  ],
+  "en-NZ": [
+    "Welcome to MSP2 Playground - Your ultimate modding destination",
+    "Discover powerful tools to enhance your MSP2 experience",
+    "Install custom mods with just one click using Violentmonkey",
+    "Access exclusive features like Soft Shop, MOOD, and Troll"
+  ]
+};
+
 const TRANSLATIONS = {
   "en-US": {
     aboutBtn: "About",
@@ -27,18 +127,18 @@ const TRANSLATIONS = {
     subtext: `Now you can do everything comfortably with the improved tool.<br>
     If nothing happens, install <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.`,
     btnSoftShop: "Install MSP2 Soft Shop",
-    btnMood: "Install MSP2 MOD",
+    btnMood: "Install MSP2 MOOD",
     btnTroll: "Install MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Info: These mods will no longer receive software updates or bug fixes starting from 15.09.2025, but you can continue to use them.",
     trollExpired: "MSP2 Troll license has expired.",
     about: `<p>
         MSP2 MODS is a platform that offers unique utility and customization tools ("mods") for MSP2. 
-        The site allows you to install various mods, including Soft Shop, Mod, Troll, and ARC MSP, each providing different features to enhance your MSP2 experience.
+        The site allows you to install various mods, including Soft Shop, MOOD, Troll, and ARC MSP, each providing different features to enhance your MSP2 experience.
       </p>
       <ul>
         <li><b>Soft Shop:</b> Adds extra shopping features for MSP2.</li>
-        <li><b>MOD:</b> Enables daily task completion and automatic dress up gameplay.</li>
+        <li><b>MOOD:</b> Enables daily task completion and automatic dress up gameplay.</li>
         <li><b>Troll:</b> Provides fun, experimental features for MSP2.</li>
         <li><b>ARC MSP:</b> External advanced mod tools for MSP2.</li>
       </ul>
@@ -57,18 +157,18 @@ const TRANSLATIONS = {
     subtext: `Now you can do everything comfortably with the improved tool.<br>
     If nothing happens, install <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.`,
     btnSoftShop: "Install MSP2 Soft Shop",
-    btnMood: "Install MSP2 MOD",
+    btnMood: "Install MSP2 MOOD",
     btnTroll: "Install MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Info: These mods will no longer receive software updates or bug fixes starting from 15.09.2025, but you can continue to use them.",
-    trollExpired: "MSP2 Troll license has expired.",
+    trollExpired: "MSP2 Troll licence has expired.",
     about: `<p>
-        MSP2 MODS is a platform that offers unique utility and customization tools ("mods") for MSP2. 
-        The site allows you to install various mods, including Soft Shop, Mod, Troll, and ARC MSP, each providing different features to enhance your MSP2 experience.
+        MSP2 MODS is a platform that offers unique utility and customisation tools ("mods") for MSP2. 
+        The site allows you to install various mods, including Soft Shop, MOOD, Troll, and ARC MSP, each providing different features to enhance your MSP2 experience.
       </p>
       <ul>
         <li><b>Soft Shop:</b> Adds extra shopping features for MSP2.</li>
-        <li><b>MOD:</b> Enables daily task completion and automatic dress up gameplay.</li>
+        <li><b>MOOD:</b> Enables daily task completion and automatic dress up gameplay.</li>
         <li><b>Troll:</b> Provides fun, experimental features for MSP2.</li>
         <li><b>ARC MSP:</b> External advanced mod tools for MSP2.</li>
       </ul>
@@ -87,18 +187,18 @@ const TRANSLATIONS = {
     subtext: `Now you can do everything comfortably with the improved tool.<br>
     If nothing happens, install <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.`,
     btnSoftShop: "Install MSP2 Soft Shop",
-    btnMood: "Install MSP2 MOD",
+    btnMood: "Install MSP2 MOOD",
     btnTroll: "Install MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Info: These mods will no longer receive software updates or bug fixes starting from 15.09.2025, but you can continue to use them.",
-    trollExpired: "MSP2 Troll license has expired.",
+    trollExpired: "MSP2 Troll licence has expired.",
     about: `<p>
         MSP2 MODS is a platform that offers unique utility and customisation tools ("mods") for MSP2. 
-        The site allows you to install various mods, including Soft Shop, Mod, Troll, and ARC MSP, each providing different features to enhance your MSP2 experience.
+        The site allows you to install various mods, including Soft Shop, MOOD, Troll, and ARC MSP, each providing different features to enhance your MSP2 experience.
       </p>
       <ul>
         <li><b>Soft Shop:</b> Adds extra shopping features for MSP2.</li>
-        <li><b>MOD:</b> Enables daily task completion and automatic dress up gameplay.</li>
+        <li><b>MOOD:</b> Enables daily task completion and automatic dress up gameplay.</li>
         <li><b>Troll:</b> Provides fun, experimental features for MSP2.</li>
         <li><b>ARC MSP:</b> External advanced mod tools for MSP2.</li>
       </ul>
@@ -117,18 +217,18 @@ const TRANSLATIONS = {
     subtext: `Nu kun je alles comfortabel doen met de verbeterde tool.<br>
     Als er niets gebeurt, installeer dan eerst <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a>.`,
     btnSoftShop: "Installeer MSP2 Soft Shop",
-    btnMood: "Installeer MSP2 MOD",
+    btnMood: "Installeer MSP2 MOOD",
     btnTroll: "Installeer MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Info: Deze mods ontvangen vanaf 15.09.2025 geen software-updates of bugfixes meer, maar je kunt ze blijven gebruiken.",
     trollExpired: "MSP2 Troll licentie is verlopen.",
     about: `<p>
         MSP2 MODS is een platform dat unieke hulpprogramma's en aanpassingstools ("mods") biedt voor MSP2. 
-        De site stelt je in staat om verschillende mods te installeren, waaronder Soft Shop, Mod, Troll en ARC MSP, elk met verschillende functies om je MSP2-ervaring te verbeteren.
+        De site stelt je in staat om verschillende mods te installeren, waaronder Soft Shop, MOOD, Troll en ARC MSP, elk met verschillende functies om je MSP2-ervaring te verbeteren.
       </p>
       <ul>
-        <li><b>Soft Shop:</b> Voegt extra winkel functies toe aan MSP2.</li>
-        <li><b>MOD:</b> Maakt dagelijkse taak voltooiing en automatische dress up gameplay mogelijk.</li>
+        <li><b>Soft Shop:</b> Voegt extra winkelfuncties toe aan MSP2.</li>
+        <li><b>MOOD:</b> Maakt dagelijkse taakvoltooiing en automatische dress up gameplay mogelijk.</li>
         <li><b>Troll:</b> Biedt leuke, experimentele functies voor MSP2.</li>
         <li><b>ARC MSP:</b> Externe geavanceerde mod tools voor MSP2.</li>
       </ul>
@@ -147,18 +247,18 @@ const TRANSLATIONS = {
     subtext: `Now you can do everything comfortably with the improved tool.<br>
     If nothing happens, install <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.`,
     btnSoftShop: "Install MSP2 Soft Shop",
-    btnMood: "Install MSP2 MOD",
+    btnMood: "Install MSP2 MOOD",
     btnTroll: "Install MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Info: These mods will no longer receive software updates or bug fixes starting from 15.09.2025, but you can continue to use them.",
-    trollExpired: "MSP2 Troll license has expired.",
+    trollExpired: "MSP2 Troll licence has expired.",
     about: `<p>
         MSP2 MODS is a platform that offers unique utility and customisation tools ("mods") for MSP2. 
-        The site allows you to install various mods, including Soft Shop, Moo, Troll, and ARC MSP, each providing different features to enhance your MSP2 experience.
+        The site allows you to install various mods, including Soft Shop, MOOD, Troll, and ARC MSP, each providing different features to enhance your MSP2 experience.
       </p>
       <ul>
         <li><b>Soft Shop:</b> Adds extra shopping features for MSP2.</li>
-        <li><b>MOD:</b> Enables daily task completion and automatic dress up gameplay.</li>
+        <li><b>MOOD:</b> Enables daily task completion and automatic dress up gameplay.</li>
         <li><b>Troll:</b> Provides fun, experimental features for MSP2.</li>
         <li><b>ARC MSP:</b> External advanced mod tools for MSP2.</li>
       </ul>
@@ -177,18 +277,18 @@ const TRANSLATIONS = {
     subtext: `Nu kan du gøre alt komfortabelt med det forbedrede værktøj.<br>
     Hvis intet sker, installer først <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a>.`,
     btnSoftShop: "Installer MSP2 Soft Shop",
-    btnMood: "Installer MSP2 MOD",
+    btnMood: "Installer MSP2 MOOD",
     btnTroll: "Installer MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Info: Disse mods vil ikke længere modtage softwareopdateringer eller fejlrettelser fra 15.09.2025, men du kan fortsætte med at bruge dem.",
     trollExpired: "MSP2 Troll licens er udløbet.",
     about: `<p>
         MSP2 MODS er en platform, der tilbyder unikke værktøjer og tilpasningstools ("mods") til MSP2. 
-        Siden giver dig mulighed for at installere forskellige mods, herunder Soft Shop, Mod, Troll og ARC MSP, hver med forskellige funktioner til at forbedre din MSP2-oplevelse.
+        Siden giver dig mulighed for at installere forskellige mods, herunder Soft Shop, MOOD, Troll og ARC MSP, hver med forskellige funktioner til at forbedre din MSP2-oplevelse.
       </p>
       <ul>
         <li><b>Soft Shop:</b> Tilføjer ekstra shopping-funktioner til MSP2.</li>
-        <li><b>MOD:</b> Muliggør daglig opgavefuldførelse og automatisk dress up gameplay.</li>
+        <li><b>MOOD:</b> Muliggør daglig opgavefuldførelse og automatisk dress up gameplay.</li>
         <li><b>Troll:</b> Giver sjove, eksperimentelle funktioner til MSP2.</li>
         <li><b>ARC MSP:</b> Eksterne avancerede mod-værktøjer til MSP2.</li>
       </ul>
@@ -207,14 +307,14 @@ const TRANSLATIONS = {
     subtext: `Vous pouvez désormais tout faire facilement avec l'outil amélioré.<br>
     Si rien ne se passe, installez d'abord <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a>.`,
     btnSoftShop: "Installer MSP2 Soft Shop",
-    btnMood: "Installer MSP2 MOD",
+    btnMood: "Installer MSP2 MOOD",
     btnTroll: "Installer MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Info : À partir du 15.09.2025, ces mods ne recevront plus de mises à jour ou de corrections, mais vous pouvez continuer à les utiliser.",
     trollExpired: "La licence MSP2 Troll a expiré.",
     about: `<p>
-        MSP2 MODS est une plateforme proposant des outils uniques et de personnalisation ("mods") pour MSP2.<br>
-        Vous pouvez installer plusieurs mods comme Soft Shop, Mod, Troll et ARC MSP, chacun offrant des fonctions différentes pour améliorer votre expérience MSP2.
+        MSP2 MODS est une plateforme proposant des outils uniques et de personnalisation ("mods") pour MSP2.
+        Vous pouvez installer plusieurs mods comme Soft Shop, MOOD, Troll et ARC MSP, chacun offrant des fonctions différentes pour améliorer votre expérience MSP2.
       </p>
       <ul>
         <li><b>Soft Shop :</b> Ajoute des fonctionnalités d'achat supplémentaires à MSP2.</li>
@@ -237,18 +337,18 @@ const TRANSLATIONS = {
     subtext: `Teraz możesz robić wszystko wygodnie dzięki ulepszonemu narzędziu.<br>
     Jeśli nic się nie dzieje, najpierw zainstaluj <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a>.`,
     btnSoftShop: "Zainstaluj MSP2 Soft Shop",
-    btnMood: "Zainstaluj MSP2 MOD",
+    btnMood: "Zainstaluj MSP2 MOOD",
     btnTroll: "Zainstaluj MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Info: Te mody nie będą już otrzymywać aktualizacji oprogramowania ani poprawek błędów od 15.09.2025, ale możesz nadal z nich korzystać.",
     trollExpired: "Licencja MSP2 Troll wygasła.",
     about: `<p>
         MSP2 MODS to platforma oferująca unikalne narzędzia użytkowe i personalizacyjne ("mody") dla MSP2. 
-        Strona pozwala na instalację różnych modów, w tym Soft Shop, Mod, Troll i ARC MSP, z których każdy zapewnia różne funkcje poprawiające doświadczenie MSP2.
+        Strona pozwala na instalację różnych modów, w tym Soft Shop, MOOD, Troll i ARC MSP, z których każdy zapewnia różne funkcje poprawiające doświadczenie MSP2.
       </p>
       <ul>
         <li><b>Soft Shop:</b> Dodaje dodatkowe funkcje zakupowe do MSP2.</li>
-        <li><b>MOD:</b> Umożliwia wykonywanie codziennych zadań i automatyczną rozgrywkę dress up.</li>
+        <li><b>MOOD:</b> Umożliwia wykonywanie codziennych zadań i automatyczną rozgrywkę dress up.</li>
         <li><b>Troll:</b> Zapewnia zabawne, eksperymentalne funkcje dla MSP2.</li>
         <li><b>ARC MSP:</b> Zewnętrzne zaawansowane narzędzia modów dla MSP2.</li>
       </ul>
@@ -267,18 +367,18 @@ const TRANSLATIONS = {
     subtext: `Nu kan du göra allt bekvämt med det förbättrade verktyget.<br>
     Om inget händer, installera först <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a>.`,
     btnSoftShop: "Installera MSP2 Soft Shop",
-    btnMood: "Installera MSP2 MOD",
+    btnMood: "Installera MSP2 MOOD",
     btnTroll: "Installera MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Info: Dessa mods kommer inte längre att få mjukvaruuppdateringar eller buggfixar från 15.09.2025, men du kan fortsätta använda dem.",
     trollExpired: "MSP2 Troll licens har upphört.",
     about: `<p>
         MSP2 MODS är en plattform som erbjuder unika verktyg och anpassningstools ("mods") för MSP2. 
-        Webbplatsen låter dig installera olika mods, inklusive Soft Shop, Mod, Troll och ARC MSP, var och en med olika funktioner för att förbättra din MSP2-upplevelse.
+        Webbplatsen låter dig installera olika mods, inklusive Soft Shop, MOOD, Troll och ARC MSP, var och en med olika funktioner för att förbättra din MSP2-upplevelse.
       </p>
       <ul>
         <li><b>Soft Shop:</b> Lägger till extra shoppingfunktioner till MSP2.</li>
-        <li><b>MOD:</b> Möjliggör daglig uppgiftsavslutning och automatisk dress up-spel.</li>
+        <li><b>MOOD:</b> Möjliggör daglig uppgiftsavslutning och automatisk dress up-spel.</li>
         <li><b>Troll:</b> Ger roliga, experimentella funktioner för MSP2.</li>
         <li><b>ARC MSP:</b> Externa avancerade mod-verktyg för MSP2.</li>
       </ul>
@@ -297,18 +397,18 @@ const TRANSLATIONS = {
     subtext: `Nå kan du gjøre alt komfortabelt med det forbedrede verktøyet.<br>
     Hvis ingenting skjer, installer først <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a>.`,
     btnSoftShop: "Installer MSP2 Soft Shop",
-    btnMood: "Installer MSP2 MOD",
+    btnMood: "Installer MSP2 MOOD",
     btnTroll: "Installer MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Info: Disse modene vil ikke lenger motta programvareoppdateringer eller feilrettinger fra 15.09.2025, men du kan fortsette å bruke dem.",
     trollExpired: "MSP2 Troll lisens har utløpt.",
     about: `<p>
         MSP2 MODS er en plattform som tilbyr unike verktøy og tilpasningsverktøy ("mods") for MSP2. 
-        Nettstedet lar deg installere forskjellige mods, inkludert Soft Shop, Mod, Troll og ARC MSP, hver med forskjellige funksjoner for å forbedre din MSP2-opplevelse.
+        Nettstedet lar deg installere forskjellige mods, inkludert Soft Shop, MOOD, Troll og ARC MSP, hver med forskjellige funksjoner for å forbedre din MSP2-opplevelse.
       </p>
       <ul>
         <li><b>Soft Shop:</b> Legger til ekstra handlefunksjoner til MSP2.</li>
-        <li><b>MOD:</b> Muliggjør daglig oppgavefullføring og automatisk dress up-spill.</li>
+        <li><b>MOOD:</b> Muliggjør daglig oppgavefullføring og automatisk dress up-spill.</li>
         <li><b>Troll:</b> Gir morsomme, eksperimentelle funksjoner for MSP2.</li>
         <li><b>ARC MSP:</b> Eksterne avanserte mod-verktøy for MSP2.</li>
       </ul>
@@ -327,18 +427,18 @@ const TRANSLATIONS = {
     subtext: `Nyt voit tehdä kaiken mukavasti parannetulla työkalulla.<br>
     Jos mitään ei tapahdu, asenna ensin <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a>.`,
     btnSoftShop: "Asenna MSP2 Soft Shop",
-    btnMood: "Asenna MSP2 MOD",
+    btnMood: "Asenna MSP2 MOOD",
     btnTroll: "Asenna MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Tiedoksi: Nämä modit eivät enää saa ohjelmistopäivityksiä tai virheiden korjauksia 15.09.2025 alkaen, mutta voit jatkaa niiden käyttöä.",
     trollExpired: "MSP2 Troll lisenssi on vanhentunut.",
     about: `<p>
         MSP2 MODS on alusta, joka tarjoaa ainutlaatuisia apuohjelmia ja mukautustyökaluja ("modeja") MSP2:lle. 
-        Sivusto mahdollistaa erilaisten modien asentamisen, mukaan lukien Soft Shop, Mod, Troll ja ARC MSP, joista jokainen tarjoaa erilaisia ominaisuuksia MSP2-kokemuksesi parantamiseksi.
+        Sivusto mahdollistaa erilaisten modien asentamisen, mukaan lukien Soft Shop, MOOD, Troll ja ARC MSP, joista jokainen tarjoaa erilaisia ominaisuuksia MSP2-kokemuksesi parantamiseksi.
       </p>
       <ul>
         <li><b>Soft Shop:</b> Lisää ylimääräisiä ostosominaisuuksia MSP2:een.</li>
-        <li><b>MOD:</b> Mahdollistaa päivittäisten tehtävien suorittamisen ja automaattisen dress up -pelaamisen.</li>
+        <li><b>MOOD:</b> Mahdollistaa päivittäisten tehtävien suorittamisen ja automaattisen dress up -pelaamisen.</li>
         <li><b>Troll:</b> Tarjoaa hauskoja, kokeellisia ominaisuuksia MSP2:lle.</li>
         <li><b>ARC MSP:</b> Ulkoiset edistyneet mod-työkalut MSP2:lle.</li>
       </ul>
@@ -357,14 +457,14 @@ const TRANSLATIONS = {
     subtext: `Artık geliştirilmiş araç ile her şeyi rahatça yapabilirsiniz.<br>
     Eğer bir şey olmuyorsa, önce <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> kurun.`,
     btnSoftShop: "MSP2 Soft Shop'u Kur",
-    btnMood: "MSP2 MOD'u Kur",
+    btnMood: "MSP2 MOOD'u Kur",
     btnTroll: "MSP2 Troll'u Kur",
     btnArcMSP: "ARC MSP",
     info: "Bilgi: Bu modlar 15.09.2025 itibarıyla yazılım güncellemesi veya hata düzeltmesi almayacaktır, ancak kullanmaya devam edebilirsiniz.",
     trollExpired: "MSP2 Troll lisans süresi doldu.",
     about: `<p>
-      MSP2 MODS; MSP2 için özel modlar ve yardımcı araçlar sunan bir platformdur.<br>
-      Sitede Soft Shop, Mod, Troll ve ARC MSP gibi çeşitli modları kurabilirsiniz. Her mod, MSP2 deneyiminizi geliştirmek için farklı özellikler sunar.
+      MSP2 MODS; MSP2 için özel modlar ve yardımcı araçlar sunan bir platformdur.
+      Sitede Soft Shop, MOOD, Troll ve ARC MSP gibi çeşitli modları kurabilirsiniz. Her mod, MSP2 deneyiminizi geliştirmek için farklı özellikler sunar.
     </p>
     <ul>
       <li><b>Soft Shop:</b> MSP2'ye ek alışveriş özellikleri kazandırır.</li>
@@ -387,14 +487,14 @@ const TRANSLATIONS = {
     subtext: `Ahora puedes hacer todo cómodamente con la herramienta mejorada.<br>
     Si no pasa nada, instala primero <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a>.`,
     btnSoftShop: "Instalar MSP2 Soft Shop",
-    btnMood: "Instalar MSP2 MOD",
+    btnMood: "Instalar MSP2 MOOD",
     btnTroll: "Instalar MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Info: Estos mods ya no recibirán actualizaciones de software o correcciones de errores a partir del 15.09.2025, pero puedes seguir usándolos.",
     trollExpired: "La licencia de MSP2 Troll ha expirado.",
     about: `<p>
         MSP2 MODS es una plataforma que ofrece herramientas únicas de utilidad y personalización ("mods") para MSP2. 
-        El sitio te permite instalar varios mods, incluyendo Soft Shop, Mod, Troll y ARC MSP, cada uno proporcionando diferentes características para mejorar tu experiencia MSP2.
+        El sitio te permite instalar varios mods, incluyendo Soft Shop, MOOD, Troll y ARC MSP, cada uno proporcionando diferentes características para mejorar tu experiencia MSP2.
       </p>
       <ul>
         <li><b>Soft Shop:</b> Añade características adicionales de compras a MSP2.</li>
@@ -417,18 +517,18 @@ const TRANSLATIONS = {
     subtext: `Jetzt können Sie alles bequem mit dem verbesserten Tool machen.<br>
     Falls nichts passiert, installieren Sie zuerst <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a>.`,
     btnSoftShop: "MSP2 Soft Shop installieren",
-    btnMood: "MSP2 MOD installieren",
+    btnMood: "MSP2 MOOD installieren",
     btnTroll: "MSP2 Troll installieren",
     btnArcMSP: "ARC MSP",
     info: "Info: Diese Mods erhalten ab dem 15.09.2025 keine Software-Updates oder Fehlerbehebungen mehr, aber Sie können sie weiterhin verwenden.",
     trollExpired: "MSP2 Troll Lizenz ist abgelaufen.",
     about: `<p>
         MSP2 MODS ist eine Plattform, die einzigartige Hilfsprogramme und Anpassungstools ("Mods") für MSP2 bietet. 
-        Die Seite ermöglicht es Ihnen, verschiedene Mods zu installieren, darunter Soft Shop, Mod, Troll und ARC MSP, die jeweils unterschiedliche Funktionen bieten, um Ihr MSP2-Erlebnis zu verbessern.
+        Die Seite ermöglicht es Ihnen, verschiedene Mods zu installieren, darunter Soft Shop, MOOD, Troll und ARC MSP, die jeweils unterschiedliche Funktionen bieten, um Ihr MSP2-Erlebnis zu verbessern.
       </p>
       <ul>
         <li><b>Soft Shop:</b> Fügt zusätzliche Einkaufsfunktionen zu MSP2 hinzu.</li>
-        <li><b>MOD:</b> Ermöglicht das Abschließen täglicher Aufgaben und automatisches Dress-Up-Gameplay.</li>
+        <li><b>MOOD:</b> Ermöglicht das Abschließen täglicher Aufgaben und automatisches Dress-Up-Gameplay.</li>
         <li><b>Troll:</b> Bietet lustige, experimentelle Funktionen für MSP2.</li>
         <li><b>ARC MSP:</b> Externe erweiterte Mod-Tools für MSP2.</li>
       </ul>
@@ -447,18 +547,18 @@ const TRANSLATIONS = {
     subtext: `Now you can do everything comfortably with the improved tool.<br>
     If nothing happens, install <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.`,
     btnSoftShop: "Install MSP2 Soft Shop",
-    btnMood: "Install MSP2 MOD",
+    btnMood: "Install MSP2 MOOD",
     btnTroll: "Install MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Info: These mods will no longer receive software updates or bug fixes starting from 15.09.2025, but you can continue to use them.",
     trollExpired: "MSP2 Troll licence has expired.",
     about: `<p>
         MSP2 MODS is a platform that offers unique utility and customisation tools ("mods") for MSP2. 
-        The site allows you to install various mods, including Soft Shop, Mod, Troll, and ARC MSP, each providing different features to enhance your MSP2 experience.
+        The site allows you to install various mods, including Soft Shop, MOOD, Troll, and ARC MSP, each providing different features to enhance your MSP2 experience.
       </p>
       <ul>
         <li><b>Soft Shop:</b> Adds extra shopping features for MSP2.</li>
-        <li><b>MOD:</b> Enables daily task completion and automatic dress up gameplay.</li>
+        <li><b>MOOD:</b> Enables daily task completion and automatic dress up gameplay.</li>
         <li><b>Troll:</b> Provides fun, experimental features for MSP2.</li>
         <li><b>ARC MSP:</b> External advanced mod tools for MSP2.</li>
       </ul>
@@ -477,18 +577,18 @@ const TRANSLATIONS = {
     subtext: `Now you can do everything comfortably with the improved tool.<br>
     If nothing happens, install <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.`,
     btnSoftShop: "Install MSP2 Soft Shop",
-    btnMood: "Install MSP2 MOD",
+    btnMood: "Install MSP2 MOOD",
     btnTroll: "Install MSP2 Troll",
     btnArcMSP: "ARC MSP",
     info: "Info: These mods will no longer receive software updates or bug fixes starting from 15.09.2025, but you can continue to use them.",
     trollExpired: "MSP2 Troll licence has expired.",
     about: `<p>
         MSP2 MODS is a platform that offers unique utility and customisation tools ("mods") for MSP2. 
-        The site allows you to install various mods, including Soft Shop, Mod, Troll, and ARC MSP, each providing different features to enhance your MSP2 experience.
+        The site allows you to install various mods, including Soft Shop, MOOD, Troll, and ARC MSP, each providing different features to enhance your MSP2 experience.
       </p>
       <ul>
         <li><b>Soft Shop:</b> Adds extra shopping features for MSP2.</li>
-        <li><b>MOD:</b> Enables daily task completion and automatic dress up gameplay.</li>
+        <li><b>MOOD:</b> Enables daily task completion and automatic dress up gameplay.</li>
         <li><b>Troll:</b> Provides fun, experimental features for MSP2.</li>
         <li><b>ARC MSP:</b> External advanced mod tools for MSP2.</li>
       </ul>
@@ -499,7 +599,6 @@ const TRANSLATIONS = {
         <b>Note:</b> MSP2 MODS will not receive updates after 15.09.2025, but all mods will remain available for use.
       </p>`
   }
-  // Add other translations here...
 };
 
 // Current language state
@@ -563,6 +662,7 @@ function renderLanguageList() {
 
 // Make functions global for access from main.js
 window.TRANSLATIONS = TRANSLATIONS;
+window.LOADING_INFO = LOADING_INFO;
 window.currentLang = currentLang;
 window.loadLanguage = loadLanguage;
 window.renderLanguageList = renderLanguageList;
