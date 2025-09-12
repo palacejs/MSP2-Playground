@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const musicToggle = document.getElementById('musicToggle');
   const musicIcon = document.getElementById('musicIcon');
   const loadingInfo = document.getElementById('loadingInfo');
-  
+
   musicIframe = document.getElementById('backgroundMusic');
 
   // Initialize background music
@@ -64,12 +64,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // Loading info rotation
   let infoIndex = 0;
   let currentLangMessages = LOADING_INFO["en-US"];
-  
+
   // Select random language for loading info
   const languages = Object.keys(LOADING_INFO);
   const randomLang = languages[Math.floor(Math.random() * languages.length)];
   currentLangMessages = LOADING_INFO[randomLang];
-  
+
   function updateLoadingInfo() {
     if (loadingInfo && currentLangMessages) {
       loadingInfo.style.opacity = '0';
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 250);
     }
   }
-  
+
   // Start loading info rotation
   updateLoadingInfo();
   const infoInterval = setInterval(updateLoadingInfo, 5000);
@@ -94,6 +94,8 @@ document.addEventListener('DOMContentLoaded', function() {
       mainContent.style.display = 'block';
       setTimeout(() => {
         mainContent.classList.add('show');
+        // Load dynamic buttons after main content is shown
+        loadDynamicButtons();
       }, 100);
     }, 1000);
   }, 20000);
@@ -136,6 +138,72 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeLanguageSystem();
 });
 
+// Dynamic Button Loading
+async function openButtonDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("msp2ArcDB", 2);
+    request.onupgradeneeded = function(e) {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains("buttons")) {
+        db.createObjectStore("buttons", { keyPath: "id" });
+      }
+    };
+    request.onsuccess = function(e) {
+      resolve(e.target.result);
+    };
+    request.onerror = function(e) {
+      reject(e.target.error);
+    };
+  });
+}
+
+async function getActiveButtons() {
+  try {
+    const db = await openButtonDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction("buttons", "readonly");
+      const store = tx.objectStore("buttons");
+      const request = store.getAll();
+      request.onsuccess = () => {
+        const buttons = request.result.filter(button => {
+          if (button.hidden) return false;
+          if (button.isTemporary) {
+            const now = new Date();
+            const expiryDate = new Date(button.expiryDate);
+            return expiryDate >= now;
+          }
+          return true;
+        });
+        resolve(buttons);
+      };
+      request.onerror = (e) => reject(e.target.error);
+    });
+  } catch (error) {
+    console.log('Button DB not available yet');
+    return [];
+  }
+}
+
+async function loadDynamicButtons() {
+  try {
+    const buttons = await getActiveButtons();
+    const overlay = document.getElementById('mainOverlay');
+    
+    if (buttons.length > 0) {
+      buttons.forEach(button => {
+        const buttonElement = document.createElement('a');
+        buttonElement.href = button.link;
+        buttonElement.className = 'bookmark-btn dynamic-btn';
+        buttonElement.textContent = button.name;
+        buttonElement.target = '_blank';
+        overlay.appendChild(buttonElement);
+      });
+    }
+  } catch (error) {
+    console.log('Could not load dynamic buttons:', error);
+  }
+}
+
 // Modal functionality
 function openModal(id) {
   document.getElementById(id).style.display = 'block';
@@ -156,7 +224,7 @@ function initializeLanguageSystem() {
   if (savedLang && window.TRANSLATIONS && window.TRANSLATIONS[savedLang]) {
     window.loadLanguage(savedLang);
   }
-  
+
   if (window.renderLanguageList) {
     window.renderLanguageList();
   }
