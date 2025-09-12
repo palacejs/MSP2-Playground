@@ -168,7 +168,7 @@ canvas {
   width: 100%;
 }
 
-.upload-section, .delete-section, .button-management-section {
+.upload-section, .delete-section, .button-management-section, .news-management-section {
   margin: 20px 0;
   padding: 20px;
   border: 1px solid rgba(150, 150, 255, 0.2);
@@ -176,7 +176,7 @@ canvas {
   background: rgba(10, 20, 60, 0.2);
 }
 
-.upload-section h3, .delete-section h3, .button-management-section h3 {
+.upload-section h3, .delete-section h3, .button-management-section h3, .news-management-section h3 {
   color: #6effb2;
   margin-bottom: 15px;
 }
@@ -205,7 +205,7 @@ canvas {
 }
 
 /* Button Management Styles */
-.button-form {
+.button-form, .news-form {
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -225,16 +225,19 @@ canvas {
 
 .form-group input[type="text"],
 .form-group input[type="url"],
-.form-group input[type="date"] {
+.form-group input[type="datetime-local"],
+.form-group textarea {
   padding: 10px 12px;
   border: 1px solid rgba(150, 150, 255, 0.3);
   border-radius: 6px;
   background: rgba(10, 20, 60, 0.3);
   color: #9abfff;
   font-size: 14px;
+  font-family: "Segoe UI", Arial, sans-serif;
+  resize: vertical;
 }
 
-.form-group input:focus {
+.form-group input:focus, .form-group textarea:focus {
   outline: none;
   border-color: #6effb2;
   box-shadow: 0 0 8px rgba(110, 255, 178, 0.3);
@@ -268,17 +271,17 @@ canvas {
   background: linear-gradient(90deg, #40e0d0, #6effb2);
 }
 
-.button-list-section {
+.button-list-section, .news-list-section {
   margin-top: 25px;
 }
 
-.button-list-section h4 {
+.button-list-section h4, .news-list-section h4 {
   color: #6effb2;
   margin-bottom: 15px;
   font-size: 18px;
 }
 
-.button-item {
+.button-item, .news-item {
   background: rgba(0, 0, 40, 0.4);
   border: 1px solid rgba(150, 150, 255, 0.2);
   border-radius: 8px;
@@ -290,29 +293,29 @@ canvas {
   gap: 15px;
 }
 
-.button-info {
+.button-info, .news-info {
   flex: 1;
 }
 
-.button-info strong {
+.button-info strong, .news-info strong {
   color: #fff;
   font-size: 16px;
 }
 
-.button-info p {
+.button-info p, .news-info p {
   margin: 5px 0;
   font-size: 13px;
   color: #ccc;
 }
 
-.button-actions {
+.button-actions, .news-actions {
   display: flex;
   flex-direction: column;
   gap: 8px;
   min-width: 80px;
 }
 
-.button-actions button {
+.button-actions button, .news-actions button {
   padding: 6px 12px;
   border: none;
   border-radius: 5px;
@@ -469,6 +472,33 @@ canvas {
   text-align: center;
 }
 
+/* News specific styles */
+.news-item {
+  background: rgba(10, 20, 60, 0.3);
+  border: 1px solid rgba(150, 150, 255, 0.2);
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px 0;
+}
+
+.news-item h4 {
+  color: #6effb2;
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.news-item p {
+  margin: 5px 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.news-date {
+  color: #40e0d0;
+  font-size: 12px;
+  font-style: italic;
+}
+
 @media (max-width: 768px) {
   .music-toggle {
     width: 40px;
@@ -507,12 +537,12 @@ canvas {
     font-size: 1.5em;
   }
 
-  .button-item {
+  .button-item, .news-item {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .button-actions {
+  .button-actions, .news-actions {
     flex-direction: row;
     width: 100%;
     justify-content: flex-end;
