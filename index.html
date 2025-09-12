@@ -39,6 +39,7 @@
     <div class="top-bar">
       <button class="about-btn" id="aboutBtn">&#8505; <span id="aboutBtnTxt">About</span></button>
       <div class="top-bar-right">
+        <button class="news-btn" id="newsBtn">📰 <span id="newsBtnTxt">News</span></button>
         <button class="lang-btn" id="langBtn">&#127760; <span id="langBtnTxt">Language</span></button>
       </div>
     </div>
@@ -50,7 +51,8 @@
         If nothing happens, install
         <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.
       </p>
-      <!-- Butonlar kaldırıldı -->
+      <!-- Dynamic buttons will be inserted here -->
+      <div id="dynamicButtons" class="dynamic-buttons-grid"></div>
     </div>
 
     <div class="info" id="infoText">
@@ -70,6 +72,18 @@
           <button class="modal-close" onclick="closeModal('aboutModal')">&times;</button>
           <h2 style="margin:0 0 10px 0;" id="aboutTitle">About MSP2 MODS</h2>
           <div id="aboutText"></div>
+          <div id="dynamicButtonDescriptions"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- News Modal -->
+    <div id="newsModal" style="display:none;">
+      <div class="modal-bg">
+        <div class="modal">
+          <button class="modal-close" onclick="closeModal('newsModal')">&times;</button>
+          <h2 style="margin:0 0 12px 0;" id="newsTitle">News & Updates</h2>
+          <div id="newsList"></div>
         </div>
       </div>
     </div>
