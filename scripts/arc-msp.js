@@ -2,15 +2,19 @@ let isAdminLoggedIn = false;
 const PASSWORD_HASH = "f7dc02cde06759a946f4dd803f767ed7a061e60558870c724e833a90a56dacec";
 const DB_NAME = "msp2ArcDB";
 const DB_STORE = "photos";
+const BUTTONS_STORE = "buttons";
 
 // --------------------------- IndexedDB Functions ---------------------------
 function openDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, 1);
+    const request = indexedDB.open(DB_NAME, 2); // Updated version
     request.onupgradeneeded = function(e) {
       const db = e.target.result;
       if (!db.objectStoreNames.contains(DB_STORE)) {
         db.createObjectStore(DB_STORE, { keyPath: "id" });
+      }
+      if (!db.objectStoreNames.contains(BUTTONS_STORE)) {
+        db.createObjectStore(BUTTONS_STORE, { keyPath: "id" });
       }
     };
     request.onsuccess = function(e) {
@@ -55,6 +59,60 @@ async function getAllPhotos() {
   });
 }
 
+// --------------------------- Button Management Functions ---------------------------
+async function saveButton(button) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(BUTTONS_STORE, "readwrite");
+    const store = tx.objectStore(BUTTONS_STORE);
+    store.put(button);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function deleteButton(id) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(BUTTONS_STORE, "readwrite");
+    const store = tx.objectStore(BUTTONS_STORE);
+    store.delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function getAllButtons() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(BUTTONS_STORE, "readonly");
+    const store = tx.objectStore(BUTTONS_STORE);
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function toggleButtonVisibility(id) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(BUTTONS_STORE, "readwrite");
+    const store = tx.objectStore(BUTTONS_STORE);
+    const getRequest = store.get(id);
+    getRequest.onsuccess = () => {
+      const button = getRequest.result;
+      if (button) {
+        button.hidden = !button.hidden;
+        store.put(button);
+        tx.oncomplete = () => resolve();
+      } else {
+        reject(new Error('Button not found'));
+      }
+    };
+    getRequest.onerror = (e) => reject(e.target.error);
+  });
+}
+
 // --------------------------- Password Functions ---------------------------
 async function hashPassword(password) {
   const encoder = new TextEncoder();
@@ -67,7 +125,7 @@ async function hashPassword(password) {
 async function adminLogin() {
   const password = document.getElementById('adminPassword').value;
   const hash = await hashPassword(password);
-
+  
   if (hash === PASSWORD_HASH) {
     isAdminLoggedIn = true;
     sessionStorage.setItem('msp2_admin', 'true');
@@ -89,6 +147,7 @@ function showAdminPanel() {
   document.getElementById('loginSection').style.display = 'none';
   document.getElementById('adminPanel').style.display = 'block';
   loadPhotoManager();
+  loadButtonManager();
 }
 
 function logout() {
@@ -100,7 +159,6 @@ function logout() {
 
 // --------------------------- Navigation ---------------------------
 function goBackHome() {
-  // Go directly to main page without loading screen
   window.location.href = 'index.html?skipLoading=true';
 }
 
@@ -110,7 +168,6 @@ document.addEventListener('DOMContentLoaded', function() {
   loadGallery();
   checkAdminStatus();
 
-  // Check if we should skip loading on main page
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.has('skipLoading') && window.location.pathname.includes('index.html')) {
     const loadingScreen = document.getElementById('loadingScreen');
@@ -158,7 +215,7 @@ function initializeStarfield() {
     }
     draw() {
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(0,0,139,${this.alpha})`;
       ctx.shadowBlur = 10;
       ctx.shadowColor = `rgba(0,0,139,${this.alpha})`;
@@ -289,6 +346,108 @@ async function deleteSelected() {
   alert(`${checkboxes.length} fotoğraf silindi!`);
 }
 
+// --------------------------- Button Management ---------------------------
+async function addNewButton() {
+  const buttonName = document.getElementById('buttonName').value.trim();
+  const buttonLink = document.getElementById('buttonLink').value.trim();
+  const isTemporary = document.getElementById('isTemporary').checked;
+  const expiryDate = document.getElementById('expiryDate').value;
+
+  if (!buttonName) {
+    alert('Lütfen buton adını girin!');
+    return;
+  }
+  if (!buttonLink) {
+    alert('Lütfen buton bağlantısını girin!');
+    return;
+  }
+  if (isTemporary && !expiryDate) {
+    alert('Lütfen geçiçi buton için son tarihi belirleyin!');
+    return;
+  }
+
+  const button = {
+    id: Date.now() + Math.random(),
+    name: buttonName,
+    link: buttonLink,
+    isTemporary: isTemporary,
+    expiryDate: isTemporary ? expiryDate : null,
+    hidden: false,
+    createdDate: new Date().toISOString()
+  };
+
+  await saveButton(button);
+  await loadButtonManager();
+  
+  // Clear form
+  document.getElementById('buttonName').value = '';
+  document.getElementById('buttonLink').value = '';
+  document.getElementById('isTemporary').checked = false;
+  document.getElementById('expiryDate').value = '';
+  document.getElementById('expiryDateContainer').style.display = 'none';
+  
+  alert('Buton başarıyla eklendi!');
+}
+
+async function loadButtonManager() {
+  const buttons = await getAllButtons();
+  const container = document.getElementById('buttonManager');
+  container.innerHTML = '';
+  
+  if (buttons.length === 0) {
+    container.innerHTML = '<p style="color:#ccc;text-align:center;">Henüz buton eklenmemiş.</p>';
+    return;
+  }
+
+  buttons.forEach(button => {
+    const now = new Date();
+    const isExpired = button.isTemporary && new Date(button.expiryDate) < now;
+    const statusText = button.hidden ? 'Gizli' : (isExpired ? 'Süresi Dolmuş' : 'Aktif');
+    const statusColor = button.hidden ? '#ff6b6b' : (isExpired ? '#ffa500' : '#6effb2');
+
+    const item = document.createElement('div');
+    item.className = 'button-item';
+    item.innerHTML = `
+      <div class="button-info">
+        <strong>${button.name}</strong>
+        <p>Bağlantı: <a href="${button.link}" target="_blank" style="color:#6effb2;">${button.link}</a></p>
+        <p>Durum: <span style="color:${statusColor};">${statusText}</span></p>
+        ${button.isTemporary ? `<p>Son Tarih: ${new Date(button.expiryDate).toLocaleDateString('tr-TR')}</p>` : ''}
+        <p>Oluşturma: ${new Date(button.createdDate).toLocaleDateString('tr-TR')}</p>
+      </div>
+      <div class="button-actions">
+        <button onclick="toggleButtonVisibilityBtn(${button.id})" ${isExpired ? 'disabled' : ''}>
+          ${button.hidden ? 'Göster' : 'Gizle'}
+        </button>
+        <button onclick="deleteButtonBtn(${button.id})" class="delete-btn">Sil</button>
+      </div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+async function toggleButtonVisibilityBtn(id) {
+  await toggleButtonVisibility(id);
+  await loadButtonManager();
+}
+
+async function deleteButtonBtn(id) {
+  if (!confirm('Bu butonu silmek istediğinizden emin misiniz?')) return;
+  await deleteButton(id);
+  await loadButtonManager();
+  alert('Buton silindi!');
+}
+
+function toggleDatePicker() {
+  const isTemporary = document.getElementById('isTemporary').checked;
+  const dateContainer = document.getElementById('expiryDateContainer');
+  dateContainer.style.display = isTemporary ? 'block' : 'none';
+  
+  if (!isTemporary) {
+    document.getElementById('expiryDate').value = '';
+  }
+}
+
 // --------------------------- Lightbox ---------------------------
 function openLightbox(imageSrc,imageName){
   const lightbox=document.getElementById('lightbox');
@@ -320,3 +479,7 @@ window.uploadPhotos = uploadPhotos;
 window.deleteSelected = deleteSelected;
 window.openLightbox = openLightbox;
 window.closeLightbox = closeLightbox;
+window.addNewButton = addNewButton;
+window.toggleButtonVisibilityBtn = toggleButtonVisibilityBtn;
+window.deleteButtonBtn = deleteButtonBtn;
+window.toggleDatePicker = toggleDatePicker;
