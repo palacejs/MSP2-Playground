@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Start loading info rotation
   updateLoadingInfo();
-  const infoInterval = setInterval(updateLoadingInfo, 5000);
+  const infoInterval = setInterval(updateLoadingInfo, 3000);
 
   // Show main content after 20 seconds
   setTimeout(() => {
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
         loadDynamicButtons();
       }, 100);
     }, 1000);
-  }, 20000);
+  }, 10000);
 
   // Music control functionality
   musicToggle.addEventListener('click', function() {
