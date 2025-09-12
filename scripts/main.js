@@ -1,6 +1,7 @@
 // Loading screen and main app initialization
 let musicIframe;
 let isMusicPlaying = true;
+let countdownIntervals = [];
 
 // Loading info messages in different languages
 const LOADING_INFO = {
@@ -8,31 +9,31 @@ const LOADING_INFO = {
     "Welcome to MSP2 Playground - Your ultimate modding destination",
     "Discover powerful tools to enhance your MSP2 experience",
     "Install custom mods with just one click using Violentmonkey",
-    "Access exclusive features like Soft Shop, MOD, and Troll"
+    "Access exclusive features and enhancements"
   ],
   "tr-TR": [
     "MSP2 Playground'a hoş geldiniz - En iyi modlama destinasyonunuz",
     "MSP2 deneyiminizi geliştiren güçlü araçları keşfedin",
     "Violentmonkey kullanarak tek tıkla özel modlar kurun",
-    "Soft Shop, MOD ve Troll gibi özel özelliklere erişin"
+    "Özel özelliklere ve geliştirmelere erişin"
   ],
   "de-DE": [
     "Willkommen im MSP2 Playground - Ihr ultimatives Modding-Ziel",
     "Entdecken Sie leistungsstarke Tools zur Verbesserung Ihres MSP2-Erlebnisses",
     "Installieren Sie benutzerdefinierte Mods mit nur einem Klick mit Violentmonkey",
-    "Zugriff auf exklusive Funktionen wie Soft Shop, MOD und Troll"
+    "Zugriff auf exklusive Funktionen und Verbesserungen"
   ],
   "fr-FR": [
     "Bienvenue sur MSP2 Playground - Votre destination de modding ultime",
     "Découvrez des outils puissants pour améliorer votre expérience MSP2",
     "Installez des mods personnalisés en un seul clic avec Violentmonkey",
-    "Accédez à des fonctionnalités exclusives comme Soft Shop, MOD et Troll"
+    "Accédez à des fonctionnalités et améliorations exclusives"
   ],
   "es-ES": [
     "Bienvenido a MSP2 Playground - Tu destino definitivo de modding",
     "Descubre herramientas poderosas para mejorar tu experiencia MSP2",
     "Instala mods personalizados con solo un clic usando Violentmonkey",
-    "Accede a características exclusivas como Soft Shop, MOD y Troll"
+    "Accede a características y mejoras exclusivas"
   ]
 };
 
@@ -85,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
   updateLoadingInfo();
   const infoInterval = setInterval(updateLoadingInfo, 3000);
 
-  // Show main content after 20 seconds
+  // Show main content after 10 seconds
   setTimeout(() => {
     clearInterval(infoInterval);
     loadingScreen.style.opacity = '0';
@@ -94,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
       mainContent.style.display = 'block';
       setTimeout(() => {
         mainContent.classList.add('show');
-        // Load dynamic buttons after main content is shown
+        // Load dynamic buttons and news after main content is shown
         loadDynamicButtons();
       }, 100);
     }, 1000);
@@ -141,11 +142,14 @@ document.addEventListener('DOMContentLoaded', function() {
 // Dynamic Button Loading
 async function openButtonDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("msp2ArcDB", 2);
+    const request = indexedDB.open("msp2ArcDB", 3);
     request.onupgradeneeded = function(e) {
       const db = e.target.result;
       if (!db.objectStoreNames.contains("buttons")) {
         db.createObjectStore("buttons", { keyPath: "id" });
+      }
+      if (!db.objectStoreNames.contains("news")) {
+        db.createObjectStore("news", { keyPath: "id" });
       }
     };
     request.onsuccess = function(e) {
@@ -184,29 +188,175 @@ async function getActiveButtons() {
   }
 }
 
+async function getAllNews() {
+  try {
+    const db = await openButtonDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction("news", "readonly");
+      const store = tx.objectStore("news");
+      const request = store.getAll();
+      request.onsuccess = () => {
+        resolve(request.result.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate)));
+      };
+      request.onerror = (e) => reject(e.target.error);
+    });
+  } catch (error) {
+    console.log('News DB not available yet');
+    return [];
+  }
+}
+
+function startCountdown(button, element) {
+  const countdownTimer = element.querySelector('.countdown-timer');
+  if (!countdownTimer || !button.expiryDate) return;
+  
+  const interval = setInterval(() => {
+    const now = new Date().getTime();
+    const expiryTime = new Date(button.expiryDate).getTime();
+    const timeLeft = expiryTime - now;
+    
+    if (timeLeft <= 0) {
+      clearInterval(interval);
+      countdownTimer.textContent = 'Expired';
+      element.style.opacity = '0.5';
+      element.style.pointerEvents = 'none';
+      // Reload buttons to remove expired ones
+      setTimeout(loadDynamicButtons, 2000);
+      return;
+    }
+    
+    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+    
+    let timeString = '';
+    if (days > 0) {
+      timeString = `${days}d ${hours}h`;
+    } else if (hours > 0) {
+      timeString = `${hours}h ${minutes}m`;
+    } else if (minutes > 0) {
+      timeString = `${minutes}m ${seconds}s`;
+    } else {
+      timeString = `${seconds}s`;
+    }
+    
+    countdownTimer.textContent = `⏱️ ${timeString}`;
+  }, 1000);
+  
+  countdownIntervals.push(interval);
+}
+
 async function loadDynamicButtons() {
   try {
+    // Clear existing countdowns
+    countdownIntervals.forEach(interval => clearInterval(interval));
+    countdownIntervals = [];
+
     const buttons = await getActiveButtons();
-    const overlay = document.getElementById('mainOverlay');
+    const container = document.getElementById('dynamicButtons');
     
     if (buttons.length > 0) {
+      container.innerHTML = '';
       buttons.forEach(button => {
         const buttonElement = document.createElement('a');
         buttonElement.href = button.link;
-        buttonElement.className = 'bookmark-btn dynamic-btn';
-        buttonElement.textContent = button.name;
+        buttonElement.className = 'dynamic-btn';
         buttonElement.target = '_blank';
-        overlay.appendChild(buttonElement);
+        
+        const textDiv = document.createElement('div');
+        textDiv.className = 'dynamic-btn-text';
+        textDiv.textContent = button.name;
+        buttonElement.appendChild(textDiv);
+        
+        if (button.isTemporary) {
+          const countdownDiv = document.createElement('div');
+          countdownDiv.className = 'countdown-timer';
+          countdownDiv.textContent = 'Loading...';
+          buttonElement.appendChild(countdownDiv);
+          
+          setTimeout(() => startCountdown(button, buttonElement), 100);
+        }
+        
+        container.appendChild(buttonElement);
       });
+    } else {
+      container.innerHTML = '';
     }
+
+    // Load button descriptions for about modal
+    loadDynamicButtonDescriptions();
   } catch (error) {
     console.log('Could not load dynamic buttons:', error);
+  }
+}
+
+async function loadDynamicButtonDescriptions() {
+  try {
+    const buttons = await getActiveButtons();
+    const container = document.getElementById('dynamicButtonDescriptions');
+    
+    if (buttons.length > 0 && container) {
+      let descriptionsHTML = '<h4 style="color: #6effb2; margin: 15px 0 10px 0;">Available Features:</h4><ul>';
+      
+      buttons.forEach(button => {
+        if (button.description) {
+          try {
+            const descriptions = JSON.parse(button.description);
+            const currentLang = window.currentLang || 'en-US';
+            const description = descriptions[currentLang] || descriptions['en-US'] || button.name;
+            descriptionsHTML += `<li><b>${description}</b></li>`;
+          } catch (e) {
+            descriptionsHTML += `<li><b>${button.name}</b>: Custom feature</li>`;
+          }
+        } else {
+          descriptionsHTML += `<li><b>${button.name}</b>: Custom feature</li>`;
+        }
+      });
+      
+      descriptionsHTML += '</ul>';
+      container.innerHTML = descriptionsHTML;
+    } else if (container) {
+      container.innerHTML = '';
+    }
+  } catch (error) {
+    console.log('Could not load button descriptions:', error);
+  }
+}
+
+async function loadNewsList() {
+  try {
+    const newsList = await getAllNews();
+    const container = document.getElementById('newsList');
+    
+    if (newsList.length > 0 && container) {
+      container.innerHTML = '';
+      newsList.forEach(news => {
+        const newsElement = document.createElement('div');
+        newsElement.className = 'news-item';
+        newsElement.innerHTML = `
+          <h4>${news.title}</h4>
+          <p>${news.content}</p>
+          <div class="news-date">${new Date(news.createdDate).toLocaleDateString('tr-TR')} ${new Date(news.createdDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</div>
+        `;
+        container.appendChild(newsElement);
+      });
+    } else if (container) {
+      container.innerHTML = '<p style="color:#ccc;text-align:center;">No news available yet.</p>';
+    }
+  } catch (error) {
+    console.log('Could not load news:', error);
   }
 }
 
 // Modal functionality
 function openModal(id) {
   document.getElementById(id).style.display = 'block';
+  if (id === 'newsModal') {
+    loadNewsList();
+  } else if (id === 'aboutModal') {
+    loadDynamicButtonDescriptions();
+  }
 }
 
 function closeModal(id) {
@@ -215,6 +365,7 @@ function closeModal(id) {
 
 function initializeModals() {
   document.getElementById('aboutBtn').onclick = () => openModal('aboutModal');
+  document.getElementById('newsBtn').onclick = () => openModal('newsModal');
   document.getElementById('langBtn').onclick = () => openModal('langModal');
 }
 
@@ -247,6 +398,7 @@ window.getMusicState = function() {
   return isMusicPlaying;
 };
 
-// Make modal functions global
+// Make functions global
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.loadDynamicButtonDescriptions = loadDynamicButtonDescriptions;
