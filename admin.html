@@ -65,6 +65,15 @@
             <label for="buttonLink">Buton Bağlantısı:</label>
             <input type="url" id="buttonLink" placeholder="https://example.com/link">
           </div>
+          <div class="form-group">
+            <label for="buttonDescription">Buton Ne İşe Yarıyor (JSON formatında):</label>
+            <textarea id="buttonDescription" rows="6" placeholder='Örnek:
+{
+  "en-US": "This button installs special features for MSP2",
+  "tr-TR": "Bu buton MSP2 için özel özellikler yükler",
+  "de-DE": "Dieser Button installiert spezielle Funktionen für MSP2"
+}'></textarea>
+          </div>
           <div class="form-group checkbox-group">
             <label>
               <input type="checkbox" id="isTemporary" onchange="toggleDatePicker()">
@@ -73,7 +82,7 @@
           </div>
           <div id="expiryDateContainer" class="form-group" style="display: none;">
             <label for="expiryDate">Son Tarih:</label>
-            <input type="date" id="expiryDate">
+            <input type="datetime-local" id="expiryDate">
           </div>
           <button onclick="addNewButton()" class="add-button">Buton Ekle</button>
         </div>
@@ -81,6 +90,27 @@
         <div class="button-list-section">
           <h4>Eklenen Butonlar</h4>
           <div id="buttonManager"></div>
+        </div>
+      </div>
+
+      <!-- News Management Section -->
+      <div class="news-management-section">
+        <h3>Haber Yönetimi</h3>
+        <div class="news-form">
+          <div class="form-group">
+            <label for="newsTitle">Haber Başlığı:</label>
+            <input type="text" id="newsTitle" placeholder="Örn: Yeni Özellik Duyurusu">
+          </div>
+          <div class="form-group">
+            <label for="newsContent">Haber İçeriği:</label>
+            <textarea id="newsContent" rows="4" placeholder="Haber içeriğini buraya yazın..."></textarea>
+          </div>
+          <button onclick="addNews()" class="add-button">Haber Ekle</button>
+        </div>
+        
+        <div class="news-list-section">
+          <h4>Yayınlanan Haberler</h4>
+          <div id="newsManager"></div>
         </div>
       </div>
       
