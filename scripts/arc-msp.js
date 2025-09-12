@@ -3,11 +3,12 @@ const PASSWORD_HASH = "f7dc02cde06759a946f4dd803f767ed7a061e60558870c724e833a90a
 const DB_NAME = "msp2ArcDB";
 const DB_STORE = "photos";
 const BUTTONS_STORE = "buttons";
+const NEWS_STORE = "news";
 
 // --------------------------- IndexedDB Functions ---------------------------
 function openDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, 2); // Updated version
+    const request = indexedDB.open(DB_NAME, 3); // Updated version
     request.onupgradeneeded = function(e) {
       const db = e.target.result;
       if (!db.objectStoreNames.contains(DB_STORE)) {
@@ -15,6 +16,9 @@ function openDB() {
       }
       if (!db.objectStoreNames.contains(BUTTONS_STORE)) {
         db.createObjectStore(BUTTONS_STORE, { keyPath: "id" });
+      }
+      if (!db.objectStoreNames.contains(NEWS_STORE)) {
+        db.createObjectStore(NEWS_STORE, { keyPath: "id" });
       }
     };
     request.onsuccess = function(e) {
@@ -113,6 +117,40 @@ async function toggleButtonVisibility(id) {
   });
 }
 
+// --------------------------- News Management Functions ---------------------------
+async function saveNews(news) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(NEWS_STORE, "readwrite");
+    const store = tx.objectStore(NEWS_STORE);
+    store.put(news);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function deleteNews(id) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(NEWS_STORE, "readwrite");
+    const store = tx.objectStore(NEWS_STORE);
+    store.delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function getAllNews() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(NEWS_STORE, "readonly");
+    const store = tx.objectStore(NEWS_STORE);
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = (e) => reject(e.target.error);
+  });
+}
+
 // --------------------------- Password Functions ---------------------------
 async function hashPassword(password) {
   const encoder = new TextEncoder();
@@ -148,6 +186,7 @@ function showAdminPanel() {
   document.getElementById('adminPanel').style.display = 'block';
   loadPhotoManager();
   loadButtonManager();
+  loadNewsManager();
 }
 
 function logout() {
@@ -350,6 +389,7 @@ async function deleteSelected() {
 async function addNewButton() {
   const buttonName = document.getElementById('buttonName').value.trim();
   const buttonLink = document.getElementById('buttonLink').value.trim();
+  const buttonDescription = document.getElementById('buttonDescription').value.trim();
   const isTemporary = document.getElementById('isTemporary').checked;
   const expiryDate = document.getElementById('expiryDate').value;
 
@@ -361,8 +401,16 @@ async function addNewButton() {
     alert('Lütfen buton bağlantısını girin!');
     return;
   }
+  if (buttonDescription) {
+    try {
+      JSON.parse(buttonDescription);
+    } catch (e) {
+      alert('Açıklama geçerli bir JSON formatında olmalıdır!');
+      return;
+    }
+  }
   if (isTemporary && !expiryDate) {
-    alert('Lütfen geçiçi buton için son tarihi belirleyin!');
+    alert('Lütfen geçici buton için son tarihi belirleyin!');
     return;
   }
 
@@ -370,6 +418,7 @@ async function addNewButton() {
     id: Date.now() + Math.random(),
     name: buttonName,
     link: buttonLink,
+    description: buttonDescription,
     isTemporary: isTemporary,
     expiryDate: isTemporary ? expiryDate : null,
     hidden: false,
@@ -382,6 +431,7 @@ async function addNewButton() {
   // Clear form
   document.getElementById('buttonName').value = '';
   document.getElementById('buttonLink').value = '';
+  document.getElementById('buttonDescription').value = '';
   document.getElementById('isTemporary').checked = false;
   document.getElementById('expiryDate').value = '';
   document.getElementById('expiryDateContainer').style.display = 'none';
@@ -412,8 +462,9 @@ async function loadButtonManager() {
         <strong>${button.name}</strong>
         <p>Bağlantı: <a href="${button.link}" target="_blank" style="color:#6effb2;">${button.link}</a></p>
         <p>Durum: <span style="color:${statusColor};">${statusText}</span></p>
-        ${button.isTemporary ? `<p>Son Tarih: ${new Date(button.expiryDate).toLocaleDateString('tr-TR')}</p>` : ''}
-        <p>Oluşturma: ${new Date(button.createdDate).toLocaleDateString('tr-TR')}</p>
+        ${button.description ? `<p>Açıklama: Evet</p>` : `<p>Açıklama: Hayır</p>`}
+        ${button.isTemporary ? `<p>Son Tarih: ${new Date(button.expiryDate).toLocaleDateString('tr-TR')} ${new Date(button.expiryDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</p>` : ''}
+        <p>Oluşturma: ${new Date(button.createdDate).toLocaleDateString('tr-TR')} ${new Date(button.createdDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</p>
       </div>
       <div class="button-actions">
         <button onclick="toggleButtonVisibilityBtn(${button.id})" ${isExpired ? 'disabled' : ''}>
@@ -446,6 +497,71 @@ function toggleDatePicker() {
   if (!isTemporary) {
     document.getElementById('expiryDate').value = '';
   }
+}
+
+// --------------------------- News Management ---------------------------
+async function addNews() {
+  const newsTitle = document.getElementById('newsTitle').value.trim();
+  const newsContent = document.getElementById('newsContent').value.trim();
+
+  if (!newsTitle) {
+    alert('Lütfen haber başlığını girin!');
+    return;
+  }
+  if (!newsContent) {
+    alert('Lütfen haber içeriğini girin!');
+    return;
+  }
+
+  const news = {
+    id: Date.now() + Math.random(),
+    title: newsTitle,
+    content: newsContent,
+    createdDate: new Date().toISOString()
+  };
+
+  await saveNews(news);
+  await loadNewsManager();
+  
+  // Clear form
+  document.getElementById('newsTitle').value = '';
+  document.getElementById('newsContent').value = '';
+  
+  alert('Haber başarıyla eklendi!');
+}
+
+async function loadNewsManager() {
+  const newsList = await getAllNews();
+  const container = document.getElementById('newsManager');
+  container.innerHTML = '';
+  
+  if (newsList.length === 0) {
+    container.innerHTML = '<p style="color:#ccc;text-align:center;">Henüz haber eklenmemiş.</p>';
+    return;
+  }
+
+  newsList.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate)).forEach(news => {
+    const item = document.createElement('div');
+    item.className = 'news-item';
+    item.innerHTML = `
+      <div class="news-info">
+        <strong>${news.title}</strong>
+        <p>${news.content}</p>
+        <p>Tarih: ${new Date(news.createdDate).toLocaleDateString('tr-TR')} ${new Date(news.createdDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</p>
+      </div>
+      <div class="news-actions">
+        <button onclick="deleteNewsBtn(${news.id})" class="delete-btn">Sil</button>
+      </div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+async function deleteNewsBtn(id) {
+  if (!confirm('Bu haberi silmek istediğinizden emin misiniz?')) return;
+  await deleteNews(id);
+  await loadNewsManager();
+  alert('Haber silindi!');
 }
 
 // --------------------------- Lightbox ---------------------------
@@ -483,3 +599,5 @@ window.addNewButton = addNewButton;
 window.toggleButtonVisibilityBtn = toggleButtonVisibilityBtn;
 window.deleteButtonBtn = deleteButtonBtn;
 window.toggleDatePicker = toggleDatePicker;
+window.addNews = addNews;
+window.deleteNewsBtn = deleteNewsBtn;
