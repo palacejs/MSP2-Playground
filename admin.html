@@ -10,66 +10,16 @@
   <canvas id="starfield"></canvas>
   
   <!-- Music Control Button -->
-  <button id="musicToggle" class="mu<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MSP2 ARC Admin</title>
-  <link rel="stylesheet" href="styles/arc-msp.css">
-</head>
-<body>
-  <canvas id="starfield"></canvas>
-  
-  <div class="container">
-    <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
-    <h1 class="title">MSP2 ARC Admin Panel</h1>
-
-    <!-- Admin Login -->
-    <div id="loginSection" class="login-section">
-      <h2>Admin Access</h2>
-      <div class="login-form">
-        <input type="password" id="adminPassword" placeholder="Enter admin password">
-        <button onclick="adminLogin()">Login</button>
-      </div>
-    </div>
-    
-    <!-- Admin Panel -->
-    <div id="adminPanel" class="admin-panel" style="display: none;">
-      <h2>Control Panel</h2>
-      
-      <!-- Upload Section -->
-      <div class="upload-section">
-        <h3>Upload Photos</h3>
-        <input type="file" id="photoInput" multiple accept="image/*">
-        <button onclick="uploadPhotos()">Upload Selected Photos</button>
-      </div>
-      
-      <!-- Delete Section -->
-      <div class="delete-section">
-        <h3>Manage Photos</h3>
-        <div id="photoManager"></div>
-        <button onclick="deleteSelected()" id="deleteBtn" style="display: none;">Delete Selected</button>
-      </div>
-      
-      <button onclick="logout()" class="logout-btn">Logout</button>
-    </div>
-  </div>
-  
-  <script src="scripts/starfield.js"></script>
-  <script src="scripts/arc-msp.js"></script>
-</body>
-</html>
-sic-toggle">
+  <button id="musicToggle" class="music-toggle">
     <span id="musicIcon">🔊</span>
   </button>
   
   <!-- Hidden YouTube iframe for background music -->
   <iframe id="backgroundMusic" 
-          src="https://www.youtube.com/embed/aLV59GhhAYA?autoplay=1&loop=1&playlist=aLV59GhhAYA&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&mute=1" 
-          frameborder="0" 
-          allow="autoplay; encrypted-media" 
-          style="display: none;">
+    src="https://www.youtube.com/embed/aLV59GhhAYA?autoplay=1&loop=1&playlist=aLV59GhhAYA&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&mute=1" 
+    frameborder="0" 
+    allow="autoplay; encrypted-media" 
+    style="display: none;">
   </iframe>
   
   <div class="container">
@@ -84,7 +34,7 @@ sic-toggle">
         <button onclick="adminLogin()">Login</button>
       </div>
     </div>
-    
+
     <!-- Admin Panel -->
     <div id="adminPanel" class="admin-panel" style="display: none;">
       <h2>Control Panel</h2>
@@ -101,6 +51,37 @@ sic-toggle">
         <h3>Manage Photos</h3>
         <div id="photoManager"></div>
         <button onclick="deleteSelected()" id="deleteBtn" style="display: none;">Delete Selected</button>
+      </div>
+
+      <!-- Button Management Section -->
+      <div class="button-management-section">
+        <h3>Yeni Bağlantılı Buton Ekle</h3>
+        <div class="button-form">
+          <div class="form-group">
+            <label for="buttonName">Buton Adı:</label>
+            <input type="text" id="buttonName" placeholder="Örn: Install MSP2 Special">
+          </div>
+          <div class="form-group">
+            <label for="buttonLink">Buton Bağlantısı:</label>
+            <input type="url" id="buttonLink" placeholder="https://example.com/link">
+          </div>
+          <div class="form-group checkbox-group">
+            <label>
+              <input type="checkbox" id="isTemporary" onchange="toggleDatePicker()">
+              Buton geçici olarak mı eklensin?
+            </label>
+          </div>
+          <div id="expiryDateContainer" class="form-group" style="display: none;">
+            <label for="expiryDate">Son Tarih:</label>
+            <input type="date" id="expiryDate">
+          </div>
+          <button onclick="addNewButton()" class="add-button">Buton Ekle</button>
+        </div>
+        
+        <div class="button-list-section">
+          <h4>Eklenen Butonlar</h4>
+          <div id="buttonManager"></div>
+        </div>
       </div>
       
       <button onclick="logout()" class="logout-btn">Logout</button>
