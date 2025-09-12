@@ -168,7 +168,7 @@ canvas {
   width: 100%;
 }
 
-.upload-section, .delete-section {
+.upload-section, .delete-section, .button-management-section {
   margin: 20px 0;
   padding: 20px;
   border: 1px solid rgba(150, 150, 255, 0.2);
@@ -176,7 +176,7 @@ canvas {
   background: rgba(10, 20, 60, 0.2);
 }
 
-.upload-section h3, .delete-section h3 {
+.upload-section h3, .delete-section h3, .button-management-section h3 {
   color: #6effb2;
   margin-bottom: 15px;
 }
@@ -202,6 +202,148 @@ canvas {
 .upload-section button:hover, .delete-section button:hover {
   transform: scale(1.05);
   background: linear-gradient(90deg, #09f, #0ff);
+}
+
+/* Button Management Styles */
+.button-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  color: #9abfff;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group input[type="date"] {
+  padding: 10px 12px;
+  border: 1px solid rgba(150, 150, 255, 0.3);
+  border-radius: 6px;
+  background: rgba(10, 20, 60, 0.3);
+  color: #9abfff;
+  font-size: 14px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #6effb2;
+  box-shadow: 0 0 8px rgba(110, 255, 178, 0.3);
+}
+
+.checkbox-group {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin: 0;
+  transform: scale(1.2);
+}
+
+.add-button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #6effb2, #40e0d0);
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.add-button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #40e0d0, #6effb2);
+}
+
+.button-list-section {
+  margin-top: 25px;
+}
+
+.button-list-section h4 {
+  color: #6effb2;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.button-item {
+  background: rgba(0, 0, 40, 0.4);
+  border: 1px solid rgba(150, 150, 255, 0.2);
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.button-info {
+  flex: 1;
+}
+
+.button-info strong {
+  color: #fff;
+  font-size: 16px;
+}
+
+.button-info p {
+  margin: 5px 0;
+  font-size: 13px;
+  color: #ccc;
+}
+
+.button-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 80px;
+}
+
+.button-actions button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.button-actions button:first-child {
+  background: linear-gradient(90deg, #40e0d0, #0ff);
+  color: #000;
+}
+
+.button-actions button:first-child:hover {
+  background: linear-gradient(90deg, #0ff, #40e0d0);
+}
+
+.button-actions button:first-child:disabled {
+  background: #666;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.delete-btn {
+  background: linear-gradient(90deg, #ff6b6b, #ff4757) !important;
+  color: #fff !important;
+}
+
+.delete-btn:hover {
+  background: linear-gradient(90deg, #ff4757, #ff6b6b) !important;
 }
 
 .photo-manager {
@@ -335,33 +477,44 @@ canvas {
     right: 15px;
     top: 15px;
   }
-  
+
   .title {
     font-size: 2em;
   }
-  
+
   .login-section, .admin-panel {
     padding: 20px 15px;
     margin: 10px;
   }
-  
+
   .login-form input {
     width: 100%;
   }
-  
+
   .gallery {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
     padding: 15px;
   }
-  
+
   .photo-container img {
     max-width: 130px;
     max-height: 130px;
   }
-  
+
   .lightbox .close {
     right: 20px;
     font-size: 1.5em;
+  }
+
+  .button-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .button-actions {
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-end;
   }
 }
