@@ -411,17 +411,21 @@ function loadLanguage(langKey) {
   
   const langModal = document.getElementById('langModal');
   if (langModal) {
-    langModal.style.display = 'none';
+    langModal.classList.remove('show');
+    setTimeout(() => {
+      langModal.style.display = 'none';
+    }, 300);
   }
 
-  // Reload dynamic button descriptions and news if they exist
+  // Reload dynamic content with new language
   if (window.loadDynamicButtonDescriptions) {
     window.loadDynamicButtonDescriptions();
   }
-  
-  // Reload news with new language
   if (window.loadNewsList) {
     window.loadNewsList();
+  }
+  if (window.loadDynamicButtons) {
+    window.loadDynamicButtons();
   }
 }
 
