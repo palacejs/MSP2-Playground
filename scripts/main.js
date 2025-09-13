@@ -96,7 +96,19 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => {
         mainContent.classList.add('show');
         // Load dynamic buttons and news after main content is shown
+        // Add multiple retry attempts for mobile devices
         loadDynamicButtons();
+        
+        // Retry loading every 2 seconds for the first 10 seconds (mobile optimization)
+        let retryCount = 0;
+        const retryInterval = setInterval(() => {
+          if (retryCount < 5) {
+            loadDynamicButtons();
+            retryCount++;
+          } else {
+            clearInterval(retryInterval);
+          }
+        }, 2000);
       }, 100);
     }, 1000);
   }, 10000);
@@ -139,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeLanguageSystem();
 });
 
-// Dynamic Button Loading
+// Dynamic Button Loading with improved mobile support
 async function openButtonDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open("msp2ArcDB", 3);
@@ -183,7 +195,7 @@ async function getActiveButtons() {
       request.onerror = (e) => reject(e.target.error);
     });
   } catch (error) {
-    console.log('Button DB not available yet');
+    console.log('Button DB not available yet:', error);
     return [];
   }
 }
@@ -201,7 +213,7 @@ async function getAllNews() {
       request.onerror = (e) => reject(e.target.error);
     });
   } catch (error) {
-    console.log('News DB not available yet');
+    console.log('News DB not available yet:', error);
     return [];
   }
 }
@@ -249,6 +261,8 @@ function startCountdown(button, element) {
 
 async function loadDynamicButtons() {
   try {
+    console.log('Loading dynamic buttons...');
+    
     // Clear existing countdowns
     countdownIntervals.forEach(interval => clearInterval(interval));
     countdownIntervals = [];
@@ -256,9 +270,17 @@ async function loadDynamicButtons() {
     const buttons = await getActiveButtons();
     const container = document.getElementById('dynamicButtons');
     
+    if (!container) {
+      console.log('Dynamic buttons container not found');
+      return;
+    }
+    
+    console.log('Found buttons:', buttons.length);
+    
     if (buttons.length > 0) {
       container.innerHTML = '';
       buttons.forEach(button => {
+        console.log('Creating button:', button.name);
         const buttonElement = document.createElement('a');
         buttonElement.href = button.link;
         buttonElement.className = 'dynamic-btn';
@@ -280,8 +302,12 @@ async function loadDynamicButtons() {
         
         container.appendChild(buttonElement);
       });
+      
+      // Force a reflow to ensure elements are rendered (mobile fix)
+      container.offsetHeight;
     } else {
       container.innerHTML = '';
+      console.log('No active buttons found');
     }
 
     // Load button descriptions for about modal
@@ -305,12 +331,12 @@ async function loadDynamicButtonDescriptions() {
             const descriptions = JSON.parse(button.description);
             const currentLang = window.currentLang || 'en-US';
             const description = descriptions[currentLang] || descriptions['en-US'] || button.name;
-            descriptionsHTML += `<li><b>${description}</b></li>`;
+            descriptionsHTML += `<li><b>${button.name}:</b> ${description}</li>`;
           } catch (e) {
-            descriptionsHTML += `<li><b>${button.name}</b>: Custom feature</li>`;
+            descriptionsHTML += `<li><b>${button.name}:</b> Custom feature</li>`;
           }
         } else {
-          descriptionsHTML += `<li><b>${button.name}</b>: Custom feature</li>`;
+          descriptionsHTML += `<li><b>${button.name}:</b> Custom feature</li>`;
         }
       });
       
@@ -326,17 +352,49 @@ async function loadDynamicButtonDescriptions() {
 
 async function loadNewsList() {
   try {
+    console.log('Loading news list...');
     const newsList = await getAllNews();
     const container = document.getElementById('newsList');
     
-    if (newsList.length > 0 && container) {
+    if (!container) {
+      console.log('News container not found');
+      return;
+    }
+    
+    console.log('Found news items:', newsList.length);
+    
+    if (newsList.length > 0) {
       container.innerHTML = '';
+      const currentLang = window.currentLang || 'en-US';
+      
       newsList.forEach(news => {
+        let title = news.title;
+        let content = news.content;
+        
+        // Check if title and content are JSON with multiple languages
+        try {
+          const titleObj = JSON.parse(news.title);
+          if (typeof titleObj === 'object') {
+            title = titleObj[currentLang] || titleObj['en-US'] || news.title;
+          }
+        } catch (e) {
+          // If not JSON, use as is
+        }
+        
+        try {
+          const contentObj = JSON.parse(news.content);
+          if (typeof contentObj === 'object') {
+            content = contentObj[currentLang] || contentObj['en-US'] || news.content;
+          }
+        } catch (e) {
+          // If not JSON, use as is
+        }
+        
         const newsElement = document.createElement('div');
         newsElement.className = 'news-item';
         newsElement.innerHTML = `
-          <h4>${news.title}</h4>
-          <p>${news.content}</p>
+          <h4>${title}</h4>
+          <p class="news-content">${content}</p>
           <div class="news-date">${new Date(news.createdDate).toLocaleDateString('tr-TR')} ${new Date(news.createdDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</div>
         `;
         container.appendChild(newsElement);
@@ -402,3 +460,4 @@ window.getMusicState = function() {
 window.openModal = openModal;
 window.closeModal = closeModal;
 window.loadDynamicButtonDescriptions = loadDynamicButtonDescriptions;
+window.loadNewsList = loadNewsList;
