@@ -8,28 +8,34 @@ document.addEventListener('DOMContentLoaded', function() {
   
   musicIframe = document.getElementById('backgroundMusic');
 
+  // Check saved music state first
+  const musicMuted = localStorage.getItem('msp2_music_muted');
+  if (musicMuted === 'true') {
+    isMusicPlaying = false;
+    if (musicIcon) {
+      musicIcon.textContent = '🔇';
+      musicToggle.classList.add('muted');
+    }
+  }
+
   // Initialize background music
   if (musicIframe) {
     musicIframe.addEventListener('load', function() {
       setTimeout(() => {
         try {
-          musicIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-          setTimeout(() => {
-            musicIframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
-          }, 2000);
+          if (isMusicPlaying) {
+            musicIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+            setTimeout(() => {
+              musicIframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+            }, 2000);
+          } else {
+            musicIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+          }
         } catch (e) {
           console.log('Music control not available');
         }
       }, 1000);
     });
-  }
-
-  // Check saved music state
-  const musicMuted = localStorage.getItem('msp2_music_muted');
-  if (musicMuted === 'true') {
-    musicIcon.textContent = '🔇';
-    musicToggle.classList.add('muted');
-    isMusicPlaying = false;
   }
 
   // Music control functionality
