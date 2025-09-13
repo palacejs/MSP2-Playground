@@ -9,11 +9,6 @@
 <body>
   <canvas id="starfield"></canvas>
   
-  <!-- Music Control Button -->
-  <button id="musicToggle" class="music-toggle">
-    <span id="musicIcon">🔊</span>
-  </button>
-  
   <!-- Hidden YouTube iframe for background music -->
   <iframe id="backgroundMusic" 
           src="https://www.youtube.com/embed/aLV59GhhAYA?autoplay=1&loop=1&playlist=aLV59GhhAYA&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&mute=1" 
@@ -23,7 +18,13 @@
   </iframe>
   
   <div class="container">
-    <button class="back-btn" onclick="goBackHome()">← Back to Home</button>
+    <div class="top-controls">
+      <button class="back-btn" onclick="goBackHome()">← Back to Home</button>
+      <!-- Music Control Button -->
+      <button id="musicToggle" class="music-toggle">
+        <span id="musicIcon">🔊</span>
+      </button>
+    </div>
     <h1 class="title">MSP2 ARC</h1>
 
     <!-- Photo Gallery -->
