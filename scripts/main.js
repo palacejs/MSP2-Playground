@@ -46,19 +46,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
   musicIframe = document.getElementById('backgroundMusic');
 
-  // Check saved music state FIRST before initializing music
+  // Check saved music state first
   const musicMuted = localStorage.getItem('msp2_music_muted');
   if (musicMuted === 'true') {
     isMusicPlaying = false;
     if (musicIcon) {
       musicIcon.textContent = '🔇';
-    }
-    if (musicToggle) {
       musicToggle.classList.add('muted');
     }
   }
 
-  // Initialize background music only if not muted
+  // Initialize background music
   if (musicIframe) {
     musicIframe.addEventListener('load', function() {
       setTimeout(() => {
@@ -257,45 +255,6 @@ function startCountdown(button, element) {
   countdownIntervals.push(interval);
 }
 
-// Break text into lines if it's too long (40 characters per line)
-function breakLongText(text, maxLength = 40) {
-  if (typeof text !== 'string') return text;
-  
-  const words = text.split(' ');
-  const lines = [];
-  let currentLine = '';
-  
-  for (const word of words) {
-    if ((currentLine + word).length <= maxLength) {
-      currentLine += (currentLine ? ' ' : '') + word;
-    } else {
-      if (currentLine) lines.push(currentLine);
-      currentLine = word;
-    }
-  }
-  if (currentLine) lines.push(currentLine);
-  
-  return lines.join('\n');
-}
-
-// Get translated text based on current language
-function getTranslatedText(textObj, fallback = '') {
-  if (typeof textObj === 'string') {
-    try {
-      textObj = JSON.parse(textObj);
-    } catch (e) {
-      return textObj;
-    }
-  }
-  
-  if (typeof textObj === 'object' && textObj !== null) {
-    const currentLang = window.currentLang || 'en-US';
-    return textObj[currentLang] || textObj['en-US'] || fallback;
-  }
-  
-  return fallback;
-}
-
 async function loadDynamicButtons() {
   try {
     // Clear existing countdowns
@@ -305,7 +264,7 @@ async function loadDynamicButtons() {
     const buttons = await getActiveButtons();
     const container = document.getElementById('dynamicButtons');
     
-    if (buttons.length > 0) {
+    if (buttons.length > 0 && container) {
       container.innerHTML = '';
       buttons.forEach(button => {
         const buttonElement = document.createElement('a');
@@ -315,8 +274,7 @@ async function loadDynamicButtons() {
         
         const textDiv = document.createElement('div');
         textDiv.className = 'dynamic-btn-text';
-        // Break long button names into multiple lines for mobile
-        textDiv.textContent = breakLongText(button.name, 25);
+        textDiv.textContent = button.name;
         buttonElement.appendChild(textDiv);
         
         if (button.isTemporary) {
@@ -330,8 +288,12 @@ async function loadDynamicButtons() {
         
         container.appendChild(buttonElement);
       });
-    } else {
+      
+      // Ensure container is visible
+      container.style.display = 'grid';
+    } else if (container) {
       container.innerHTML = '';
+      container.style.display = 'grid'; // Keep grid layout even when empty
     }
 
     // Load button descriptions for about modal
@@ -351,8 +313,12 @@ async function loadDynamicButtonDescriptions() {
       
       buttons.forEach(button => {
         if (button.description) {
-          const description = getTranslatedText(button.description, button.name);
-          descriptionsHTML += `<li><b>${button.name}</b>: ${description}</li>`;
+          const translatedDescription = window.getTranslatedText(button.description, window.currentLang);
+          if (translatedDescription && translatedDescription !== button.description) {
+            descriptionsHTML += `<li><b>${translatedDescription}</b></li>`;
+          } else {
+            descriptionsHTML += `<li><b>${button.name}</b>: Custom feature</li>`;
+          }
         } else {
           descriptionsHTML += `<li><b>${button.name}</b>: Custom feature</li>`;
         }
@@ -380,40 +346,34 @@ async function loadNewsList() {
         newsElement.className = 'news-item';
         
         // Get translated title and content
-        const translatedTitle = getTranslatedText(news.title, news.title);
-        const translatedContent = getTranslatedText(news.content, news.content);
+        const translatedTitle = window.getTranslatedText(news.title, window.currentLang);
+        const translatedContent = window.getTranslatedText(news.content, window.currentLang);
         
-        // Break long content into lines
-        const formattedContent = breakLongText(translatedContent, 40);
+        // Break text at 40 characters for mobile readability
+        const formattedTitle = window.breakTextAtLimit(translatedTitle, 40);
+        const formattedContent = window.breakTextAtLimit(translatedContent, 40);
         
         newsElement.innerHTML = `
-          <h4>${translatedTitle}</h4>
+          <h4>${formattedTitle}</h4>
           <p>${formattedContent}</p>
           <div class="news-date">${new Date(news.createdDate).toLocaleDateString('tr-TR')} ${new Date(news.createdDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</div>
         `;
         container.appendChild(newsElement);
       });
     } else if (container) {
-      const currentLang = window.currentLang || 'en-US';
-      const noNewsText = currentLang === 'tr-TR' ? 'Henüz haber bulunmamaktadır.' : 
-                        currentLang === 'de-DE' ? 'Noch keine Nachrichten verfügbar.' :
-                        currentLang === 'fr-FR' ? 'Aucune actualité disponible pour le moment.' :
-                        currentLang === 'es-ES' ? 'No hay noticias disponibles aún.' :
-                        'No news available yet.';
-      container.innerHTML = `<p style="color:#ccc;text-align:center;">${noNewsText}</p>`;
+      const trans = window.TRANSLATIONS && window.TRANSLATIONS[window.currentLang] ? window.TRANSLATIONS[window.currentLang] : window.TRANSLATIONS['en-US'];
+      container.innerHTML = '<p style="color:#ccc;text-align:center;">No news available yet.</p>';
     }
   } catch (error) {
     console.log('Could not load news:', error);
   }
 }
 
-// Modal functionality with animations
+// Modal functionality with animation
 function openModal(id) {
   const modal = document.getElementById(id);
   if (modal) {
-    modal.style.display = 'block';
-    // Force reflow
-    modal.offsetHeight;
+    modal.style.display = 'flex';
     modal.classList.add('show');
     
     if (id === 'newsModal') {
@@ -438,12 +398,12 @@ function initializeModals() {
   document.getElementById('aboutBtn').onclick = () => openModal('aboutModal');
   document.getElementById('newsBtn').onclick = () => openModal('newsModal');
   document.getElementById('langBtn').onclick = () => openModal('langModal');
-  
+
   // Close modals when clicking outside
-  document.querySelectorAll('.modal-bg').forEach(modalBg => {
-    modalBg.addEventListener('click', function(e) {
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
       if (e.target === this) {
-        const modalId = this.parentElement.id;
+        const modalId = this.id;
         closeModal(modalId);
       }
     });
@@ -454,6 +414,7 @@ function initializeLanguageSystem() {
   // Load saved language
   const savedLang = localStorage.getItem('msp2mods_lang');
   if (savedLang && window.TRANSLATIONS && window.TRANSLATIONS[savedLang]) {
+    window.currentLang = savedLang;
     window.loadLanguage(savedLang);
   }
 
@@ -472,7 +433,9 @@ function initializeLanguageSystem() {
 
 // Global music control functions
 window.toggleMusic = function() {
-  document.getElementById('musicToggle').click();
+  if (document.getElementById('musicToggle')) {
+    document.getElementById('musicToggle').click();
+  }
 };
 
 window.getMusicState = function() {
@@ -483,5 +446,4 @@ window.getMusicState = function() {
 window.openModal = openModal;
 window.closeModal = closeModal;
 window.loadDynamicButtonDescriptions = loadDynamicButtonDescriptions;
-window.loadDynamicButtons = loadDynamicButtons;
 window.loadNewsList = loadNewsList;
