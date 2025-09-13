@@ -9,11 +9,6 @@
 <body>
   <canvas id="starfield"></canvas>
   
-  <!-- Music Control Button -->
-  <button id="musicToggle" class="music-toggle">
-    <span id="musicIcon">🔊</span>
-  </button>
-  
   <!-- Hidden YouTube iframe for background music -->
   <iframe id="backgroundMusic" 
     src="https://www.youtube.com/embed/aLV59GhhAYA?autoplay=1&loop=1&playlist=aLV59GhhAYA&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&mute=1" 
@@ -23,7 +18,13 @@
   </iframe>
   
   <div class="container">
-    <button class="back-btn" onclick="goBackHome()">← Back to Home</button>
+    <div class="top-controls">
+      <button class="back-btn" onclick="goBackHome()">← Back to Home</button>
+      <!-- Music Control Button -->
+      <button id="musicToggle" class="music-toggle">
+        <span id="musicIcon">🔊</span>
+      </button>
+    </div>
     <h1 class="title">MSP2 ARC Admin Panel</h1>
 
     <!-- Admin Login -->
@@ -98,12 +99,22 @@
         <h3>Haber Yönetimi</h3>
         <div class="news-form">
           <div class="form-group">
-            <label for="newsTitle">Haber Başlığı:</label>
-            <input type="text" id="newsTitle" placeholder="Örn: Yeni Özellik Duyurusu">
+            <label for="newsTitle">Haber Başlığı (JSON formatında - 16 dil):</label>
+            <textarea id="newsTitle" rows="4" placeholder='Örnek:
+{
+  "en-US": "New Feature Announcement",
+  "tr-TR": "Yeni Özellik Duyurusu",
+  "de-DE": "Neue Funktion Ankündigung"
+}'></textarea>
           </div>
           <div class="form-group">
-            <label for="newsContent">Haber İçeriği:</label>
-            <textarea id="newsContent" rows="4" placeholder="Haber içeriğini buraya yazın..."></textarea>
+            <label for="newsContent">Haber İçeriği (JSON formatında - 16 dil):</label>
+            <textarea id="newsContent" rows="6" placeholder='Örnek:
+{
+  "en-US": "We are excited to announce new features that will enhance your experience.",
+  "tr-TR": "Deneyiminizi geliştirecek yeni özellikler duyurmaktan heyecan duyuyoruz.",
+  "de-DE": "Wir freuen uns, neue Funktionen anzukündigen, die Ihre Erfahrung verbessern werden."
+}'></textarea>
           </div>
           <button onclick="addNews()" class="add-button">Haber Ekle</button>
         </div>
