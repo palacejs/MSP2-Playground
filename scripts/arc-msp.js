@@ -513,10 +513,29 @@ async function addNews() {
     return;
   }
 
+  // Check if it's JSON format for multilingual support
+  let isJsonTitle = false;
+  let isJsonContent = false;
+  
+  try {
+    JSON.parse(newsTitle);
+    isJsonTitle = true;
+  } catch (e) {
+    // Not JSON, use as plain text
+  }
+
+  try {
+    JSON.parse(newsContent);
+    isJsonContent = true;
+  } catch (e) {
+    // Not JSON, use as plain text
+  }
+
   const news = {
     id: Date.now() + Math.random(),
     title: newsTitle,
     content: newsContent,
+    isMultilingual: isJsonTitle || isJsonContent,
     createdDate: new Date().toISOString()
   };
 
@@ -541,12 +560,37 @@ async function loadNewsManager() {
   }
 
   newsList.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate)).forEach(news => {
+    // Show preview of content/title
+    let titlePreview = news.title;
+    let contentPreview = news.content;
+    
+    try {
+      const titleObj = JSON.parse(news.title);
+      if (typeof titleObj === 'object') {
+        titlePreview = titleObj['tr-TR'] || titleObj['en-US'] || news.title;
+        if (titlePreview.length > 50) titlePreview = titlePreview.substring(0, 50) + '...';
+      }
+    } catch (e) {
+      if (titlePreview.length > 50) titlePreview = titlePreview.substring(0, 50) + '...';
+    }
+    
+    try {
+      const contentObj = JSON.parse(news.content);
+      if (typeof contentObj === 'object') {
+        contentPreview = contentObj['tr-TR'] || contentObj['en-US'] || news.content;
+        if (contentPreview.length > 100) contentPreview = contentPreview.substring(0, 100) + '...';
+      }
+    } catch (e) {
+      if (contentPreview.length > 100) contentPreview = contentPreview.substring(0, 100) + '...';
+    }
+
     const item = document.createElement('div');
     item.className = 'news-item';
     item.innerHTML = `
       <div class="news-info">
-        <strong>${news.title}</strong>
-        <p>${news.content}</p>
+        <strong>${titlePreview}</strong>
+        <p style="word-wrap: break-word; hyphens: auto;">${contentPreview}</p>
+        <p>Çok Dilli: ${news.isMultilingual ? 'Evet' : 'Hayır'}</p>
         <p>Tarih: ${new Date(news.createdDate).toLocaleDateString('tr-TR')} ${new Date(news.createdDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</p>
       </div>
       <div class="news-actions">
