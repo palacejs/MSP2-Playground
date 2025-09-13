@@ -385,27 +385,6 @@ async function deleteSelected() {
   alert(`${checkboxes.length} fotoğraf silindi!`);
 }
 
-// Break text function for admin panel
-function breakText(text, maxLength = 40) {
-  if (typeof text !== 'string') return text;
-  
-  const words = text.split(' ');
-  const lines = [];
-  let currentLine = '';
-  
-  for (const word of words) {
-    if ((currentLine + word).length <= maxLength) {
-      currentLine += (currentLine ? ' ' : '') + word;
-    } else {
-      if (currentLine) lines.push(currentLine);
-      currentLine = word;
-    }
-  }
-  if (currentLine) lines.push(currentLine);
-  
-  return lines.join('\n');
-}
-
 // --------------------------- Button Management ---------------------------
 async function addNewButton() {
   const buttonName = document.getElementById('buttonName').value.trim();
@@ -534,28 +513,27 @@ async function addNews() {
     return;
   }
 
-  // Check if title is JSON format
-  let titleToSave = newsTitle;
+  // Validate JSON format for title and content
+  let titleJSON, contentJSON;
+  
   try {
-    JSON.parse(newsTitle);
-    // It's valid JSON, save as is
+    titleJSON = JSON.parse(newsTitle);
   } catch (e) {
-    // Not JSON, treat as plain text
+    alert('Haber başlığı geçerli bir JSON formatında olmalıdır!');
+    return;
   }
-
-  // Check if content is JSON format
-  let contentToSave = newsContent;
+  
   try {
-    JSON.parse(newsContent);
-    // It's valid JSON, save as is
+    contentJSON = JSON.parse(newsContent);
   } catch (e) {
-    // Not JSON, treat as plain text
+    alert('Haber içeriği geçerli bir JSON formatında olmalıdır!');
+    return;
   }
 
   const news = {
     id: Date.now() + Math.random(),
-    title: titleToSave,
-    content: contentToSave,
+    title: newsTitle,
+    content: newsContent,
     createdDate: new Date().toISOString()
   };
 
@@ -583,14 +561,28 @@ async function loadNewsManager() {
     const item = document.createElement('div');
     item.className = 'news-item';
     
-    // Display title and content (show raw content in admin)
-    const displayTitle = typeof news.title === 'string' ? news.title : JSON.stringify(news.title, null, 2);
-    const displayContent = typeof news.content === 'string' ? breakText(news.content, 40) : JSON.stringify(news.content, null, 2);
+    // Parse JSON and show first available language or raw text
+    let displayTitle = news.title;
+    let displayContent = news.content;
+    
+    try {
+      const titleJSON = JSON.parse(news.title);
+      displayTitle = titleJSON['en-US'] || titleJSON['tr-TR'] || Object.values(titleJSON)[0] || news.title;
+    } catch (e) {
+      // Use raw title if not JSON
+    }
+    
+    try {
+      const contentJSON = JSON.parse(news.content);
+      displayContent = contentJSON['en-US'] || contentJSON['tr-TR'] || Object.values(contentJSON)[0] || news.content;
+    } catch (e) {
+      // Use raw content if not JSON
+    }
     
     item.innerHTML = `
       <div class="news-info">
         <strong>${displayTitle}</strong>
-        <p style="white-space: pre-wrap;">${displayContent}</p>
+        <p>${displayContent}</p>
         <p>Tarih: ${new Date(news.createdDate).toLocaleDateString('tr-TR')} ${new Date(news.createdDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</p>
       </div>
       <div class="news-actions">
