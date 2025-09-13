@@ -376,6 +376,63 @@ const TRANSLATIONS = {
 // Current language state
 let currentLang = "en-US";
 
+// Utility function to parse JSON safely
+function parseJSONSafely(jsonString) {
+  try {
+    return JSON.parse(jsonString);
+  } catch (e) {
+    return null;
+  }
+}
+
+// Utility function to get translated text from JSON or fallback
+function getTranslatedText(jsonOrString, targetLang = null) {
+  const lang = targetLang || currentLang;
+  
+  if (typeof jsonOrString === 'string') {
+    const parsed = parseJSONSafely(jsonOrString);
+    if (parsed && typeof parsed === 'object') {
+      return parsed[lang] || parsed['en-US'] || jsonOrString;
+    }
+    return jsonOrString;
+  }
+  
+  if (typeof jsonOrString === 'object' && jsonOrString !== null) {
+    return jsonOrString[lang] || jsonOrString['en-US'] || '';
+  }
+  
+  return jsonOrString || '';
+}
+
+// Utility function to break text at specified character limit
+function breakTextAtLimit(text, limit = 40) {
+  if (!text || text.length <= limit) return text;
+  
+  const words = text.split(' ');
+  const lines = [];
+  let currentLine = '';
+  
+  for (const word of words) {
+    if ((currentLine + word).length > limit) {
+      if (currentLine) {
+        lines.push(currentLine.trim());
+        currentLine = word + ' ';
+      } else {
+        lines.push(word);
+        currentLine = '';
+      }
+    } else {
+      currentLine += word + ' ';
+    }
+  }
+  
+  if (currentLine.trim()) {
+    lines.push(currentLine.trim());
+  }
+  
+  return lines.join('<br>');
+}
+
 // Language functionality
 function loadLanguage(langKey) {
   currentLang = langKey;
@@ -411,21 +468,15 @@ function loadLanguage(langKey) {
   
   const langModal = document.getElementById('langModal');
   if (langModal) {
-    langModal.classList.remove('show');
-    setTimeout(() => {
-      langModal.style.display = 'none';
-    }, 300);
+    closeModal('langModal');
   }
 
-  // Reload dynamic content with new language
+  // Reload dynamic button descriptions and news if they exist
   if (window.loadDynamicButtonDescriptions) {
     window.loadDynamicButtonDescriptions();
   }
   if (window.loadNewsList) {
     window.loadNewsList();
-  }
-  if (window.loadDynamicButtons) {
-    window.loadDynamicButtons();
   }
 }
 
@@ -444,8 +495,11 @@ function renderLanguageList() {
   });
 }
 
-// Make functions global for access from main.js
+// Make functions global for access from main.js and other scripts
 window.TRANSLATIONS = TRANSLATIONS;
 window.currentLang = currentLang;
 window.loadLanguage = loadLanguage;
 window.renderLanguageList = renderLanguageList;
+window.getTranslatedText = getTranslatedText;
+window.parseJSONSafely = parseJSONSafely;
+window.breakTextAtLimit = breakTextAtLimit;
