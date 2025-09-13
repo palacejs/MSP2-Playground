@@ -414,9 +414,14 @@ function loadLanguage(langKey) {
     langModal.style.display = 'none';
   }
 
-  // Reload dynamic button descriptions if they exist
+  // Reload dynamic button descriptions and news if they exist
   if (window.loadDynamicButtonDescriptions) {
     window.loadDynamicButtonDescriptions();
+  }
+  
+  // Reload news with new language
+  if (window.loadNewsList) {
+    window.loadNewsList();
   }
 }
 
