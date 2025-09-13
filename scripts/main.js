@@ -46,15 +46,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
   musicIframe = document.getElementById('backgroundMusic');
 
-  // Initialize background music
+  // Check saved music state FIRST before initializing music
+  const musicMuted = localStorage.getItem('msp2_music_muted');
+  if (musicMuted === 'true') {
+    isMusicPlaying = false;
+    if (musicIcon) {
+      musicIcon.textContent = '🔇';
+    }
+    if (musicToggle) {
+      musicToggle.classList.add('muted');
+    }
+  }
+
+  // Initialize background music only if not muted
   if (musicIframe) {
     musicIframe.addEventListener('load', function() {
       setTimeout(() => {
         try {
-          musicIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-          setTimeout(() => {
-            musicIframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
-          }, 2000);
+          if (isMusicPlaying) {
+            musicIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+            setTimeout(() => {
+              musicIframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+            }, 2000);
+          } else {
+            musicIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+          }
         } catch (e) {
           console.log('Music control not available');
         }
@@ -96,54 +112,36 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => {
         mainContent.classList.add('show');
         // Load dynamic buttons and news after main content is shown
-        // Add multiple retry attempts for mobile devices
         loadDynamicButtons();
-        
-        // Retry loading every 2 seconds for the first 10 seconds (mobile optimization)
-        let retryCount = 0;
-        const retryInterval = setInterval(() => {
-          if (retryCount < 5) {
-            loadDynamicButtons();
-            retryCount++;
-          } else {
-            clearInterval(retryInterval);
-          }
-        }, 2000);
       }, 100);
     }, 1000);
   }, 10000);
 
   // Music control functionality
-  musicToggle.addEventListener('click', function() {
-    if (isMusicPlaying) {
-      try {
-        musicIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-      } catch (e) {
-        console.log('Music control not available');
+  if (musicToggle) {
+    musicToggle.addEventListener('click', function() {
+      if (isMusicPlaying) {
+        try {
+          musicIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        } catch (e) {
+          console.log('Music control not available');
+        }
+        musicIcon.textContent = '🔇';
+        musicToggle.classList.add('muted');
+        isMusicPlaying = false;
+        localStorage.setItem('msp2_music_muted', 'true');
+      } else {
+        try {
+          musicIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+        } catch (e) {
+          console.log('Music control not available');
+        }
+        musicIcon.textContent = '🔊';
+        musicToggle.classList.remove('muted');
+        isMusicPlaying = true;
+        localStorage.setItem('msp2_music_muted', 'false');
       }
-      musicIcon.textContent = '🔇';
-      musicToggle.classList.add('muted');
-      isMusicPlaying = false;
-      localStorage.setItem('msp2_music_muted', 'true');
-    } else {
-      try {
-        musicIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-      } catch (e) {
-        console.log('Music control not available');
-      }
-      musicIcon.textContent = '🔊';
-      musicToggle.classList.remove('muted');
-      isMusicPlaying = true;
-      localStorage.setItem('msp2_music_muted', 'false');
-    }
-  });
-
-  // Check saved music state
-  const musicMuted = localStorage.getItem('msp2_music_muted');
-  if (musicMuted === 'true') {
-    musicIcon.textContent = '🔇';
-    musicToggle.classList.add('muted');
-    isMusicPlaying = false;
+    });
   }
 
   // Initialize existing functionality
@@ -151,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeLanguageSystem();
 });
 
-// Dynamic Button Loading with improved mobile support
+// Dynamic Button Loading
 async function openButtonDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open("msp2ArcDB", 3);
@@ -195,7 +193,7 @@ async function getActiveButtons() {
       request.onerror = (e) => reject(e.target.error);
     });
   } catch (error) {
-    console.log('Button DB not available yet:', error);
+    console.log('Button DB not available yet');
     return [];
   }
 }
@@ -213,7 +211,7 @@ async function getAllNews() {
       request.onerror = (e) => reject(e.target.error);
     });
   } catch (error) {
-    console.log('News DB not available yet:', error);
+    console.log('News DB not available yet');
     return [];
   }
 }
@@ -259,10 +257,47 @@ function startCountdown(button, element) {
   countdownIntervals.push(interval);
 }
 
+// Break text into lines if it's too long (40 characters per line)
+function breakLongText(text, maxLength = 40) {
+  if (typeof text !== 'string') return text;
+  
+  const words = text.split(' ');
+  const lines = [];
+  let currentLine = '';
+  
+  for (const word of words) {
+    if ((currentLine + word).length <= maxLength) {
+      currentLine += (currentLine ? ' ' : '') + word;
+    } else {
+      if (currentLine) lines.push(currentLine);
+      currentLine = word;
+    }
+  }
+  if (currentLine) lines.push(currentLine);
+  
+  return lines.join('\n');
+}
+
+// Get translated text based on current language
+function getTranslatedText(textObj, fallback = '') {
+  if (typeof textObj === 'string') {
+    try {
+      textObj = JSON.parse(textObj);
+    } catch (e) {
+      return textObj;
+    }
+  }
+  
+  if (typeof textObj === 'object' && textObj !== null) {
+    const currentLang = window.currentLang || 'en-US';
+    return textObj[currentLang] || textObj['en-US'] || fallback;
+  }
+  
+  return fallback;
+}
+
 async function loadDynamicButtons() {
   try {
-    console.log('Loading dynamic buttons...');
-    
     // Clear existing countdowns
     countdownIntervals.forEach(interval => clearInterval(interval));
     countdownIntervals = [];
@@ -270,17 +305,9 @@ async function loadDynamicButtons() {
     const buttons = await getActiveButtons();
     const container = document.getElementById('dynamicButtons');
     
-    if (!container) {
-      console.log('Dynamic buttons container not found');
-      return;
-    }
-    
-    console.log('Found buttons:', buttons.length);
-    
     if (buttons.length > 0) {
       container.innerHTML = '';
       buttons.forEach(button => {
-        console.log('Creating button:', button.name);
         const buttonElement = document.createElement('a');
         buttonElement.href = button.link;
         buttonElement.className = 'dynamic-btn';
@@ -288,7 +315,8 @@ async function loadDynamicButtons() {
         
         const textDiv = document.createElement('div');
         textDiv.className = 'dynamic-btn-text';
-        textDiv.textContent = button.name;
+        // Break long button names into multiple lines for mobile
+        textDiv.textContent = breakLongText(button.name, 25);
         buttonElement.appendChild(textDiv);
         
         if (button.isTemporary) {
@@ -302,12 +330,8 @@ async function loadDynamicButtons() {
         
         container.appendChild(buttonElement);
       });
-      
-      // Force a reflow to ensure elements are rendered (mobile fix)
-      container.offsetHeight;
     } else {
       container.innerHTML = '';
-      console.log('No active buttons found');
     }
 
     // Load button descriptions for about modal
@@ -327,16 +351,10 @@ async function loadDynamicButtonDescriptions() {
       
       buttons.forEach(button => {
         if (button.description) {
-          try {
-            const descriptions = JSON.parse(button.description);
-            const currentLang = window.currentLang || 'en-US';
-            const description = descriptions[currentLang] || descriptions['en-US'] || button.name;
-            descriptionsHTML += `<li><b>${button.name}:</b> ${description}</li>`;
-          } catch (e) {
-            descriptionsHTML += `<li><b>${button.name}:</b> Custom feature</li>`;
-          }
+          const description = getTranslatedText(button.description, button.name);
+          descriptionsHTML += `<li><b>${button.name}</b>: ${description}</li>`;
         } else {
-          descriptionsHTML += `<li><b>${button.name}:</b> Custom feature</li>`;
+          descriptionsHTML += `<li><b>${button.name}</b>: Custom feature</li>`;
         }
       });
       
@@ -352,79 +370,84 @@ async function loadDynamicButtonDescriptions() {
 
 async function loadNewsList() {
   try {
-    console.log('Loading news list...');
     const newsList = await getAllNews();
     const container = document.getElementById('newsList');
     
-    if (!container) {
-      console.log('News container not found');
-      return;
-    }
-    
-    console.log('Found news items:', newsList.length);
-    
-    if (newsList.length > 0) {
+    if (newsList.length > 0 && container) {
       container.innerHTML = '';
-      const currentLang = window.currentLang || 'en-US';
-      
       newsList.forEach(news => {
-        let title = news.title;
-        let content = news.content;
-        
-        // Check if title and content are JSON with multiple languages
-        try {
-          const titleObj = JSON.parse(news.title);
-          if (typeof titleObj === 'object') {
-            title = titleObj[currentLang] || titleObj['en-US'] || news.title;
-          }
-        } catch (e) {
-          // If not JSON, use as is
-        }
-        
-        try {
-          const contentObj = JSON.parse(news.content);
-          if (typeof contentObj === 'object') {
-            content = contentObj[currentLang] || contentObj['en-US'] || news.content;
-          }
-        } catch (e) {
-          // If not JSON, use as is
-        }
-        
         const newsElement = document.createElement('div');
         newsElement.className = 'news-item';
+        
+        // Get translated title and content
+        const translatedTitle = getTranslatedText(news.title, news.title);
+        const translatedContent = getTranslatedText(news.content, news.content);
+        
+        // Break long content into lines
+        const formattedContent = breakLongText(translatedContent, 40);
+        
         newsElement.innerHTML = `
-          <h4>${title}</h4>
-          <p class="news-content">${content}</p>
+          <h4>${translatedTitle}</h4>
+          <p>${formattedContent}</p>
           <div class="news-date">${new Date(news.createdDate).toLocaleDateString('tr-TR')} ${new Date(news.createdDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</div>
         `;
         container.appendChild(newsElement);
       });
     } else if (container) {
-      container.innerHTML = '<p style="color:#ccc;text-align:center;">No news available yet.</p>';
+      const currentLang = window.currentLang || 'en-US';
+      const noNewsText = currentLang === 'tr-TR' ? 'Henüz haber bulunmamaktadır.' : 
+                        currentLang === 'de-DE' ? 'Noch keine Nachrichten verfügbar.' :
+                        currentLang === 'fr-FR' ? 'Aucune actualité disponible pour le moment.' :
+                        currentLang === 'es-ES' ? 'No hay noticias disponibles aún.' :
+                        'No news available yet.';
+      container.innerHTML = `<p style="color:#ccc;text-align:center;">${noNewsText}</p>`;
     }
   } catch (error) {
     console.log('Could not load news:', error);
   }
 }
 
-// Modal functionality
+// Modal functionality with animations
 function openModal(id) {
-  document.getElementById(id).style.display = 'block';
-  if (id === 'newsModal') {
-    loadNewsList();
-  } else if (id === 'aboutModal') {
-    loadDynamicButtonDescriptions();
+  const modal = document.getElementById(id);
+  if (modal) {
+    modal.style.display = 'block';
+    // Force reflow
+    modal.offsetHeight;
+    modal.classList.add('show');
+    
+    if (id === 'newsModal') {
+      loadNewsList();
+    } else if (id === 'aboutModal') {
+      loadDynamicButtonDescriptions();
+    }
   }
 }
 
 function closeModal(id) {
-  document.getElementById(id).style.display = 'none';
+  const modal = document.getElementById(id);
+  if (modal) {
+    modal.classList.remove('show');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 300);
+  }
 }
 
 function initializeModals() {
   document.getElementById('aboutBtn').onclick = () => openModal('aboutModal');
   document.getElementById('newsBtn').onclick = () => openModal('newsModal');
   document.getElementById('langBtn').onclick = () => openModal('langModal');
+  
+  // Close modals when clicking outside
+  document.querySelectorAll('.modal-bg').forEach(modalBg => {
+    modalBg.addEventListener('click', function(e) {
+      if (e.target === this) {
+        const modalId = this.parentElement.id;
+        closeModal(modalId);
+      }
+    });
+  });
 }
 
 function initializeLanguageSystem() {
@@ -460,4 +483,5 @@ window.getMusicState = function() {
 window.openModal = openModal;
 window.closeModal = closeModal;
 window.loadDynamicButtonDescriptions = loadDynamicButtonDescriptions;
+window.loadDynamicButtons = loadDynamicButtons;
 window.loadNewsList = loadNewsList;
