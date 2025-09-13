@@ -385,6 +385,27 @@ async function deleteSelected() {
   alert(`${checkboxes.length} fotoğraf silindi!`);
 }
 
+// Break text function for admin panel
+function breakText(text, maxLength = 40) {
+  if (typeof text !== 'string') return text;
+  
+  const words = text.split(' ');
+  const lines = [];
+  let currentLine = '';
+  
+  for (const word of words) {
+    if ((currentLine + word).length <= maxLength) {
+      currentLine += (currentLine ? ' ' : '') + word;
+    } else {
+      if (currentLine) lines.push(currentLine);
+      currentLine = word;
+    }
+  }
+  if (currentLine) lines.push(currentLine);
+  
+  return lines.join('\n');
+}
+
 // --------------------------- Button Management ---------------------------
 async function addNewButton() {
   const buttonName = document.getElementById('buttonName').value.trim();
@@ -513,29 +534,28 @@ async function addNews() {
     return;
   }
 
-  // Check if it's JSON format for multilingual support
-  let isJsonTitle = false;
-  let isJsonContent = false;
-  
+  // Check if title is JSON format
+  let titleToSave = newsTitle;
   try {
     JSON.parse(newsTitle);
-    isJsonTitle = true;
+    // It's valid JSON, save as is
   } catch (e) {
-    // Not JSON, use as plain text
+    // Not JSON, treat as plain text
   }
 
+  // Check if content is JSON format
+  let contentToSave = newsContent;
   try {
     JSON.parse(newsContent);
-    isJsonContent = true;
+    // It's valid JSON, save as is
   } catch (e) {
-    // Not JSON, use as plain text
+    // Not JSON, treat as plain text
   }
 
   const news = {
     id: Date.now() + Math.random(),
-    title: newsTitle,
-    content: newsContent,
-    isMultilingual: isJsonTitle || isJsonContent,
+    title: titleToSave,
+    content: contentToSave,
     createdDate: new Date().toISOString()
   };
 
@@ -560,37 +580,17 @@ async function loadNewsManager() {
   }
 
   newsList.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate)).forEach(news => {
-    // Show preview of content/title
-    let titlePreview = news.title;
-    let contentPreview = news.content;
-    
-    try {
-      const titleObj = JSON.parse(news.title);
-      if (typeof titleObj === 'object') {
-        titlePreview = titleObj['tr-TR'] || titleObj['en-US'] || news.title;
-        if (titlePreview.length > 50) titlePreview = titlePreview.substring(0, 50) + '...';
-      }
-    } catch (e) {
-      if (titlePreview.length > 50) titlePreview = titlePreview.substring(0, 50) + '...';
-    }
-    
-    try {
-      const contentObj = JSON.parse(news.content);
-      if (typeof contentObj === 'object') {
-        contentPreview = contentObj['tr-TR'] || contentObj['en-US'] || news.content;
-        if (contentPreview.length > 100) contentPreview = contentPreview.substring(0, 100) + '...';
-      }
-    } catch (e) {
-      if (contentPreview.length > 100) contentPreview = contentPreview.substring(0, 100) + '...';
-    }
-
     const item = document.createElement('div');
     item.className = 'news-item';
+    
+    // Display title and content (show raw content in admin)
+    const displayTitle = typeof news.title === 'string' ? news.title : JSON.stringify(news.title, null, 2);
+    const displayContent = typeof news.content === 'string' ? breakText(news.content, 40) : JSON.stringify(news.content, null, 2);
+    
     item.innerHTML = `
       <div class="news-info">
-        <strong>${titlePreview}</strong>
-        <p style="word-wrap: break-word; hyphens: auto;">${contentPreview}</p>
-        <p>Çok Dilli: ${news.isMultilingual ? 'Evet' : 'Hayır'}</p>
+        <strong>${displayTitle}</strong>
+        <p style="white-space: pre-wrap;">${displayContent}</p>
         <p>Tarih: ${new Date(news.createdDate).toLocaleDateString('tr-TR')} ${new Date(news.createdDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</p>
       </div>
       <div class="news-actions">
