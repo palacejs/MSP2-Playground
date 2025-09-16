@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSP2 Playground</title>
+  <link rel="stylesheet" href="src/index.css">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loadingScreen" class="loading-screen">
+    <div class="loading-content">
+      <h1 class="loading-title">MSP2 Playground</h1>
+      <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+      </div>
+      <div id="loadingInfo" class="loading-info">Loading your ultimate modding destination...</div>
+    </div>
+  </div>
+
+  <!-- Hidden YouTube iframe for background music -->
+  <iframe id="backgroundMusic" 
+          src="https://www.youtube.com/embed/aLV59GhhAYA?autoplay=1&loop=1&playlist=aLV59GhhAYA&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&mute=1" 
+          frameborder="0" 
+          allow="autoplay; encrypted-media" 
+          style="display: none;">
+  </iframe>
+
+  <!-- Main Content -->
+  <div id="mainContent" class="main-content" style="display: none;">
+    <canvas id="starfield"></canvas>
+    
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div></div>
+      <div class="top-bar-right">
+        <button id="aboutBtn" class="about-btn">
+          <span id="aboutBtnTxt">About</span>
+        </button>
+        <button id="langBtn" class="lang-btn">
+          <span id="langBtnTxt">Language</span>
+        </button>
+        <button id="newsBtn" class="news-btn">
+          <span id="newsBtnTxt">News</span>
+        </button>
+        <button id="musicToggle" class="music-toggle">
+          <span id="musicIcon">🔊</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Overlay -->
+    <div class="overlay">
+      <h1>MSP2 Playground</h1>
+      <div id="subtextMain" class="subtext">
+        Now you can do everything comfortably with the improved tool.<br>
+        If nothing happens, install <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.
+      </div>
+      
+      <!-- Dynamic Buttons Grid -->
+      <div id="dynamicButtons" class="dynamic-buttons-grid">
+        <!-- Dynamic buttons will be loaded here -->
+      </div>
+    </div>
+
+    <!-- Info Bar -->
+    <div class="info">
+      <span id="infoText">Info: These mods will no longer receive software updates or bug fixes starting from 15.09.2025, but you can continue to use them.</span>
+    </div>
+  </div>
+
+  <!-- Language Modal -->
+  <div id="langModal" class="modal-overlay">
+    <div class="modal-bg">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal('langModal')">&times;</button>
+        <h3 id="langTitle">Select Language</h3>
+        <div id="langList" class="lang-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Modal -->
+  <div id="aboutModal" class="modal-overlay">
+    <div class="modal-bg">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal('aboutModal')">&times;</button>
+        <h3 id="aboutTitle">About MSP2 MODS</h3>
+        <div id="aboutText">
+          <p>
+            MSP2 MODS is a platform that offers unique utility and customization tools ("mods") for MSP2. 
+            The site allows you to install various mods to enhance your MSP2 experience.
+          </p>
+          <p>
+            <b>How to use?</b> Click "Install" on any mod. If your browser doesn't respond, install <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.
+          </p>
+          <p>
+            <b>Note:</b> MSP2 MODS will not receive updates after 15.09.2025, but all mods will remain available for use.
+          </p>
+        </div>
+        <div id="dynamicButtonDescriptions"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- News Modal -->
+  <div id="newsModal" class="modal-overlay">
+    <div class="modal-bg">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal('newsModal')">&times;</button>
+        <h3 id="newsTitle">News & Updates</h3>
+        <div id="newsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/starfield.js"></script>
+  <script src="scripts/language.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+</html>
