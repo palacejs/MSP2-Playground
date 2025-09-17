@@ -53,77 +53,6 @@
         <div id="photoManager"></div>
         <button onclick="deleteSelected()" id="deleteBtn" style="display: none;">Delete Selected</button>
       </div>
-
-      <!-- Button Management Section -->
-      <div class="button-management-section">
-        <h3>Yeni Bağlantılı Buton Ekle</h3>
-        <div class="button-form">
-          <div class="form-group">
-            <label for="buttonName">Buton Adı:</label>
-            <input type="text" id="buttonName" placeholder="Örn: Install MSP2 Special">
-          </div>
-          <div class="form-group">
-            <label for="buttonLink">Buton Bağlantısı:</label>
-            <input type="url" id="buttonLink" placeholder="https://example.com/link">
-          </div>
-          <div class="form-group">
-            <label for="buttonDescription">Buton Ne İşe Yarıyor (JSON formatında):</label>
-            <textarea id="buttonDescription" rows="6" placeholder='Örnek:
-{
-  "en-US": "This button installs special features for MSP2",
-  "tr-TR": "Bu buton MSP2 için özel özellikler yükler",
-  "de-DE": "Dieser Button installiert spezielle Funktionen für MSP2"
-}'></textarea>
-          </div>
-          <div class="form-group checkbox-group">
-            <label>
-              <input type="checkbox" id="isTemporary" onchange="toggleDatePicker()">
-              Buton geçici olarak mı eklensin?
-            </label>
-          </div>
-          <div id="expiryDateContainer" class="form-group" style="display: none;">
-            <label for="expiryDate">Son Tarih:</label>
-            <input type="datetime-local" id="expiryDate">
-          </div>
-          <button onclick="addNewButton()" class="add-button">Buton Ekle</button>
-        </div>
-        
-        <div class="button-list-section">
-          <h4>Eklenen Butonlar</h4>
-          <div id="buttonManager"></div>
-        </div>
-      </div>
-
-      <!-- News Management Section -->
-      <div class="news-management-section">
-        <h3>Haber Yönetimi</h3>
-        <div class="news-form">
-          <div class="form-group">
-            <label for="newsTitle">Haber Başlığı (JSON formatında - 16 dil):</label>
-            <textarea id="newsTitle" rows="4" placeholder='Örnek:
-{
-  "en-US": "New Feature Announcement",
-  "tr-TR": "Yeni Özellik Duyurusu",
-  "de-DE": "Neue Funktion Ankündigung"
-}'></textarea>
-          </div>
-          <div class="form-group">
-            <label for="newsContent">Haber İçeriği (JSON formatında - 16 dil):</label>
-            <textarea id="newsContent" rows="6" placeholder='Örnek:
-{
-  "en-US": "We are excited to announce new features that will enhance your experience.",
-  "tr-TR": "Deneyiminizi geliştirecek yeni özellikler duyurmaktan heyecan duyuyoruz.",
-  "de-DE": "Wir freuen uns, neue Funktionen anzukündigen, die Ihre Erfahrung verbessern werden."
-}'></textarea>
-          </div>
-          <button onclick="addNews()" class="add-button">Haber Ekle</button>
-        </div>
-        
-        <div class="news-list-section">
-          <h4>Yayınlanan Haberler</h4>
-          <div id="newsManager"></div>
-        </div>
-      </div>
       
       <button onclick="logout()" class="logout-btn">Logout</button>
     </div>
@@ -132,6 +61,5 @@
   <script src="scripts/starfield.js"></script>
   <script src="scripts/music-control.js"></script>
   <script src="scripts/arc-msp.js"></script>
-  <script src="scripts/data-manager.js"></script>
 </body>
 </html>
