@@ -1,4 +1,4 @@
-// Starfield with fast pulsating stars and very slow color change
+// Starfield with faster pulsating stars and very slow color change
 function createStarfield(canvasId = 'starfield') {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
@@ -31,10 +31,12 @@ function createStarfield(canvasId = 'starfield') {
       this.maxRadius = this.baseRadius * 1.4;   // Maksimum boyut
       this.radius = this.baseRadius;
 
-      // Büyüme hızı artırıldı
-      this.radiusChange = 0.005 + Math.random() * 0.003; // Daha hızlı pulsasyon
+      // Daha hızlı pulsasyon
+      this.radiusChange = 0.008 + Math.random() * 0.004; 
       this.radiusDirection = 1;
-      this.alpha = Math.random() * 0.3 + 0.2;
+
+      // Parlaklık sabit
+      this.alpha = 0.25; 
     }
 
     update() {
@@ -43,7 +45,7 @@ function createStarfield(canvasId = 'starfield') {
       if (this.x <= 0 || this.x >= canvas.width) this.vx *= -1;
       if (this.y <= 0 || this.y >= canvas.height) this.vy *= -1;
 
-      // Yıldız boyutunu hızlıca değiştir
+      // Yıldız boyutu hızlıca değiştir
       this.radius += this.radiusChange * this.radiusDirection;
       if (this.radius >= this.maxRadius || this.radius <= this.minRadius) this.radiusDirection *= -1;
     }
