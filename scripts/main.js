@@ -37,7 +37,7 @@ const LOADING_INFO = {
 };
 
 // GitHub news URL - you will upload your JSON file here
-const GITHUB_NEWS_URL = 'https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/news.json';
+const GITHUB_NEWS_URL = 'https://raw.githubusercontent.com/palacejs/MSP2-Playground/refs/heads/main/scripts/news.json';
 
 document.addEventListener('DOMContentLoaded', function() {
   const loadingScreen = document.getElementById('loadingScreen');
