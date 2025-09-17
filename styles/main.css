@@ -228,14 +228,14 @@ canvas {
   color: #c0d7ff;
 }
 
-/* Dynamic Buttons Grid - Fixed for mobile */
+/* Manual Buttons Grid */
 .dynamic-buttons-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   margin-top: 20px;
   width: 100%;
-  min-height: 60px; /* Ensure minimum height */
+  min-height: 60px;
 }
 
 .dynamic-btn {
@@ -274,24 +274,6 @@ canvas {
   word-break: break-word;
   overflow-wrap: break-word;
   max-width: 100%;
-}
-
-.countdown-timer {
-  font-size: 10px;
-  color: #ffeb3b;
-  font-weight: 700;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 2px 6px;
-  border-radius: 10px;
-  margin-top: 4px;
-  animation: pulse 2s infinite;
-  white-space: nowrap;
-}
-
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.7; }
-  100% { opacity: 1; }
 }
 
 .notification {
@@ -492,18 +474,22 @@ canvas {
   font-style: italic;
 }
 
-/* Dynamic Button Descriptions */
-#dynamicButtonDescriptions ul {
-  text-align: left;
-  margin: 15px 0;
+#newsList {
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
-#dynamicButtonDescriptions li {
-  margin: 8px 0;
-  font-size: 14px;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  line-height: 1.3;
+.loading-news {
+  text-align: center;
+  color: #9abfff;
+  font-style: italic;
+  padding: 20px;
+}
+
+.news-error {
+  text-align: center;
+  color: #ff6b6b;
+  padding: 20px;
 }
 
 /* Mobile Responsive - ENHANCED */
@@ -519,7 +505,7 @@ canvas {
     margin: 0 auto;
   }
   
-  /* Fixed dynamic buttons for mobile */
+  /* Fixed manual buttons for mobile */
   .dynamic-buttons-grid {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -540,10 +526,6 @@ canvas {
     line-height: 1.2;
     word-break: break-word;
     overflow-wrap: break-word;
-  }
-  
-  .countdown-timer {
-    font-size: 10px;
   }
   
   .top-bar {
@@ -607,12 +589,6 @@ canvas {
   .news-item p {
     font-size: 13px;
     line-height: 1.4;
-  }
-
-  #dynamicButtonDescriptions li {
-    font-size: 13px;
-    line-height: 1.4;
-    margin: 6px 0;
   }
 }
 
