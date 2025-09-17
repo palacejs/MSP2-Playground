@@ -55,36 +55,16 @@
 }
 
 .spinner-ring {
-  width: 60px;
-  height: 60px;
+  /* Sadece en küçük halkanın boyutunu ve rengini tutuyoruz */
+  width: 20px;
+  height: 20px;
   border: 3px solid transparent;
-  border-top: 3px solid #0078d4;
-  border-right: 3px solid #0078d4;
+  border-top: 3px solid #6effb2; /* Yeşil ton */
+  border-right: 3px solid #6effb2; /* Yeşil ton */
   border-radius: 50%;
   animation: spin 1.5s linear infinite;
   position: absolute;
-}
-
-.spinner-ring:nth-child(1) {
-  animation-delay: 0s;
-  border-top-color: #0078d4;
-  border-right-color: #0078d4;
-}
-
-.spinner-ring:nth-child(2) {
-  animation-delay: 0.2s;
-  width: 40px;
-  height: 40px;
-  border-top-color: #40e0d0;
-  border-right-color: #40e0d0;
-}
-
-.spinner-ring:nth-child(3) {
-  animation-delay: 0.4s;
-  width: 20px;
-  height: 20px;
-  border-top-color: #6effb2;
-  border-right-color: #6effb2;
+  animation-delay: 0s; /* Tek halka olduğu için gecikmeye gerek yok */
 }
 
 @keyframes spin {
@@ -228,10 +208,10 @@ canvas {
   color: #c0d7ff;
 }
 
-/* Manual Buttons Grid */
+/* Dynamic Buttons Grid - Fixed for mobile */
 .dynamic-buttons-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr); /* 2 sütun */
   gap: 12px;
   margin-top: 20px;
   width: 100%;
@@ -243,8 +223,8 @@ canvas {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0px 0px;
-  font-size: 13px;
+  padding: 8px 8px; /* Daha küçük padding */
+  font-size: 13px; /* Daha küçük font */
   background: linear-gradient(to right, #6e9aff, #4db89e);
   color: white;
   border: none;
@@ -253,7 +233,7 @@ canvas {
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
-  min-height: 60px;
+  min-height: 50px; /* Daha küçük min-height */
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -269,12 +249,31 @@ canvas {
 
 .dynamic-btn-text {
   font-size: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 0; /* Sayım olmadığı için */
   line-height: 1.2;
   word-break: break-word;
   overflow-wrap: break-word;
   max-width: 100%;
 }
+
+/* Countdown timer kaldırıldığı için ilgili stiller de kaldırılabilir. */
+/* .countdown-timer {
+  font-size: 10px;
+  color: #ffeb3b;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-top: 4px;
+  animation: pulse 2s infinite;
+  white-space: nowrap;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+} */
 
 .notification {
   position: fixed;
@@ -423,6 +422,7 @@ canvas {
   font-weight: 700;
 }
 
+/* Info/Warning Bar */
 .info {
   position: fixed;
   bottom: 0;
@@ -436,9 +436,23 @@ canvas {
   border-top: 1px solid rgba(150, 150, 255, 0.3);
   backdrop-filter: blur(4px);
   z-index: 3;
+  display: flex; /* Flexbox ile ikon ve mesajı hizala */
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* İkon ile mesaj arasına boşluk */
 }
 
-/* News Styles with word wrap */
+.warning-icon {
+  font-size: 16px; /* İkon boyutu */
+  color: #FFD700; /* Dikkat çekici sarı renk */
+}
+
+.warning-message {
+  color: #FFD700; /* Mesajın rengi */
+  font-weight: 500; /* Kalınlık */
+}
+
+/* News Styles with word wrap - Haber yönetimini kaldırdığımız için bu stiller gereksiz hale gelebilir, ancak güvenli bir şekilde bırakıyorum. */
 .news-item {
   background: rgba(10, 20, 60, 0.3);
   border: 1px solid rgba(150, 150, 255, 0.2);
@@ -474,23 +488,19 @@ canvas {
   font-style: italic;
 }
 
-#newsList {
-  max-height: 70vh;
-  overflow-y: auto;
+/* Dynamic Button Descriptions - Hakkında modalında statik açıklamalar olduğu için bu stiller artık doğrudan HTML içinde. */
+/* #dynamicButtonDescriptions ul {
+  text-align: left;
+  margin: 15px 0;
 }
 
-.loading-news {
-  text-align: center;
-  color: #9abfff;
-  font-style: italic;
-  padding: 20px;
-}
-
-.news-error {
-  text-align: center;
-  color: #ff6b6b;
-  padding: 20px;
-}
+#dynamicButtonDescriptions li {
+  margin: 8px 0;
+  font-size: 14px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.3;
+} */
 
 /* Mobile Responsive - ENHANCED */
 @media (max-width: 768px) {
@@ -505,17 +515,17 @@ canvas {
     margin: 0 auto;
   }
   
-  /* Fixed manual buttons for mobile */
+  /* Fixed dynamic buttons for mobile */
   .dynamic-buttons-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Mobilde tek sütun */
     gap: 10px;
     width: 100%;
     margin-top: 20px;
   }
   
   .dynamic-btn {
-    min-height: 60px;
-    padding: 12px 10px;
+    min-height: 55px; /* Mobilde biraz daha küçük */
+    padding: 10px 10px;
     font-size: 13px;
     width: 100%;
     box-sizing: border-box;
@@ -527,6 +537,11 @@ canvas {
     word-break: break-word;
     overflow-wrap: break-word;
   }
+  
+  /* .countdown-timer kaldırıldığı için ilgili stiller de kaldırılabilir. */
+  /* .countdown-timer {
+    font-size: 10px;
+  } */
   
   .top-bar {
     height: 50px;
@@ -575,7 +590,7 @@ canvas {
     padding: 0 20px;
   }
 
-  /* Enhanced news display for mobile */
+  /* Enhanced news display for mobile - Haber yönetimini kaldırdığımız için bu stiller gereksiz hale gelebilir. */
   .news-item {
     padding: 12px;
     margin: 8px 0;
@@ -590,6 +605,13 @@ canvas {
     font-size: 13px;
     line-height: 1.4;
   }
+
+  /* #dynamicButtonDescriptions li kaldırıldığı için bu stiller gereksiz hale gelebilir. */
+  /* #dynamicButtonDescriptions li {
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 6px 0;
+  } */
 }
 
 /* Extra small screens */
@@ -600,7 +622,7 @@ canvas {
   }
 
   .dynamic-btn {
-    min-height: 55px;
+    min-height: 50px;
     padding: 10px 8px;
   }
 
