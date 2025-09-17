@@ -13,7 +13,7 @@ function createStarfield(canvasId = 'starfield') {
   window.addEventListener('resize', resizeCanvas);
 
   const stars = [];
-  const STAR_COUNT = 30;
+  const STAR_COUNT = 40;
   const MAX_DISTANCE = 120;
 
   // Global hue for all stars and lines
@@ -32,7 +32,7 @@ function createStarfield(canvasId = 'starfield') {
       this.radius = this.baseRadius;
 
       // Daha hızlı pulsasyon
-      this.radiusChange = 0.02 + Math.random() * 0.01; // Çok daha hızlı pulsasyon
+      this.radiusChange = 0.04 + Math.random() * 0.02; // Çok daha hızlı pulsasyon
       this.radiusDirection = 1;
 
       // Parlaklık sabit
