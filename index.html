@@ -36,8 +36,14 @@
     <div class="top-bar">
       <button class="about-btn" id="aboutBtn">&#8505; <span>Hakkında</span></button>
       <div class="top-bar-right">
-        <!-- Music Control Button -->
-        <button id="musicToggle" class="music-toggle">
+        <!-- Audio Controls -->
+        <button id="soundSettingsToggle" class="control-btn" title="Ses Ayarları">
+          <span>🎚️</span>
+        </button>
+        <button id="soundEffectsToggle" class="control-btn" title="Ses Efektleri">
+          <span id="soundEffectsIcon">🔔</span>
+        </button>
+        <button id="musicToggle" class="control-btn" title="Müzik">
           <span id="musicIcon">🔊</span>
         </button>
       </div>
@@ -52,9 +58,9 @@
       </p>
       <!-- Static buttons -->
       <div class="static-buttons-grid">
-        <a href="https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/MSP2.mood.user.js" class="static-btn" target="_blank">
-          <div class="static-btn-text">MSP2 MOD</div>
-        </a>
+        <button class="static-btn" id="msp2ModsBtn">
+          <div class="static-btn-text">MSP2 MODS</div>
+        </button>
         <a href="arc-msp.html" class="static-btn">
           <div class="static-btn-text">ARC MSP</div>
         </a>
@@ -92,9 +98,63 @@
         </div>
       </div>
     </div>
+
+    <!-- MSP2 Mods Modal -->
+    <div id="msp2ModsModal" class="modal-overlay" style="display:none;">
+      <div class="modal-bg">
+        <div class="modal">
+          <button class="modal-close" onclick="closeModal('msp2ModsModal')">&times;</button>
+          <h2 style="margin:0 0 20px 0;">MSP2 MODS</h2>
+          <div class="mod-content">
+            <p>MSP2 için gelişmiş özellikler ve iyileştirmeler içeren mod paketini yükleyin.</p>
+            <div class="mod-features">
+              <h4 style="color: #6effb2; margin: 15px 0 10px 0;">Özellikler:</h4>
+              <ul>
+                <li>Gelişmiş kullanıcı arayüzü</li>
+                <li>Ek özellikler ve araçlar</li>
+                <li>Performans iyileştirmeleri</li>
+                <li>Özel modifikasyonlar</li>
+              </ul>
+            </div>
+            <div class="mod-install">
+              <a href="https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/MSP2.mood.user.js" class="install-btn" target="_blank">
+                <span>📦</span> MOD'U YÜKLE
+              </a>
+              <p class="install-note">Mod yüklemek için Violentmonkey eklentisine ihtiyacınız var.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sound Settings Modal -->
+    <div id="soundSettingsModal" class="modal-overlay" style="display:none;">
+      <div class="modal-bg">
+        <div class="modal">
+          <button class="modal-close" onclick="closeModal('soundSettingsModal')">&times;</button>
+          <h2 style="margin:0 0 20px 0;">Ses Ayarları</h2>
+          <div class="sound-settings">
+            <div class="setting-group">
+              <label for="musicVolume">Müzik Ses Düzeyi</label>
+              <input type="range" id="musicVolume" min="0" max="100" value="50" class="volume-slider">
+              <span id="musicVolumeDisplay">50%</span>
+            </div>
+            <div class="setting-group">
+              <label for="effectsVolume">Ses Efekti Düzeyi</label>
+              <input type="range" id="effectsVolume" min="0" max="100" value="50" class="volume-slider">
+              <span id="effectsVolumeDisplay">50%</span>
+            </div>
+            <div class="setting-group">
+              <button id="testSoundBtn" class="test-btn">Ses Efekti Test Et</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="scripts/starfield.js"></script>
+  <script src="scripts/sound-effects.js"></script>
   <script src="scripts/main.js"></script>
 </body>
 </html>
