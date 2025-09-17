@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,10 +17,9 @@
       <h1 class="loading-title">MSP2 Playground</h1>
       <div class="loading-spinner">
         <div class="spinner-ring"></div>
-        <div class="spinner-ring"></div>
-        <div class="spinner-ring"></div>
+        <!-- Diğer spinner-ring'ler kaldırıldı -->
       </div>
-      <div class="loading-info" id="loadingInfo">Loading...</div>
+      <div class="loading-info" id="loadingInfo">Yükleniyor...</div>
     </div>
     <!-- Hidden YouTube iframe for background music -->
     <iframe id="backgroundMusic" 
@@ -36,10 +35,10 @@
     <canvas id="starfield"></canvas>
 
     <div class="top-bar">
-      <button class="about-btn" id="aboutBtn">&#8505; <span id="aboutBtnTxt">About</span></button>
+      <button class="about-btn" id="aboutBtn">&#8505; <span id="aboutBtnTxt">Hakkında</span></button>
       <div class="top-bar-right">
-        <button class="news-btn" id="newsBtn">📰 <span id="newsBtnTxt">News</span></button>
-        <button class="lang-btn" id="langBtn">&#127760; <span id="langBtnTxt">Language</span></button>
+        <button class="news-btn" id="newsBtn">📰 <span id="newsBtnTxt">Haberler</span></button>
+        <button class="lang-btn" id="langBtn">&#127760; <span id="langBtnTxt">Dil</span></button>
         <!-- Music Control Button moved here -->
         <button id="musicToggle" class="music-toggle">
           <span id="musicIcon">🔊</span>
@@ -50,23 +49,23 @@
     <div class="overlay" id="mainOverlay">
       <h1>MSP2 Glitch</h1>
       <p class="subtext" id="subtextMain">
-        Now you can do everything comfortably with the improved tool.
-        If nothing happens, install
-        <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.
+        Artık geliştirilmiş araç ile her şeyi rahatça yapabilirsiniz.<br>
+        Eğer bir şey olmuyorsa, önce <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> kurun.
       </p>
-      <!-- Manual buttons -->
-      <div id="manualButtons" class="dynamic-buttons-grid">
+      <!-- Statik butonlar buraya eklendi -->
+      <div id="dynamicButtons" class="dynamic-buttons-grid">
         <a href="https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/MSP2.mood.user.js" class="dynamic-btn" target="_blank">
           <div class="dynamic-btn-text">MSP2 MOD</div>
         </a>
-        <a href="arc-msp.html" class="dynamic-btn">
-          <div class="dynamic-btn-text">MSP2 ARC</div>
+        <a href="arc-msp.html" class="dynamic-btn" target="_blank">
+          <div class="dynamic-btn-text">ARC MSP</div>
         </a>
       </div>
     </div>
 
-    <div class="info" id="infoText">
-      Info: These mods will no longer receive software updates or bug fixes starting from 15.09.2025, but you can continue to use them.
+    <div class="info" id="warningText">
+      <div class="warning-icon">⚠️</div>
+      <div class="warning-message">Uyarı: Bu modlar 15.09.2025 itibarıyla güncelleme desteği kesildi, ileride optimizasyon ve performans düşüşü yaşanabilir.</div>
     </div>
 
     <!-- Notification -->
@@ -80,8 +79,24 @@
       <div class="modal-bg">
         <div class="modal">
           <button class="modal-close" onclick="closeModal('aboutModal')">&times;</button>
-          <h2 style="margin:0 0 10px 0;" id="aboutTitle">About MSP2 MODS</h2>
-          <div id="aboutText"></div>
+          <h2 style="margin:0 0 10px 0;" id="aboutTitle">MSP2 MODS Hakkında</h2>
+          <div id="aboutText">
+            <p>
+              MSP2 MODS; MSP2 için özel modlar ve yardımcı araçlar sunan bir platformdur.
+              Sitede çeşitli modları kurarak MSP2 deneyiminizi geliştirebilirsiniz.
+            </p>
+            <p>
+              <b>Nasıl kullanılır?</b> Herhangi bir modun "Kur" butonuna tıklayın. Tarayıcınız tepki vermezse önce <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> kurun.
+            </p>
+            <p>
+              <b>Not:</b> MSP2 MODS 15.09.2025 sonrası güncelleme almayacaktır, fakat tüm modlar kullanılabilir kalacaktır.
+            </p>
+            <h4 style="color: #6effb2; margin: 15px 0 10px 0;">Mevcut Özellikler:</h4>
+            <ul>
+                <li><b>MSP2 MOD</b>: Özel MSP2 özellikleri ve modları yükler.</li>
+                <li><b>ARC MSP</b>: MSP2 fotoğraf arşivine erişim sağlar.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -91,8 +106,10 @@
       <div class="modal-bg">
         <div class="modal">
           <button class="modal-close" onclick="closeModal('newsModal')">&times;</button>
-          <h2 style="margin:0 0 12px 0;" id="newsTitle">News & Updates</h2>
-          <div id="newsList"></div>
+          <h2 style="margin:0 0 12px 0;" id="newsTitle">Haberler & Güncellemeler</h2>
+          <div id="newsList">
+            <p style="color:#ccc;text-align:center;">Henüz haber mevcut değil.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -102,8 +119,12 @@
       <div class="modal-bg">
         <div class="modal">
           <button class="modal-close" onclick="closeModal('langModal')">&times;</button>
-          <h2 style="margin:0 0 12px 0;" id="langTitle">Select Language</h2>
-          <div class="lang-list" id="langList"></div>
+          <h2 style="margin:0 0 12px 0;" id="langTitle">Dil Seç</h2>
+          <div class="lang-list" id="langList">
+            <div class="lang-item selected" onclick="loadLanguage('tr-TR')">
+                <span>🇹🇷</span><span>Türkiye</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
