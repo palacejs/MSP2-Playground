@@ -1,179 +1,154 @@
 let isAdminLoggedIn = false;
 const PASSWORD_HASH = "f7dc02cde06759a946f4dd803f767ed7a061e60558870c724e833a90a56dacec";
+const DB_NAME = "msp2ArcDB";
+const DB_STORE = "photos";
+const BUTTONS_STORE = "buttons";
+const NEWS_STORE = "news";
 
-// --------------------------- Supabase Functions ---------------------------
+// --------------------------- IndexedDB Functions ---------------------------
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, 3); // Updated version
+    request.onupgradeneeded = function(e) {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(DB_STORE)) {
+        db.createObjectStore(DB_STORE, { keyPath: "id" });
+      }
+      if (!db.objectStoreNames.contains(BUTTONS_STORE)) {
+        db.createObjectStore(BUTTONS_STORE, { keyPath: "id" });
+      }
+      if (!db.objectStoreNames.contains(NEWS_STORE)) {
+        db.createObjectStore(NEWS_STORE, { keyPath: "id" });
+      }
+    };
+    request.onsuccess = function(e) {
+      resolve(e.target.result);
+    };
+    request.onerror = function(e) {
+      reject(e.target.error);
+    };
+  });
+}
+
 async function savePhoto(photo) {
-  try {
-    const { data, error } = await window.supabase
-      .from('photos')
-      .insert([{
-        id: photo.id.toString(),
-        name: photo.name,
-        data: photo.data,
-        upload_date: photo.uploadDate
-      }]);
-    
-    if (error) throw error;
-    return data;
-  } catch (error) {
-    console.error('Error saving photo:', error);
-    throw error;
-  }
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(DB_STORE, "readwrite");
+    const store = tx.objectStore(DB_STORE);
+    store.put(photo);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
 }
 
 async function deletePhoto(id) {
-  try {
-    const { error } = await window.supabase
-      .from('photos')
-      .delete()
-      .eq('id', id.toString());
-    
-    if (error) throw error;
-  } catch (error) {
-    console.error('Error deleting photo:', error);
-    throw error;
-  }
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(DB_STORE, "readwrite");
+    const store = tx.objectStore(DB_STORE);
+    store.delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
 }
 
 async function getAllPhotos() {
-  try {
-    const { data, error } = await window.supabase
-      .from('photos')
-      .select('*')
-      .order('upload_date', { ascending: false });
-    
-    if (error) throw error;
-    return data;
-  } catch (error) {
-    console.error('Error fetching photos:', error);
-    return [];
-  }
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(DB_STORE, "readonly");
+    const store = tx.objectStore(DB_STORE);
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = (e) => reject(e.target.error);
+  });
 }
 
 // --------------------------- Button Management Functions ---------------------------
 async function saveButton(button) {
-  try {
-    const { data, error } = await window.supabase
-      .from('buttons')
-      .insert([{
-        id: button.id.toString(),
-        name: button.name,
-        link: button.link,
-        description: button.description,
-        is_temporary: button.isTemporary,
-        expiry_date: button.expiryDate,
-        hidden: button.hidden,
-        created_date: button.createdDate
-      }]);
-    
-    if (error) throw error;
-    return data;
-  } catch (error) {
-    console.error('Error saving button:', error);
-    throw error;
-  }
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(BUTTONS_STORE, "readwrite");
+    const store = tx.objectStore(BUTTONS_STORE);
+    store.put(button);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
 }
 
 async function deleteButton(id) {
-  try {
-    const { error } = await window.supabase
-      .from('buttons')
-      .delete()
-      .eq('id', id.toString());
-    
-    if (error) throw error;
-  } catch (error) {
-    console.error('Error deleting button:', error);
-    throw error;
-  }
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(BUTTONS_STORE, "readwrite");
+    const store = tx.objectStore(BUTTONS_STORE);
+    store.delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
 }
 
 async function getAllButtons() {
-  try {
-    const { data, error } = await window.supabase
-      .from('buttons')
-      .select('*')
-      .order('created_date', { ascending: false });
-    
-    if (error) throw error;
-    return data;
-  } catch (error) {
-    console.error('Error fetching buttons:', error);
-    return [];
-  }
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(BUTTONS_STORE, "readonly");
+    const store = tx.objectStore(BUTTONS_STORE);
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = (e) => reject(e.target.error);
+  });
 }
 
 async function toggleButtonVisibility(id) {
-  try {
-    // First get the current button
-    const { data: currentButton, error: fetchError } = await window.supabase
-      .from('buttons')
-      .select('hidden')
-      .eq('id', id.toString())
-      .single();
-    
-    if (fetchError) throw fetchError;
-    
-    // Toggle the hidden status
-    const { error: updateError } = await window.supabase
-      .from('buttons')
-      .update({ hidden: !currentButton.hidden })
-      .eq('id', id.toString());
-    
-    if (updateError) throw updateError;
-  } catch (error) {
-    console.error('Error toggling button visibility:', error);
-    throw error;
-  }
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(BUTTONS_STORE, "readwrite");
+    const store = tx.objectStore(BUTTONS_STORE);
+    const getRequest = store.get(id);
+    getRequest.onsuccess = () => {
+      const button = getRequest.result;
+      if (button) {
+        button.hidden = !button.hidden;
+        store.put(button);
+        tx.oncomplete = () => resolve();
+      } else {
+        reject(new Error('Button not found'));
+      }
+    };
+    getRequest.onerror = (e) => reject(e.target.error);
+  });
 }
 
 // --------------------------- News Management Functions ---------------------------
 async function saveNews(news) {
-  try {
-    const { data, error } = await window.supabase
-      .from('news')
-      .insert([{
-        id: news.id.toString(),
-        title: news.title,
-        content: news.content,
-        created_date: news.createdDate
-      }]);
-    
-    if (error) throw error;
-    return data;
-  } catch (error) {
-    console.error('Error saving news:', error);
-    throw error;
-  }
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(NEWS_STORE, "readwrite");
+    const store = tx.objectStore(NEWS_STORE);
+    store.put(news);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
 }
 
 async function deleteNews(id) {
-  try {
-    const { error } = await window.supabase
-      .from('news')
-      .delete()
-      .eq('id', id.toString());
-    
-    if (error) throw error;
-  } catch (error) {
-    console.error('Error deleting news:', error);
-    throw error;
-  }
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(NEWS_STORE, "readwrite");
+    const store = tx.objectStore(NEWS_STORE);
+    store.delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
 }
 
 async function getAllNews() {
-  try {
-    const { data, error } = await window.supabase
-      .from('news')
-      .select('*')
-      .order('created_date', { ascending: false });
-    
-    if (error) throw error;
-    return data;
-  } catch (error) {
-    console.error('Error fetching news:', error);
-    return [];
-  }
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(NEWS_STORE, "readonly");
+    const store = tx.objectStore(NEWS_STORE);
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = (e) => reject(e.target.error);
+  });
 }
 
 // --------------------------- Password Functions ---------------------------
@@ -403,7 +378,7 @@ async function deleteSelected() {
   if(!confirm(`${checkboxes.length} fotoğrafı silmek istediğinizden emin misiniz?`)) return;
 
   for(const cb of checkboxes){
-    await deletePhoto(cb.value);
+    await deletePhoto(parseFloat(cb.value));
   }
   await loadGallery();
   await loadPhotoManager();
@@ -476,7 +451,7 @@ async function loadButtonManager() {
 
   buttons.forEach(button => {
     const now = new Date();
-    const isExpired = button.is_temporary && new Date(button.expiry_date) < now;
+    const isExpired = button.isTemporary && new Date(button.expiryDate) < now;
     const statusText = button.hidden ? 'Gizli' : (isExpired ? 'Süresi Dolmuş' : 'Aktif');
     const statusColor = button.hidden ? '#ff6b6b' : (isExpired ? '#ffa500' : '#6effb2');
 
@@ -488,14 +463,14 @@ async function loadButtonManager() {
         <p>Bağlantı: <a href="${button.link}" target="_blank" style="color:#6effb2;">${button.link}</a></p>
         <p>Durum: <span style="color:${statusColor};">${statusText}</span></p>
         ${button.description ? `<p>Açıklama: Evet</p>` : `<p>Açıklama: Hayır</p>`}
-        ${button.is_temporary ? `<p>Son Tarih: ${new Date(button.expiry_date).toLocaleDateString('tr-TR')} ${new Date(button.expiry_date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</p>` : ''}
-        <p>Oluşturma: ${new Date(button.created_date).toLocaleDateString('tr-TR')} ${new Date(button.created_date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</p>
+        ${button.isTemporary ? `<p>Son Tarih: ${new Date(button.expiryDate).toLocaleDateString('tr-TR')} ${new Date(button.expiryDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</p>` : ''}
+        <p>Oluşturma: ${new Date(button.createdDate).toLocaleDateString('tr-TR')} ${new Date(button.createdDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</p>
       </div>
       <div class="button-actions">
-        <button onclick="toggleButtonVisibilityBtn('${button.id}')" ${isExpired ? 'disabled' : ''}>
+        <button onclick="toggleButtonVisibilityBtn(${button.id})" ${isExpired ? 'disabled' : ''}>
           ${button.hidden ? 'Göster' : 'Gizle'}
         </button>
-        <button onclick="deleteButtonBtn('${button.id}')" class="delete-btn">Sil</button>
+        <button onclick="deleteButtonBtn(${button.id})" class="delete-btn">Sil</button>
       </div>
     `;
     container.appendChild(item);
@@ -582,7 +557,7 @@ async function loadNewsManager() {
     return;
   }
 
-  newsList.forEach(news => {
+  newsList.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate)).forEach(news => {
     const item = document.createElement('div');
     item.className = 'news-item';
     
@@ -608,10 +583,10 @@ async function loadNewsManager() {
       <div class="news-info">
         <strong>${displayTitle}</strong>
         <p>${displayContent}</p>
-        <p>Tarih: ${new Date(news.created_date).toLocaleDateString('tr-TR')} ${new Date(news.created_date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</p>
+        <p>Tarih: ${new Date(news.createdDate).toLocaleDateString('tr-TR')} ${new Date(news.createdDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</p>
       </div>
       <div class="news-actions">
-        <button onclick="deleteNewsBtn('${news.id}')" class="delete-btn">Sil</button>
+        <button onclick="deleteNewsBtn(${news.id})" class="delete-btn">Sil</button>
       </div>
     `;
     container.appendChild(item);
