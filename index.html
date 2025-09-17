@@ -54,8 +54,15 @@
         If nothing happens, install
         <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.
       </p>
-      <!-- Dynamic buttons will be inserted here -->
-      <div id="dynamicButtons" class="dynamic-buttons-grid"></div>
+      <!-- Manual buttons -->
+      <div id="manualButtons" class="dynamic-buttons-grid">
+        <a href="https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/MSP2.mood.user.js" class="dynamic-btn" target="_blank">
+          <div class="dynamic-btn-text">MSP2 MOD</div>
+        </a>
+        <a href="arc-msp.html" class="dynamic-btn">
+          <div class="dynamic-btn-text">MSP2 ARC</div>
+        </a>
+      </div>
     </div>
 
     <div class="info" id="infoText">
@@ -75,7 +82,6 @@
           <button class="modal-close" onclick="closeModal('aboutModal')">&times;</button>
           <h2 style="margin:0 0 10px 0;" id="aboutTitle">About MSP2 MODS</h2>
           <div id="aboutText"></div>
-          <div id="dynamicButtonDescriptions"></div>
         </div>
       </div>
     </div>
@@ -103,9 +109,8 @@
     </div>
   </div>
 
-  <script src="scripts/data-manager.js"></script>
-   <script src="scripts/starfield.js"></script>
-   <script src="scripts/language.js"></script>
-   <script src="scripts/main.js"></script>
+  <script src="scripts/starfield.js"></script>
+  <script src="scripts/language.js"></script>
+  <script src="scripts/main.js"></script>
 </body>
 </html>
