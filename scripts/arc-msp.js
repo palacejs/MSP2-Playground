@@ -3,16 +3,15 @@ const PASSWORD_HASH = "f7dc02cde06759a946f4dd803f767ed7a061e60558870c724e833a90a
 const DB_NAME = "msp2ArcDB";
 const DB_STORE = "photos";
 
-// --------------------------- IndexedDB Functions (Sadece Fotoğraf Yönetimi için) ---------------------------
+// --------------------------- IndexedDB Functions ---------------------------
 function openDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, 3); // Updated version
+    const request = indexedDB.open(DB_NAME, 3);
     request.onupgradeneeded = function(e) {
       const db = e.target.result;
       if (!db.objectStoreNames.contains(DB_STORE)) {
         db.createObjectStore(DB_STORE, { keyPath: "id" });
       }
-      // Eski butonlar ve haberler için objectStore'lar kaldırıldı
     };
     request.onsuccess = function(e) {
       resolve(e.target.result);
@@ -90,7 +89,6 @@ function showAdminPanel() {
   document.getElementById('loginSection').style.display = 'none';
   document.getElementById('adminPanel').style.display = 'block';
   loadPhotoManager();
-  // Buton ve haber yönetimini kaldırdığımız için buradaki çağrılar silindi
 }
 
 function logout() {
@@ -102,7 +100,7 @@ function logout() {
 
 // --------------------------- Navigation ---------------------------
 function goBackHome() {
-  window.location.href = 'index.html?skipLoading=true';
+  window.location.href = 'index.html';
 }
 
 // --------------------------- Initialize ---------------------------
@@ -110,17 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeStarfield();
   loadGallery();
   checkAdminStatus();
-
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('skipLoading') && window.location.pathname.includes('index.html')) {
-    const loadingScreen = document.getElementById('loadingScreen');
-    const mainContent = document.getElementById('mainContent');
-    if (loadingScreen && mainContent) {
-      loadingScreen.style.display = 'none';
-      mainContent.style.display = 'block';
-      mainContent.classList.add('show');
-    }
-  }
 });
 
 function initializeStarfield() {
@@ -239,7 +226,7 @@ async function loadGallery() {
   const gallery = document.getElementById('gallery');
   gallery.innerHTML = '';
   if(photos.length===0){
-    gallery.innerHTML = '<div style="text-align:center;color:#ccc;grid-column:1/-1;"><h3>Henüz fotoğraf yüklenmemiş</h3><p>Yönetici panelinden fotoğraf yükleyebilirsiniz.</p></div>';
+    gallery.innerHTML = '<div style="text-align:center;color:#ccc;grid-column:1/-1;"><h3>Henüz fotoğraf yüklenmemiş</h3><p>Admin panelinden fotoğraf yükleyebilirsiniz.</p></div>';
     return;
   }
   photos.forEach(photo=>{
@@ -320,4 +307,3 @@ window.uploadPhotos = uploadPhotos;
 window.deleteSelected = deleteSelected;
 window.openLightbox = openLightbox;
 window.closeLightbox = closeLightbox;
-// Kaldırılan buton ve haber yönetimi fonksiyonları kaldırıldı
