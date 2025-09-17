@@ -26,28 +26,65 @@ canvas {
   z-index: 10;
 }
 
-/* Music Toggle Button */
-.music-toggle {
-  width: 35px;
-  height: 35px;
+/* Audio Controls Container */
+.audio-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Control Buttons */
+.control-btn {
+  width: 40px;
+  height: 40px;
   border: none;
-  border-radius: 50%;
-  background: rgba(0, 0, 30, 0.8);
+  border-radius: 12px;
+  background: rgba(10, 20, 60, 0.7);
   color: #9abfff;
   font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(150, 150, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(150, 150, 255, 0.2);
+  font-weight: 600;
+  padding: 8px;
+  position: relative;
+  overflow: hidden;
 }
 
-.music-toggle:hover {
-  background: rgba(60, 120, 200, 0.3);
-  transform: scale(1.1);
+.control-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(110, 255, 178, 0.2), transparent);
+  transition: left 0.6s;
 }
 
-.music-toggle.muted {
+.control-btn:hover {
+  background: rgba(60, 120, 200, 0.4);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 139, 255, 0.3), 0 0 20px rgba(110, 255, 178, 0.2);
+  border-color: rgba(110, 255, 178, 0.5);
+}
+
+.control-btn:hover::before {
+  left: 100%;
+}
+
+.control-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.control-btn.muted {
   color: #ff6b6b;
+  border-color: rgba(255, 107, 107, 0.3);
+}
+
+.control-btn.muted:hover {
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
 }
 
 .container {
@@ -55,24 +92,44 @@ canvas {
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  padding: 80px 20px 20px 20px; /* Added top padding for top controls */
+  padding: 80px 20px 20px 20px;
   box-sizing: border-box;
 }
 
 .back-btn {
   padding: 10px 20px;
-  background: rgba(10, 20, 60, 0.6);
-  border: 1px solid rgba(150,150,255,0.20);
-  border-radius: 8px;
+  background: rgba(10, 20, 60, 0.7);
+  border: 2px solid rgba(150,150,255,0.2);
+  border-radius: 12px;
   color: #9abfff;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.back-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(110, 255, 178, 0.2), transparent);
+  transition: left 0.6s;
 }
 
 .back-btn:hover {
-  background: rgba(60, 120, 200, 0.23);
+  background: rgba(60, 120, 200, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 139, 255, 0.3);
+  border-color: rgba(110, 255, 178, 0.5);
+}
+
+.back-btn:hover::before {
+  left: 100%;
 }
 
 /* BEYAZ NEON YAZI + MAVİ GLOW ARKA PLAN */
@@ -137,6 +194,7 @@ canvas {
   font-size: 16px;
   width: 250px;
   max-width: 100%;
+  transition: all 0.3s ease;
 }
 
 .login-form input:focus {
@@ -148,18 +206,36 @@ canvas {
 .login-form button, .logout-btn {
   padding: 12px 25px;
   border: none;
-  border-radius: 8px;
-  background: linear-gradient(90deg, #0ff, #09f);
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0ff, #09f);
   color: #000;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-form button::before, .logout-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
 }
 
 .login-form button:hover, .logout-btn:hover {
-  transform: scale(1.05);
-  background: linear-gradient(90deg, #09f, #0ff);
+  transform: translateY(-2px) scale(1.05);
+  background: linear-gradient(135deg, #09f, #0ff);
+  box-shadow: 0 8px 25px rgba(0, 255, 255, 0.4);
+}
+
+.login-form button:hover::before, .logout-btn:hover::before {
+  left: 100%;
 }
 
 .admin-panel {
@@ -173,7 +249,7 @@ canvas {
   width: 100%;
 }
 
-.upload-section, .delete-section { /* Removed button and news management classes */
+.upload-section, .delete-section {
   margin: 20px 0;
   padding: 20px;
   border: 1px solid rgba(150, 150, 255, 0.2);
@@ -181,7 +257,7 @@ canvas {
   background: rgba(10, 20, 60, 0.2);
 }
 
-.upload-section h3, .delete-section h3 { /* Removed button and news management h3 styles */
+.upload-section h3, .delete-section h3 {
   color: #6effb2;
   margin-bottom: 15px;
 }
@@ -196,20 +272,38 @@ canvas {
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(90deg, #0ff, #09f);
+  background: linear-gradient(135deg, #0ff, #09f);
   color: #000;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   margin: 10px 5px 0 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-section button::before, .delete-section button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
 }
 
 .upload-section button:hover, .delete-section button:hover {
-  transform: scale(1.05);
-  background: linear-gradient(90deg, #09f, #0ff);
+  transform: translateY(-2px) scale(1.05);
+  background: linear-gradient(135deg, #09f, #0ff);
+  box-shadow: 0 8px 25px rgba(0, 255, 255, 0.4);
 }
 
-/* Remaining styles for photo management, gallery, lightbox */
+.upload-section button:hover::before, .delete-section button:hover::before {
+  left: 100%;
+}
+
+/* Photo management and gallery styles */
 .photo-manager {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -227,6 +321,12 @@ canvas {
   max-height: 100px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.photo-item img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
 }
 
 .photo-item input[type="checkbox"] {
@@ -257,11 +357,14 @@ canvas {
   background: rgba(0, 0, 30, 0.3);
   border-radius: 12px;
   padding: 15px;
-  transition: transform 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(150, 150, 255, 0.1);
 }
 
 .photo-container:hover {
   transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+  border-color: rgba(0, 255, 255, 0.3);
 }
 
 .photo-container img {
@@ -269,7 +372,7 @@ canvas {
   max-height: 180px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
@@ -298,6 +401,7 @@ canvas {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  backdrop-filter: blur(5px);
 }
 
 .lightbox.show {
@@ -309,6 +413,18 @@ canvas {
   max-height: 90%;
   border-radius: 12px;
   box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+  animation: lightboxAppear 0.3s ease-out;
+}
+
+@keyframes lightboxAppear {
+  from { 
+    opacity: 0; 
+    transform: scale(0.8);
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1);
+  }
 }
 
 .lightbox .close {
@@ -320,10 +436,20 @@ canvas {
   cursor: pointer;
   font-weight: bold;
   z-index: 1001;
+  transition: all 0.3s ease;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .lightbox .close:hover {
   color: #0ff;
+  background: rgba(0, 255, 255, 0.2);
+  transform: rotate(90deg);
 }
 
 .lightbox p {
@@ -333,13 +459,184 @@ canvas {
   text-align: center;
 }
 
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  width: 100vw; 
+  height: 100vh;
+  background: rgba(0,0,30,0.45);
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+  backdrop-filter: blur(8px);
+}
+
+.modal-bg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: rgba(0,0,30,0.95);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(180,200,255,0.2);
+  padding: 25px 20px;
+  min-width: 290px;
+  max-width: 97vw;
+  color: #9abfff;
+  border: 2px solid rgba(150,150,255,0.3);
+  position: relative;
+  z-index: 100;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: scale(0.5) rotateX(20deg);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(20px);
+}
+
+.modal-overlay.show .modal {
+  transform: scale(1) rotateX(0deg);
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #9abfff;
+  background: none;
+  border: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  color: #6effb2;
+  background: rgba(110, 255, 178, 0.1);
+  transform: rotate(90deg);
+}
+
+/* Sound Settings Modal */
+.sound-settings {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.setting-group {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.setting-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: #6effb2;
+  font-weight: 600;
+}
+
+.volume-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 5px;
+  background: rgba(150, 150, 255, 0.2);
+  outline: none;
+  margin: 10px 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ff, #09f);
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.5);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ff, #09f);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 255, 255, 0.3);
+}
+
+.test-btn {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #6effb2, #4db89e);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.test-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
+}
+
+.test-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(110, 255, 178, 0.3);
+}
+
+.test-btn:hover::before {
+  left: 100%;
+}
+
 @media (max-width: 768px) {
   .top-controls {
     padding: 0 15px;
     top: 15px;
   }
 
-  .music-toggle {
+  .audio-controls {
+    gap: 8px;
+  }
+
+  .control-btn {
     width: 32px;
     height: 32px;
     font-size: 14px;
@@ -378,22 +675,10 @@ canvas {
     font-size: 1.5em;
   }
 
-  .button-item, .news-item { /* These classes might not be needed anymore, but keeping for safety if CSS is shared */
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .button-actions, .news-actions { /* These classes might not be needed anymore, but keeping for safety if CSS is shared */
-    flex-direction: row;
-    width: 100%;
-    justify-content: flex-end;
-  }
-
-  .form-group textarea { /* These styles might not be needed anymore, but keeping for safety if CSS is shared */
-    min-height: 80px;
-  }
-
-  .button-info p, .news-info p { /* These styles might not be needed anymore, but keeping for safety if CSS is shared */
-    font-size: 12px;
+  .modal {
+    padding: 20px 15px;
+    font-size: 13px;
+    min-width: 85vw;
+    max-width: 95vw;
   }
 }
