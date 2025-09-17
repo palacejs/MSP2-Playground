@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,45 +19,46 @@
   
   <div class="container">
     <div class="top-controls">
-      <button class="back-btn" onclick="goBackHome()">← Back to Home</button>
+      <button class="back-btn" onclick="goBackHome()">← Ana Sayfaya Dön</button>
       <!-- Music Control Button -->
       <button id="musicToggle" class="music-toggle">
         <span id="musicIcon">🔊</span>
       </button>
     </div>
-    <h1 class="title">MSP2 ARC Admin Panel</h1>
+    <h1 class="title">MSP2 ARC Yönetici Paneli</h1>
 
     <!-- Admin Login -->
     <div id="loginSection" class="login-section">
-      <h2>Admin Access</h2>
+      <h2>Yönetici Erişimi</h2>
       <div class="login-form">
-        <input type="password" id="adminPassword" placeholder="Enter admin password">
-        <button onclick="adminLogin()">Login</button>
+        <input type="password" id="adminPassword" placeholder="Yönetici şifresini girin">
+        <button onclick="adminLogin()">Giriş Yap</button>
       </div>
     </div>
 
     <!-- Admin Panel -->
     <div id="adminPanel" class="admin-panel" style="display: none;">
-      <h2>Control Panel</h2>
+      <h2>Kontrol Paneli</h2>
       
       <!-- Upload Section -->
       <div class="upload-section">
-        <h3>Upload Photos</h3>
+        <h3>Fotoğraf Yükle</h3>
         <input type="file" id="photoInput" multiple accept="image/*">
-        <button onclick="uploadPhotos()">Upload Selected Photos</button>
+        <button onclick="uploadPhotos()">Seçilen Fotoğrafları Yükle</button>
       </div>
       
       <!-- Delete Section -->
       <div class="delete-section">
-        <h3>Manage Photos</h3>
+        <h3>Fotoğrafları Yönet</h3>
         <div id="photoManager"></div>
-        <button onclick="deleteSelected()" id="deleteBtn" style="display: none;">Delete Selected</button>
+        <button onclick="deleteSelected()" id="deleteBtn" style="display: none;">Seçilenleri Sil</button>
       </div>
       
-      <button onclick="logout()" class="logout-btn">Logout</button>
+      <button onclick="logout()" class="logout-btn">Çıkış Yap</button>
     </div>
   </div>
   
+  <script type="module" src="src/lib/supabase.js"></script>
   <script src="scripts/starfield.js"></script>
   <script src="scripts/music-control.js"></script>
   <script src="scripts/arc-msp.js"></script>
