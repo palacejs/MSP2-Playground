@@ -73,6 +73,9 @@ async function adminLogin() {
     sessionStorage.setItem('msp2_admin', 'true');
     showAdminPanel();
     document.getElementById('adminPassword').value = '';
+    if (window.soundEffects) {
+      window.soundEffects.play('success');
+    }
   } else {
     alert('Yanlış şifre!');
   }
@@ -213,6 +216,9 @@ async function uploadPhotos() {
           await loadPhotoManager();
           fileInput.value='';
           alert(`${uploadedCount} fotoğraf başarıyla yüklendi!`);
+          if (window.soundEffects) {
+            window.soundEffects.play('success');
+          }
         }
       };
       reader.readAsDataURL(file);
@@ -274,6 +280,9 @@ async function deleteSelected() {
   await loadGallery();
   await loadPhotoManager();
   alert(`${checkboxes.length} fotoğraf silindi!`);
+  if (window.soundEffects) {
+    window.soundEffects.play('success');
+  }
 }
 
 // --------------------------- Lightbox ---------------------------
