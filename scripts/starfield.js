@@ -1,4 +1,4 @@
-// Starfield with slow color change and smooth pulsating stars
+// Starfield with fast pulsating stars and very slow color change
 function createStarfield(canvasId = 'starfield') {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
@@ -13,12 +13,12 @@ function createStarfield(canvasId = 'starfield') {
   window.addEventListener('resize', resizeCanvas);
 
   const stars = [];
-  const STAR_COUNT = 80;
+  const STAR_COUNT = 30;
   const MAX_DISTANCE = 120;
 
   // Global hue for all stars and lines
   let globalHue = 180; // Başlangıç açık mavi
-  const HUE_SPEED = 360 / (2 * 60 * 60); // 2 dakika = 2*60s*60fps ≈ 360/7200 per frame
+  const HUE_SPEED = 360 / (5 * 60 * 60); // 5 dakika = 5*60s*60fps ≈ 360/18000 per frame
 
   class Star {
     constructor() {
@@ -30,9 +30,11 @@ function createStarfield(canvasId = 'starfield') {
       this.minRadius = this.baseRadius * 0.6;   // Minimum boyut
       this.maxRadius = this.baseRadius * 1.4;   // Maksimum boyut
       this.radius = this.baseRadius;
-      this.radiusChange = 0.002 + Math.random() * 0.002; // Büyüme hızı
-      this.radiusDirection = 1; // 1 = büyü, -1 = küçül
-      this.alpha = Math.random() * 0.3 + 0.2; // Parlaklık
+
+      // Büyüme hızı artırıldı
+      this.radiusChange = 0.005 + Math.random() * 0.003; // Daha hızlı pulsasyon
+      this.radiusDirection = 1;
+      this.alpha = Math.random() * 0.3 + 0.2;
     }
 
     update() {
@@ -41,7 +43,7 @@ function createStarfield(canvasId = 'starfield') {
       if (this.x <= 0 || this.x >= canvas.width) this.vx *= -1;
       if (this.y <= 0 || this.y >= canvas.height) this.vy *= -1;
 
-      // Boyutu yavaşça değiştir
+      // Yıldız boyutunu hızlıca değiştir
       this.radius += this.radiusChange * this.radiusDirection;
       if (this.radius >= this.maxRadius || this.radius <= this.minRadius) this.radiusDirection *= -1;
     }
@@ -82,7 +84,7 @@ function createStarfield(canvasId = 'starfield') {
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Renk değişimi
+    // Renk değişimi çok yavaş (5 dakika)
     globalHue += HUE_SPEED;
     if (globalHue > 360) globalHue -= 360;
 
