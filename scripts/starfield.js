@@ -32,7 +32,7 @@ function createStarfield(canvasId = 'starfield') {
       this.radius = this.baseRadius;
 
       // Daha hızlı pulsasyon
-      this.radiusChange = 0.008 + Math.random() * 0.004; 
+      this.radiusChange = 0.02 + Math.random() * 0.01; // Çok daha hızlı pulsasyon
       this.radiusDirection = 1;
 
       // Parlaklık sabit
