@@ -1,6 +1,7 @@
 // Loading screen and main app initialization
 let musicIframe;
 let isMusicPlaying = true;
+let musicVolume = 0.5;
 
 // Turkish loading info messages
 const LOADING_INFO = [
@@ -63,14 +64,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 8000);
   }
 
-  // Check saved music state first
-  const musicMuted = localStorage.getItem('msp2_music_muted');
-  if (musicMuted === 'true') {
+  // Load saved settings
+  const savedMusicMuted = localStorage.getItem('msp2_music_muted');
+  const savedMusicVolume = localStorage.getItem('msp2_music_volume');
+  
+  if (savedMusicMuted === 'true') {
     isMusicPlaying = false;
     if (musicIcon) {
       musicIcon.textContent = '🔇';
       musicToggle.classList.add('muted');
     }
+  }
+  
+  if (savedMusicVolume) {
+    musicVolume = parseFloat(savedMusicVolume);
   }
 
   // Initialize background music
@@ -82,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             musicIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
             setTimeout(() => {
               musicIframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+              setMusicVolume(musicVolume);
             }, 2000);
           } else {
             musicIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
@@ -109,6 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         try {
           musicIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+          setTimeout(() => setMusicVolume(musicVolume), 500);
         } catch (e) {
           console.log('Music control not available');
         }
@@ -120,16 +129,108 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Sound effects toggle
+  const soundEffectsToggle = document.getElementById('soundEffectsToggle');
+  const soundEffectsIcon = document.getElementById('soundEffectsIcon');
+  
+  if (soundEffectsToggle) {
+    // Load saved state
+    const soundEffectsEnabled = window.soundEffects.isSoundEffectsEnabled();
+    if (!soundEffectsEnabled) {
+      soundEffectsIcon.textContent = '🔕';
+      soundEffectsToggle.classList.add('muted');
+    }
+
+    soundEffectsToggle.addEventListener('click', function() {
+      const currentState = window.soundEffects.isSoundEffectsEnabled();
+      const newState = !currentState;
+      
+      window.soundEffects.setSoundEffectsEnabled(newState);
+      
+      if (newState) {
+        soundEffectsIcon.textContent = '🔔';
+        soundEffectsToggle.classList.remove('muted');
+      } else {
+        soundEffectsIcon.textContent = '🔕';
+        soundEffectsToggle.classList.add('muted');
+      }
+    });
+  }
+
+  // Sound settings modal
+  const soundSettingsToggle = document.getElementById('soundSettingsToggle');
+  if (soundSettingsToggle) {
+    soundSettingsToggle.addEventListener('click', function() {
+      openModal('soundSettingsModal');
+      initSoundSettings();
+    });
+  }
+
   // Initialize existing functionality
   initializeModals();
+  initializeMSP2ModsButton();
 });
 
-// Modal functionality with animation
+function setMusicVolume(volume) {
+  if (musicIframe && isMusicPlaying) {
+    try {
+      const volumeLevel = Math.round(volume * 100);
+      musicIframe.contentWindow.postMessage(`{"event":"command","func":"setVolume","args":"${volumeLevel}"}`, '*');
+    } catch (e) {
+      console.log('Music volume control not available');
+    }
+  }
+}
+
+function initSoundSettings() {
+  const musicVolumeSlider = document.getElementById('musicVolume');
+  const effectsVolumeSlider = document.getElementById('effectsVolume');
+  const musicVolumeDisplay = document.getElementById('musicVolumeDisplay');
+  const effectsVolumeDisplay = document.getElementById('effectsVolumeDisplay');
+  const testSoundBtn = document.getElementById('testSoundBtn');
+
+  if (musicVolumeSlider) {
+    musicVolumeSlider.value = Math.round(musicVolume * 100);
+    musicVolumeDisplay.textContent = Math.round(musicVolume * 100) + '%';
+    
+    musicVolumeSlider.addEventListener('input', function() {
+      const volume = this.value / 100;
+      musicVolume = volume;
+      musicVolumeDisplay.textContent = this.value + '%';
+      localStorage.setItem('msp2_music_volume', volume.toString());
+      setMusicVolume(volume);
+    });
+  }
+
+  if (effectsVolumeSlider) {
+    const currentEffectsVolume = window.soundEffects.getEffectsVolume();
+    effectsVolumeSlider.value = Math.round(currentEffectsVolume * 100);
+    effectsVolumeDisplay.textContent = Math.round(currentEffectsVolume * 100) + '%';
+    
+    effectsVolumeSlider.addEventListener('input', function() {
+      const volume = this.value / 100;
+      window.soundEffects.setEffectsVolume(volume);
+      effectsVolumeDisplay.textContent = this.value + '%';
+    });
+  }
+
+  if (testSoundBtn) {
+    testSoundBtn.addEventListener('click', function() {
+      window.soundEffects.play('success');
+    });
+  }
+}
+
+// Modal functionality with enhanced animation
 function openModal(id) {
   const modal = document.getElementById(id);
   if (modal) {
     modal.style.display = 'flex';
-    modal.classList.add('show');
+    modal.style.visibility = 'visible';
+    // Trigger animation
+    requestAnimationFrame(() => {
+      modal.classList.add('show');
+    });
   }
 }
 
@@ -139,12 +240,16 @@ function closeModal(id) {
     modal.classList.remove('show');
     setTimeout(() => {
       modal.style.display = 'none';
-    }, 300);
+      modal.style.visibility = 'hidden';
+    }, 400);
   }
 }
 
 function initializeModals() {
-  document.getElementById('aboutBtn').onclick = () => openModal('aboutModal');
+  const aboutBtn = document.getElementById('aboutBtn');
+  if (aboutBtn) {
+    aboutBtn.onclick = () => openModal('aboutModal');
+  }
 
   // Close modals when clicking outside
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
@@ -157,7 +262,17 @@ function initializeModals() {
   });
 }
 
-// Global music control functions
+function initializeMSP2ModsButton() {
+  const msp2ModsBtn = document.getElementById('msp2ModsBtn');
+  if (msp2ModsBtn) {
+    msp2ModsBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      openModal('msp2ModsModal');
+    });
+  }
+}
+
+// Global functions
 window.toggleMusic = function() {
   if (document.getElementById('musicToggle')) {
     document.getElementById('musicToggle').click();
@@ -168,6 +283,5 @@ window.getMusicState = function() {
   return isMusicPlaying;
 };
 
-// Make functions global
 window.openModal = openModal;
 window.closeModal = closeModal;
