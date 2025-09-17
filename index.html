@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MSP2 Playground</title>
-  <link rel="stylesheet" href="src/index.css">
+  <link rel="stylesheet" href="styles/main.css">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1577065347252131"
+     crossorigin="anonymous"></script>
 </head>
 <body>
   <!-- Loading Screen -->
@@ -13,103 +17,88 @@
       <h1 class="loading-title">MSP2 Playground</h1>
       <div class="loading-spinner">
         <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
       </div>
-      <div id="loadingInfo" class="loading-info">Loading your ultimate modding destination...</div>
+      <div class="loading-info" id="loadingInfo">Loading...</div>
     </div>
+    <!-- Hidden YouTube iframe for background music -->
+    <iframe id="backgroundMusic" 
+            src="https://www.youtube.com/embed/aLV59GhhAYA?autoplay=1&loop=1&playlist=aLV59GhhAYA&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&mute=1" 
+            frameborder="0" 
+            allow="autoplay; encrypted-media" 
+            style="display: none;">
+    </iframe>
   </div>
 
-  <!-- Hidden YouTube iframe for background music -->
-  <iframe id="backgroundMusic" 
-          src="https://www.youtube.com/embed/aLV59GhhAYA?autoplay=1&loop=1&playlist=aLV59GhhAYA&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&mute=1" 
-          frameborder="0" 
-          allow="autoplay; encrypted-media" 
-          style="display: none;">
-  </iframe>
-
-  <!-- Main Content -->
+  <!-- Main Content (Initially Hidden) -->
   <div id="mainContent" class="main-content" style="display: none;">
     <canvas id="starfield"></canvas>
-    
-    <!-- Top Bar -->
+
     <div class="top-bar">
-      <div></div>
+      <button class="about-btn" id="aboutBtn">&#8505; <span id="aboutBtnTxt">About</span></button>
       <div class="top-bar-right">
-        <button id="aboutBtn" class="about-btn">
-          <span id="aboutBtnTxt">About</span>
-        </button>
-        <button id="langBtn" class="lang-btn">
-          <span id="langBtnTxt">Language</span>
-        </button>
-        <button id="newsBtn" class="news-btn">
-          <span id="newsBtnTxt">News</span>
-        </button>
+        <button class="news-btn" id="newsBtn">📰 <span id="newsBtnTxt">News</span></button>
+        <button class="lang-btn" id="langBtn">&#127760; <span id="langBtnTxt">Language</span></button>
+        <!-- Music Control Button moved here -->
         <button id="musicToggle" class="music-toggle">
           <span id="musicIcon">🔊</span>
         </button>
       </div>
     </div>
-
-    <!-- Main Overlay -->
-    <div class="overlay">
-      <h1>MSP2 Playground</h1>
-      <div id="subtextMain" class="subtext">
-        Now you can do everything comfortably with the improved tool.<br>
-        If nothing happens, install <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.
-      </div>
-      
-      <!-- Dynamic Buttons Grid -->
-      <div id="dynamicButtons" class="dynamic-buttons-grid">
-        <!-- Dynamic buttons will be loaded here -->
-      </div>
+    
+    <div class="overlay" id="mainOverlay">
+      <h1>MSP2 Glitch</h1>
+      <p class="subtext" id="subtextMain">
+        Now you can do everything comfortably with the improved tool.
+        If nothing happens, install
+        <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.
+      </p>
+      <!-- Dynamic buttons will be inserted here -->
+      <div id="dynamicButtons" class="dynamic-buttons-grid"></div>
     </div>
 
-    <!-- Info Bar -->
-    <div class="info">
-      <span id="infoText">Info: These mods will no longer receive software updates or bug fixes starting from 15.09.2025, but you can continue to use them.</span>
+    <div class="info" id="infoText">
+      Info: These mods will no longer receive software updates or bug fixes starting from 15.09.2025, but you can continue to use them.
     </div>
-  </div>
 
-  <!-- Language Modal -->
-  <div id="langModal" class="modal-overlay">
-    <div class="modal-bg">
-      <div class="modal">
-        <button class="modal-close" onclick="closeModal('langModal')">&times;</button>
-        <h3 id="langTitle">Select Language</h3>
-        <div id="langList" class="lang-list"></div>
-      </div>
+    <!-- Notification -->
+    <div class="notification" id="trollNotification">
+      <div class="notification-icon">ℹ️</div>
+      <div class="notification-text" id="trollNotificationText">MSP2 Troll lisans süresi doldu.</div>
     </div>
-  </div>
 
-  <!-- About Modal -->
-  <div id="aboutModal" class="modal-overlay">
-    <div class="modal-bg">
-      <div class="modal">
-        <button class="modal-close" onclick="closeModal('aboutModal')">&times;</button>
-        <h3 id="aboutTitle">About MSP2 MODS</h3>
-        <div id="aboutText">
-          <p>
-            MSP2 MODS is a platform that offers unique utility and customization tools ("mods") for MSP2. 
-            The site allows you to install various mods to enhance your MSP2 experience.
-          </p>
-          <p>
-            <b>How to use?</b> Click "Install" on any mod. If your browser doesn't respond, install <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> first.
-          </p>
-          <p>
-            <b>Note:</b> MSP2 MODS will not receive updates after 15.09.2025, but all mods will remain available for use.
-          </p>
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal-overlay" style="display:none;">
+      <div class="modal-bg">
+        <div class="modal">
+          <button class="modal-close" onclick="closeModal('aboutModal')">&times;</button>
+          <h2 style="margin:0 0 10px 0;" id="aboutTitle">About MSP2 MODS</h2>
+          <div id="aboutText"></div>
+          <div id="dynamicButtonDescriptions"></div>
         </div>
-        <div id="dynamicButtonDescriptions"></div>
       </div>
     </div>
-  </div>
 
-  <!-- News Modal -->
-  <div id="newsModal" class="modal-overlay">
-    <div class="modal-bg">
-      <div class="modal">
-        <button class="modal-close" onclick="closeModal('newsModal')">&times;</button>
-        <h3 id="newsTitle">News & Updates</h3>
-        <div id="newsList"></div>
+    <!-- News Modal -->
+    <div id="newsModal" class="modal-overlay" style="display:none;">
+      <div class="modal-bg">
+        <div class="modal">
+          <button class="modal-close" onclick="closeModal('newsModal')">&times;</button>
+          <h2 style="margin:0 0 12px 0;" id="newsTitle">News & Updates</h2>
+          <div id="newsList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Language Modal -->
+    <div id="langModal" class="modal-overlay" style="display:none;">
+      <div class="modal-bg">
+        <div class="modal">
+          <button class="modal-close" onclick="closeModal('langModal')">&times;</button>
+          <h2 style="margin:0 0 12px 0;" id="langTitle">Select Language</h2>
+          <div class="lang-list" id="langList"></div>
+        </div>
       </div>
     </div>
   </div>
