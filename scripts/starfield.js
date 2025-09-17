@@ -13,7 +13,7 @@ function createStarfield(canvasId = 'starfield') {
   window.addEventListener('resize', resizeCanvas);
 
   const stars = [];
-  const STAR_COUNT = 80;
+  const STAR_COUNT = 30;
   const MAX_DISTANCE = 120;
 
   // Global hue for all stars and lines
