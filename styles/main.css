@@ -55,16 +55,13 @@
 }
 
 .spinner-ring {
-  /* Sadece en küçük halkanın boyutunu ve rengini tutuyoruz */
   width: 20px;
   height: 20px;
   border: 3px solid transparent;
-  border-top: 3px solid #6effb2; /* Yeşil ton */
-  border-right: 3px solid #6effb2; /* Yeşil ton */
+  border-top: 3px solid #6effb2;
+  border-right: 3px solid #6effb2;
   border-radius: 50%;
   animation: spin 1.5s linear infinite;
-  position: absolute;
-  animation-delay: 0s; /* Tek halka olduğu için gecikmeye gerek yok */
 }
 
 @keyframes spin {
@@ -155,7 +152,7 @@ canvas {
   align-items: center;
 }
 
-.about-btn, .lang-btn, .news-btn {
+.about-btn {
   background: rgba(10, 20, 60, 0.6);
   border: 1px solid rgba(150,150,255,0.20);
   border-radius: 8px;
@@ -168,7 +165,7 @@ canvas {
   margin-top: 2px;
 }
 
-.about-btn:hover, .lang-btn:hover, .news-btn:hover {
+.about-btn:hover {
   background: rgba(60, 120, 200, 0.23);
 }
 
@@ -208,23 +205,23 @@ canvas {
   color: #c0d7ff;
 }
 
-/* Dynamic Buttons Grid - Fixed for mobile */
-.dynamic-buttons-grid {
+/* Static Buttons Grid */
+.static-buttons-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 sütun */
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   margin-top: 20px;
   width: 100%;
   min-height: 60px;
 }
 
-.dynamic-btn {
+.static-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 8px 8px; /* Daha küçük padding */
-  font-size: 13px; /* Daha küçük font */
+  padding: 12px 10px;
+  font-size: 14px;
   background: linear-gradient(to right, #6e9aff, #4db89e);
   color: white;
   border: none;
@@ -233,7 +230,7 @@ canvas {
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
-  min-height: 50px; /* Daha küçük min-height */
+  min-height: 60px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -241,74 +238,18 @@ canvas {
   hyphens: auto;
 }
 
-.dynamic-btn:hover {
+.static-btn:hover {
   background: linear-gradient(to right, #4db89e, #6e9aff);
   transform: scale(1.02);
   box-shadow: 0 0 15px rgba(0, 139, 255, 0.6);
 }
 
-.dynamic-btn-text {
-  font-size: 12px;
-  margin-bottom: 0; /* Sayım olmadığı için */
+.static-btn-text {
+  font-size: 14px;
   line-height: 1.2;
   word-break: break-word;
   overflow-wrap: break-word;
   max-width: 100%;
-}
-
-/* Countdown timer kaldırıldığı için ilgili stiller de kaldırılabilir. */
-/* .countdown-timer {
-  font-size: 10px;
-  color: #ffeb3b;
-  font-weight: 700;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 2px 6px;
-  border-radius: 10px;
-  margin-top: 4px;
-  animation: pulse 2s infinite;
-  white-space: nowrap;
-}
-
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.7; }
-  100% { opacity: 1; }
-} */
-
-.notification {
-  position: fixed;
-  top: -100px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 40, 0.95);
-  border: 1px solid rgba(150, 150, 255, 0.4);
-  border-radius: 12px;
-  padding: 15px 20px;
-  color: #9abfff;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 9999;
-  min-width: 300px;
-  max-width: 90vw;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  transition: all 0.5s ease;
-}
-
-.notification.show {
-  top: 80px;
-}
-
-.notification-icon {
-  font-size: 20px;
-  color: #6effb2;
-  font-weight: bold;
-}
-
-.notification-text {
-  font-size: 14px;
-  font-weight: 500;
 }
 
 @keyframes appear {
@@ -320,6 +261,43 @@ canvas {
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }
+}
+
+/* Warning Info Styles */
+.warning-info {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 12px 15px;
+  background: rgba(255, 69, 0, 0.15);
+  border-top: 2px solid #ff4500;
+  color: #ffcc00;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  backdrop-filter: blur(4px);
+  z-index: 3;
+  box-shadow: 0 -2px 10px rgba(255, 69, 0, 0.3);
+}
+
+.warning-icon {
+  font-size: 18px;
+  color: #ff4500;
+  font-weight: bold;
+  animation: pulse 2s infinite;
+}
+
+.warning-text {
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 /* Modal Styles with Animation */
@@ -388,121 +366,20 @@ canvas {
   color: #6effb2;
 }
 
-.lang-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 12px;
-  margin-top: 18px;
-  justify-content: center;
-}
-
-.lang-item {
-  display: flex;
-  align-items: center;
-  padding: 8px 13px;
-  border-radius: 7px;
-  background: rgba(10,20,60,0.22);
-  cursor: pointer;
-  font-size: 15px;
-  border: 1px solid rgba(150,150,255,0.18);
-  transition: background 0.2s;
-  user-select: none;
-  min-width: 120px;
-  gap: 7px;
-}
-
-.lang-item:hover {
-  background: rgba(120,220,180,0.18);
-}
-
-.lang-item.selected {
-  background: rgba(110,255,178,0.13);
-  color: #6effb2;
-  border-color: #6effb2;
-  font-weight: 700;
-}
-
-/* Info/Warning Bar */
-.info {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 8px 15px;
-  background: rgba(0, 0, 30, 0.8);
-  color: #9abfff;
-  text-align: center;
-  font-size: 13px;
-  border-top: 1px solid rgba(150, 150, 255, 0.3);
-  backdrop-filter: blur(4px);
-  z-index: 3;
-  display: flex; /* Flexbox ile ikon ve mesajı hizala */
-  align-items: center;
-  justify-content: center;
-  gap: 8px; /* İkon ile mesaj arasına boşluk */
-}
-
-.warning-icon {
-  font-size: 16px; /* İkon boyutu */
-  color: #FFD700; /* Dikkat çekici sarı renk */
-}
-
-.warning-message {
-  color: #FFD700; /* Mesajın rengi */
-  font-weight: 500; /* Kalınlık */
-}
-
-/* News Styles with word wrap - Haber yönetimini kaldırdığımız için bu stiller gereksiz hale gelebilir, ancak güvenli bir şekilde bırakıyorum. */
-.news-item {
-  background: rgba(10, 20, 60, 0.3);
-  border: 1px solid rgba(150, 150, 255, 0.2);
-  border-radius: 8px;
-  padding: 15px;
-  margin: 10px 0;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
-}
-
-.news-item h4 {
-  color: #6effb2;
-  margin: 0 0 8px 0;
-  font-size: 16px;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  line-height: 1.3;
-}
-
-.news-item p {
-  margin: 5px 0;
-  font-size: 14px;
-  line-height: 1.4;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
-}
-
-.news-date {
-  color: #40e0d0;
-  font-size: 12px;
-  font-style: italic;
-}
-
-/* Dynamic Button Descriptions - Hakkında modalında statik açıklamalar olduğu için bu stiller artık doğrudan HTML içinde. */
-/* #dynamicButtonDescriptions ul {
+#aboutText ul {
   text-align: left;
   margin: 15px 0;
 }
 
-#dynamicButtonDescriptions li {
+#aboutText li {
   margin: 8px 0;
   font-size: 14px;
   word-wrap: break-word;
   overflow-wrap: break-word;
   line-height: 1.3;
-} */
+}
 
-/* Mobile Responsive - ENHANCED */
+/* Mobile Responsive */
 @media (max-width: 768px) {
   .loading-title {
     font-size: 2rem;
@@ -515,33 +392,27 @@ canvas {
     margin: 0 auto;
   }
   
-  /* Fixed dynamic buttons for mobile */
-  .dynamic-buttons-grid {
-    grid-template-columns: 1fr; /* Mobilde tek sütun */
+  .static-buttons-grid {
+    grid-template-columns: 1fr;
     gap: 10px;
     width: 100%;
     margin-top: 20px;
   }
   
-  .dynamic-btn {
-    min-height: 55px; /* Mobilde biraz daha küçük */
-    padding: 10px 10px;
-    font-size: 13px;
+  .static-btn {
+    min-height: 60px;
+    padding: 12px 10px;
+    font-size: 14px;
     width: 100%;
     box-sizing: border-box;
   }
   
-  .dynamic-btn-text {
-    font-size: 13px;
+  .static-btn-text {
+    font-size: 14px;
     line-height: 1.2;
     word-break: break-word;
     overflow-wrap: break-word;
   }
-  
-  /* .countdown-timer kaldırıldığı için ilgili stiller de kaldırılabilir. */
-  /* .countdown-timer {
-    font-size: 10px;
-  } */
   
   .top-bar {
     height: 50px;
@@ -553,7 +424,7 @@ canvas {
     gap: 8px;
   }
   
-  .about-btn, .lang-btn, .news-btn {
+  .about-btn {
     font-size: 14px;
     padding: 6px 10px;
   }
@@ -574,15 +445,9 @@ canvas {
     margin: 0 auto;
   }
   
-  .info {
-    padding: 8px 10px;
+  .warning-info {
+    padding: 10px;
     font-size: 12px;
-  }
-  
-  .notification {
-    min-width: 280px;
-    font-size: 13px;
-    margin: 0 10px;
   }
 
   .loading-info {
@@ -590,28 +455,11 @@ canvas {
     padding: 0 20px;
   }
 
-  /* Enhanced news display for mobile - Haber yönetimini kaldırdığımız için bu stiller gereksiz hale gelebilir. */
-  .news-item {
-    padding: 12px;
-    margin: 8px 0;
-  }
-
-  .news-item h4 {
-    font-size: 15px;
-    margin-bottom: 6px;
-  }
-
-  .news-item p {
-    font-size: 13px;
-    line-height: 1.4;
-  }
-
-  /* #dynamicButtonDescriptions li kaldırıldığı için bu stiller gereksiz hale gelebilir. */
-  /* #dynamicButtonDescriptions li {
+  #aboutText li {
     font-size: 13px;
     line-height: 1.4;
     margin: 6px 0;
-  } */
+  }
 }
 
 /* Extra small screens */
@@ -621,13 +469,13 @@ canvas {
     max-width: 90vw;
   }
 
-  .dynamic-btn {
-    min-height: 50px;
+  .static-btn {
+    min-height: 55px;
     padding: 10px 8px;
   }
 
-  .dynamic-btn-text {
-    font-size: 12px;
+  .static-btn-text {
+    font-size: 13px;
   }
 
   .modal {
@@ -639,7 +487,7 @@ canvas {
     padding: 0 8px;
   }
 
-  .about-btn, .lang-btn, .news-btn {
+  .about-btn {
     font-size: 12px;
     padding: 5px 8px;
   }
