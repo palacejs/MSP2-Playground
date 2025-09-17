@@ -76,21 +76,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Loading info rotation with language support
+  // Loading info rotation
   let infoIndex = 0;
   let currentLangMessages = LOADING_INFO["en-US"];
 
-  // Get current language from localStorage or detect browser language
-  const savedLang = localStorage.getItem('msp2mods_lang');
-  if (savedLang && LOADING_INFO[savedLang]) {
-    currentLangMessages = LOADING_INFO[savedLang];
-  } else {
-    // Try browser language
-    const browserLang = navigator.language || navigator.userLanguage;
-    if (LOADING_INFO[browserLang]) {
-      currentLangMessages = LOADING_INFO[browserLang];
-    }
-  }
+  // Select random language for loading info
+  const languages = Object.keys(LOADING_INFO);
+  const randomLang = languages[Math.floor(Math.random() * languages.length)];
+  currentLangMessages = LOADING_INFO[randomLang];
 
   function updateLoadingInfo() {
     if (loadingInfo && currentLangMessages) {
@@ -154,63 +147,80 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeLanguageSystem();
 });
 
-// Supabase Button and News Loading
+// Dynamic Button Loading
+async function openButtonDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("msp2ArcDB", 3);
+    request.onupgradeneeded = function(e) {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains("buttons")) {
+        db.createObjectStore("buttons", { keyPath: "id" });
+      }
+      if (!db.objectStoreNames.contains("news")) {
+        db.createObjectStore("news", { keyPath: "id" });
+      }
+    };
+    request.onsuccess = function(e) {
+      resolve(e.target.result);
+    };
+    request.onerror = function(e) {
+      reject(e.target.error);
+    };
+  });
+}
+
 async function getActiveButtons() {
   try {
-    const { data, error } = await window.supabase
-      .from('buttons')
-      .select('*')
-      .eq('hidden', false)
-      .or('is_temporary.is.null,expiry_date.gte.' + new Date().toISOString());
-    
-    if (error) {
-      console.error('Error fetching buttons:', error);
-      return [];
-    }
-    
-    // Filter out expired temporary buttons
-    const activeButtons = data.filter(button => {
-      if (button.is_temporary && button.expiry_date) {
-        const now = new Date();
-        const expiryDate = new Date(button.expiry_date);
-        return expiryDate >= now;
-      }
-      return true;
+    const db = await openButtonDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction("buttons", "readonly");
+      const store = tx.objectStore("buttons");
+      const request = store.getAll();
+      request.onsuccess = () => {
+        const buttons = request.result.filter(button => {
+          if (button.hidden) return false;
+          if (button.isTemporary) {
+            const now = new Date();
+            const expiryDate = new Date(button.expiryDate);
+            return expiryDate >= now;
+          }
+          return true;
+        });
+        resolve(buttons);
+      };
+      request.onerror = (e) => reject(e.target.error);
     });
-    
-    return activeButtons;
   } catch (error) {
-    console.error('Error connecting to Supabase:', error);
+    console.log('Button DB not available yet');
     return [];
   }
 }
 
 async function getAllNews() {
   try {
-    const { data, error } = await window.supabase
-      .from('news')
-      .select('*')
-      .order('created_date', { ascending: false });
-    
-    if (error) {
-      console.error('Error fetching news:', error);
-      return [];
-    }
-    
-    return data;
+    const db = await openButtonDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction("news", "readonly");
+      const store = tx.objectStore("news");
+      const request = store.getAll();
+      request.onsuccess = () => {
+        resolve(request.result.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate)));
+      };
+      request.onerror = (e) => reject(e.target.error);
+    });
   } catch (error) {
-    console.error('Error connecting to Supabase:', error);
+    console.log('News DB not available yet');
     return [];
   }
 }
 
 function startCountdown(button, element) {
   const countdownTimer = element.querySelector('.countdown-timer');
-  if (!countdownTimer || !button.expiry_date) return;
+  if (!countdownTimer || !button.expiryDate) return;
   
   const interval = setInterval(() => {
     const now = new Date().getTime();
-    const expiryTime = new Date(button.expiry_date).getTime();
+    const expiryTime = new Date(button.expiryDate).getTime();
     const timeLeft = expiryTime - now;
     
     if (timeLeft <= 0) {
@@ -267,7 +277,7 @@ async function loadDynamicButtons() {
         textDiv.textContent = button.name;
         buttonElement.appendChild(textDiv);
         
-        if (button.is_temporary) {
+        if (button.isTemporary) {
           const countdownDiv = document.createElement('div');
           countdownDiv.className = 'countdown-timer';
           countdownDiv.textContent = 'Loading...';
@@ -346,7 +356,7 @@ async function loadNewsList() {
         newsElement.innerHTML = `
           <h4>${formattedTitle}</h4>
           <p>${formattedContent}</p>
-          <div class="news-date">${new Date(news.created_date).toLocaleDateString('tr-TR')} ${new Date(news.created_date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</div>
+          <div class="news-date">${new Date(news.createdDate).toLocaleDateString('tr-TR')} ${new Date(news.createdDate).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</div>
         `;
         container.appendChild(newsElement);
       });
@@ -405,9 +415,7 @@ function initializeLanguageSystem() {
   const savedLang = localStorage.getItem('msp2mods_lang');
   if (savedLang && window.TRANSLATIONS && window.TRANSLATIONS[savedLang]) {
     window.currentLang = savedLang;
-    if (window.applyCurrentLanguage) {
-      window.applyCurrentLanguage();
-    }
+    window.loadLanguage(savedLang);
   }
 
   if (window.renderLanguageList) {
