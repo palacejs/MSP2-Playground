@@ -173,7 +173,7 @@ canvas {
   width: 100%;
 }
 
-.upload-section, .delete-section {
+.upload-section, .delete-section { /* Removed button and news management classes */
   margin: 20px 0;
   padding: 20px;
   border: 1px solid rgba(150, 150, 255, 0.2);
@@ -181,7 +181,7 @@ canvas {
   background: rgba(10, 20, 60, 0.2);
 }
 
-.upload-section h3, .delete-section h3 {
+.upload-section h3, .delete-section h3 { /* Removed button and news management h3 styles */
   color: #6effb2;
   margin-bottom: 15px;
 }
@@ -209,6 +209,7 @@ canvas {
   background: linear-gradient(90deg, #09f, #0ff);
 }
 
+/* Remaining styles for photo management, gallery, lightbox */
 .photo-manager {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -375,5 +376,24 @@ canvas {
   .lightbox .close {
     right: 20px;
     font-size: 1.5em;
+  }
+
+  .button-item, .news-item { /* These classes might not be needed anymore, but keeping for safety if CSS is shared */
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .button-actions, .news-actions { /* These classes might not be needed anymore, but keeping for safety if CSS is shared */
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .form-group textarea { /* These styles might not be needed anymore, but keeping for safety if CSS is shared */
+    min-height: 80px;
+  }
+
+  .button-info p, .news-info p { /* These styles might not be needed anymore, but keeping for safety if CSS is shared */
+    font-size: 12px;
   }
 }
