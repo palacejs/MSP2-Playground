@@ -1,4 +1,4 @@
-// Starfield with slow color change and twinkling stars
+// Starfield with slow color change and smooth pulsating stars
 function createStarfield(canvasId = 'starfield') {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
@@ -13,11 +13,11 @@ function createStarfield(canvasId = 'starfield') {
   window.addEventListener('resize', resizeCanvas);
 
   const stars = [];
-  const STAR_COUNT = 30;
+  const STAR_COUNT = 80;
   const MAX_DISTANCE = 120;
 
   // Global hue for all stars and lines
-  let globalHue = 0;
+  let globalHue = 180; // Başlangıç açık mavi
   const HUE_SPEED = 360 / (2 * 60 * 60); // 2 dakika = 2*60s*60fps ≈ 360/7200 per frame
 
   class Star {
@@ -26,13 +26,13 @@ function createStarfield(canvasId = 'starfield') {
       this.y = Math.random() * canvas.height;
       this.vx = (Math.random() - 0.5) * 0.2;
       this.vy = (Math.random() - 0.5) * 0.2;
-      this.baseRadius = Math.random() * 1 + 1; // Temel boyut
+      this.baseRadius = Math.random() * 1 + 1; // Ortalama boyut
+      this.minRadius = this.baseRadius * 0.6;   // Minimum boyut
+      this.maxRadius = this.baseRadius * 1.4;   // Maksimum boyut
       this.radius = this.baseRadius;
-      this.alpha = Math.random() * 0.3 + 0.2; // Daha az parlak
-      this.alphaChange = 0.002 + Math.random() * 0.001; // Yanıp sönme hızı
-      this.radiusChange = 0.002 + Math.random() * 0.002; // Hafif büyüyüp küçülme
-      this.radiusDirection = 1; // Büyüme yönü
-      this.alphaDirection = 1; // Parlaklık yönü
+      this.radiusChange = 0.002 + Math.random() * 0.002; // Büyüme hızı
+      this.radiusDirection = 1; // 1 = büyü, -1 = küçül
+      this.alpha = Math.random() * 0.3 + 0.2; // Parlaklık
     }
 
     update() {
@@ -41,13 +41,9 @@ function createStarfield(canvasId = 'starfield') {
       if (this.x <= 0 || this.x >= canvas.width) this.vx *= -1;
       if (this.y <= 0 || this.y >= canvas.height) this.vy *= -1;
 
-      // Hafif yanıp sönme
-      this.alpha += this.alphaChange * this.alphaDirection;
-      if (this.alpha >= 0.4 || this.alpha <= 0.2) this.alphaDirection *= -1;
-
-      // Hafif büyüyüp küçülme
+      // Boyutu yavaşça değiştir
       this.radius += this.radiusChange * this.radiusDirection;
-      if (this.radius >= this.baseRadius + 0.5 || this.radius <= this.baseRadius - 0.3) this.radiusDirection *= -1;
+      if (this.radius >= this.maxRadius || this.radius <= this.minRadius) this.radiusDirection *= -1;
     }
 
     draw() {
@@ -86,7 +82,7 @@ function createStarfield(canvasId = 'starfield') {
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Update global hue
+    // Renk değişimi
     globalHue += HUE_SPEED;
     if (globalHue > 360) globalHue -= 360;
 
