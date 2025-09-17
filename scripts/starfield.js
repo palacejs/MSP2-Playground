@@ -1,4 +1,4 @@
-// Starfield with synchronized slow color change
+// Starfield with slow color change and twinkling stars
 function createStarfield(canvasId = 'starfield') {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
@@ -18,7 +18,7 @@ function createStarfield(canvasId = 'starfield') {
 
   // Global hue for all stars and lines
   let globalHue = 0;
-  const HUE_SPEED = 360 / (60 * 60); // 1 dakika = 60s * 60fps ≈ 360 / 3600 per frame
+  const HUE_SPEED = 360 / (2 * 60 * 60); // 2 dakika = 2*60s*60fps ≈ 360/7200 per frame
 
   class Star {
     constructor() {
@@ -26,9 +26,13 @@ function createStarfield(canvasId = 'starfield') {
       this.y = Math.random() * canvas.height;
       this.vx = (Math.random() - 0.5) * 0.2;
       this.vy = (Math.random() - 0.5) * 0.2;
-      this.radius = Math.random() * 1 + 1;
-      this.alpha = Math.random() * 0.5 + 0.5;
-      this.alphaChange = 0.003 + Math.random() * 0.00002;
+      this.baseRadius = Math.random() * 1 + 1; // Temel boyut
+      this.radius = this.baseRadius;
+      this.alpha = Math.random() * 0.3 + 0.2; // Daha az parlak
+      this.alphaChange = 0.002 + Math.random() * 0.001; // Yanıp sönme hızı
+      this.radiusChange = 0.002 + Math.random() * 0.002; // Hafif büyüyüp küçülme
+      this.radiusDirection = 1; // Büyüme yönü
+      this.alphaDirection = 1; // Parlaklık yönü
     }
 
     update() {
@@ -37,15 +41,20 @@ function createStarfield(canvasId = 'starfield') {
       if (this.x <= 0 || this.x >= canvas.width) this.vx *= -1;
       if (this.y <= 0 || this.y >= canvas.height) this.vy *= -1;
 
-      this.alpha += this.alphaChange;
-      if (this.alpha >= 0.5 || this.alpha <= 0.1) this.alphaChange *= -1;
+      // Hafif yanıp sönme
+      this.alpha += this.alphaChange * this.alphaDirection;
+      if (this.alpha >= 0.4 || this.alpha <= 0.2) this.alphaDirection *= -1;
+
+      // Hafif büyüyüp küçülme
+      this.radius += this.radiusChange * this.radiusDirection;
+      if (this.radius >= this.baseRadius + 0.5 || this.radius <= this.baseRadius - 0.3) this.radiusDirection *= -1;
     }
 
     draw() {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
       ctx.fillStyle = `hsla(${globalHue}, 100%, 50%, ${this.alpha})`;
-      ctx.shadowBlur = 10;
+      ctx.shadowBlur = 5;
       ctx.shadowColor = `hsla(${globalHue}, 100%, 50%, ${this.alpha})`;
       ctx.fill();
       ctx.shadowBlur = 0;
@@ -66,8 +75,8 @@ function createStarfield(canvasId = 'starfield') {
           ctx.beginPath();
           ctx.moveTo(stars[i].x, stars[i].y);
           ctx.lineTo(stars[j].x, stars[j].y);
-          ctx.strokeStyle = `hsla(${globalHue}, 100%, 50%, ${0.4 - (dist / MAX_DISTANCE) * 0.4})`;
-          ctx.lineWidth = 0.6;
+          ctx.strokeStyle = `hsla(${globalHue}, 100%, 50%, ${0.3 - (dist / MAX_DISTANCE) * 0.3})`;
+          ctx.lineWidth = 0.5;
           ctx.stroke();
         }
       }
