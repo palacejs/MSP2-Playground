@@ -433,7 +433,7 @@ function breakTextAtLimit(text, limit = 40) {
   return lines.join('<br>');
 }
 
-// Language functionality
+// Language functionality with page reload
 function loadLanguage(langKey) {
   currentLang = langKey;
   const trans = TRANSLATIONS[langKey];
@@ -471,13 +471,10 @@ function loadLanguage(langKey) {
     closeModal('langModal');
   }
 
-  // Reload dynamic button descriptions and news if they exist
-  if (window.loadDynamicButtonDescriptions) {
-    window.loadDynamicButtonDescriptions();
-  }
-  if (window.loadNewsList) {
-    window.loadNewsList();
-  }
+  // Reload the page after a short delay to ensure the selection is processed
+  setTimeout(() => {
+    window.location.reload();
+  }, 300);
 }
 
 function renderLanguageList() {
