@@ -20,7 +20,6 @@
       </div>
       <div class="loading-info" id="loadingInfo">Yükleniyor...</div>
     </div>
-    <!-- Hidden YouTube iframe for background music -->
     <iframe id="backgroundMusic" 
             src="https://www.youtube.com/embed/aLV59GhhAYA?autoplay=1&loop=1&playlist=aLV59GhhAYA&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&mute=1" 
             frameborder="0" 
@@ -36,7 +35,6 @@
     <div class="top-bar">
       <button class="about-btn" id="aboutBtn">&#8505; <span>Hakkında</span></button>
       <div class="top-bar-right">
-        <!-- Audio Controls -->
         <button id="soundSettingsToggle" class="control-btn" title="Ses Ayarları">
           <span>🎚️</span>
         </button>
@@ -56,7 +54,6 @@
         Eğer bir şey olmuyorsa, önce
         <a href="https://violentmonkey.github.io/get-it/" target="_blank" style="color:#6effb2;">Violentmonkey</a> kurun.
       </p>
-      <!-- Static buttons -->
       <div class="static-buttons-grid">
         <button class="static-btn" id="msp2ModsBtn">
           <div class="static-btn-text">MSP2 MODS</div>
@@ -99,29 +96,67 @@
       </div>
     </div>
 
-    <!-- MSP2 Mods Modal -->
-    <div id="msp2ModsModal" class="modal-overlay" style="display:none;">
-      <div class="modal-bg">
-        <div class="modal">
-          <button class="modal-close" onclick="closeModal('msp2ModsModal')">&times;</button>
-          <h2 style="margin:0 0 20px 0;">MSP2 MODS</h2>
-          <div class="mod-content">
-            <p>MSP2 için gelişmiş özellikler ve iyileştirmeler içeren mod paketini yükleyin.</p>
-            <div class="mod-features">
-              <h4 style="color: #6effb2; margin: 15px 0 10px 0;">Özellikler:</h4>
-              <ul>
-                <li>Gelişmiş kullanıcı arayüzü</li>
-                <li>Ek özellikler ve araçlar</li>
-                <li>Performans iyileştirmeleri</li>
-                <li>Özel modifikasyonlar</li>
-              </ul>
-            </div>
-            <div class="mod-install">
-              <a href="https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/MSP2.mood.user.js" class="install-btn" target="_blank">
-                <span>📦</span> MOD'U YÜKLE
-              </a>
-              <p class="install-note">Mod yüklemek için Violentmonkey eklentisine ihtiyacınız var.</p>
-            </div>
+<!-- MSP2 Mods Modal -->
+<div id="msp2ModsModal" class="modal-overlay" style="display:none;">
+  <div class="modal-bg">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('msp2ModsModal')">&times;</button>
+      <h2 style="margin:0 0 20px 0;">MSP2 MODS</h2>
+      <div class="mod-content">
+        <p>MSP2 için gelişmiş özellikler ve iyileştirmeler içeren mod paketini yükleyin.</p>
+
+        <!-- MOD Özellikleri -->
+        <div class="mod-features">
+          <h4 style="color: #6effb2; margin: 15px 0 10px 0;">Özellikler:</h4>
+          <ul>
+            <li>Gelişmiş kullanıcı arayüzü</li>
+            <li>Ek özellikler ve araçlar</li>
+            <li>Performans iyileştirmeleri</li>
+            <li>Özel modifikasyonlar</li>
+          </ul>
+        </div>
+
+        <!-- MOD'U YÜKLE Butonu -->
+        <div class="mod-install" style="margin-top: 20px;">
+          <a href="https://raw.githubusercontent.com/lombard001/soft/refs/heads/main/MSP2.mood.user.js" class="install-btn" target="_blank">
+            <span>📦</span> MOD'U YÜKLE
+          </a>
+        </div>
+
+        <!-- MSP2 Troll Başlığı ve Özellikleri -->
+        <div class="mod-features" style="margin-top: 30px;">
+          <h4 style="color: #6effb2; margin: 15px 0 10px 0;">MSP2 Troll:</h4>
+          <ul>
+            <li>🎯 <strong>Takip Et:</strong> Seçili kullanıcıların hareketlerini kopyala</li>
+            <li>💬 <strong>Mesaj Taklit:</strong> Seçili kullanıcıların mesajlarını kopyala</li>
+            <li>🔄 <strong>Otomatik Yakalama:</strong> Yeni kullanıcıları otomatik yakala</li>
+            <li>🗑️ <strong>Kullanıcıları Temizle:</strong> Tüm yakalanan kullanıcıları kaldır</li>
+          </ul>
+
+          <!-- MSP2 Troll'ü YÜKLE Butonu (Yönlendirme) -->
+          <div class="mod-install" style="margin-top: 10px;">
+            <a href="https://cdn.jsdelivr.net/gh/lombard001/soft@refs/heads/main/msp2.troll.js" 
+               target="_blank" 
+               class="install-btn">
+               <span>🎭</span> MSP2 Troll'ü YÜKLE
+            </a>
+            <p class="install-note">Mod yüklemek için Violentmonkey eklentisine ihtiyacınız var.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Modal kapatma fonksiyonu
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+</script>
+
+
           </div>
         </div>
       </div>
@@ -156,5 +191,12 @@
   <script src="scripts/starfield.js"></script>
   <script src="scripts/sound-effects.js"></script>
   <script src="scripts/main.js"></script>
+
+  <script>
+  // Modal kapatma fonksiyonu
+  function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+  }
+  </script>
 </body>
 </html>
