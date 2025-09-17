@@ -1,4 +1,4 @@
-// Starfield animation
+// Starfield animation with dynamic colors
 function createStarfield(canvasId = 'starfield') {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
@@ -26,6 +26,8 @@ function createStarfield(canvasId = 'starfield') {
       this.radius = Math.random() * 1 + 1;
       this.alpha = Math.random() * 0.5 + 0.5;
       this.alphaChange = 0.003 + Math.random() * 0.00002;
+      this.hue = Math.random() * 360; // Başlangıç rengi
+      this.hueSpeed = 0.1 + Math.random() * 0.1; // Renk değişim hızı
     }
     
     update() {
@@ -35,14 +37,17 @@ function createStarfield(canvasId = 'starfield') {
       if (this.y <= 0 || this.y >= canvas.height) this.vy *= -1;
       this.alpha += this.alphaChange;
       if (this.alpha >= 0.5 || this.alpha <= 0.1) this.alphaChange *= -1;
+      
+      this.hue += this.hueSpeed; // Renk sürekli değişiyor
+      if(this.hue > 360) this.hue -= 360;
     }
     
     draw() {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(0, 0, 139, ${this.alpha})`;
+      ctx.fillStyle = `hsla(${this.hue}, 100%, 50%, ${this.alpha})`;
       ctx.shadowBlur = 10;
-      ctx.shadowColor = `rgba(0, 0, 139, ${this.alpha})`;
+      ctx.shadowColor = `hsla(${this.hue}, 100%, 50%, ${this.alpha})`;
       ctx.fill();
       ctx.shadowBlur = 0;
     }
@@ -68,7 +73,9 @@ function createStarfield(canvasId = 'starfield') {
           ctx.beginPath();
           ctx.moveTo(stars[i].x, stars[i].y);
           ctx.lineTo(stars[j].x, stars[j].y);
-          ctx.strokeStyle = `rgba(0, 0, 139, ${conn.alpha})`;
+          // Çizgi rengi yıldızlardan ortalama hue alınarak ayarlanıyor
+          const avgHue = (stars[i].hue + stars[j].hue) / 2;
+          ctx.strokeStyle = `hsla(${avgHue}, 100%, 50%, ${conn.alpha})`;
           ctx.lineWidth = 0.6;
           ctx.stroke();
         }
@@ -89,7 +96,7 @@ function createStarfield(canvasId = 'starfield') {
   animate();
 }
 
-// Initialize starfield when DOM is loaded
+// Initialize starfield
 document.addEventListener('DOMContentLoaded', function() {
   createStarfield();
 });
