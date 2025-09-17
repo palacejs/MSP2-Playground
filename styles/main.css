@@ -263,13 +263,13 @@ canvas {
   }
 }
 
-/* Warning Info Styles */
+/* Warning Info Styles - Orta hizalı */
 .warning-info {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 12px 15px;
+  bottom: 20px;               /* Sayfa altından biraz boşluk */
+  left: 50%;                  /* Yatayda ortalamak için */
+  transform: translateX(-50%); /* Yarı genişliği sola kaydırarak tam ortala */
+  padding: 12px 20px;
   background: rgba(255, 69, 0, 0.15);
   border-top: 2px solid #ff4500;
   color: #ffcc00;
@@ -279,8 +279,12 @@ canvas {
   font-size: 13px;
   backdrop-filter: blur(4px);
   z-index: 3;
-  box-shadow: 0 -2px 10px rgba(255, 69, 0, 0.3);
+  box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+  max-width: 600px;           /* İsteğe bağlı: mesaj kutusu genişliği */
+  text-align: center;
+  border-radius: 8px;
 }
+
 
 .warning-icon {
   font-size: 18px;
