@@ -69,31 +69,59 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Music Toggle Button - Now in top bar */
-.music-toggle {
+/* Control Buttons */
+.control-btn {
   width: 40px;
   height: 40px;
   border: none;
-  border-radius: 8px;
-  background: rgba(10, 20, 60, 0.6);
+  border-radius: 12px;
+  background: rgba(10, 20, 60, 0.7);
   color: #9abfff;
-  font-size: 13px;
+  font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(150, 150, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(150, 150, 255, 0.2);
   margin-left: 10px;
   font-weight: 600;
   padding: 8px;
+  position: relative;
+  overflow: hidden;
 }
 
-.music-toggle:hover {
-  background: rgba(60, 120, 200, 0.3);
-  transform: scale(1.1);
+.control-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(110, 255, 178, 0.2), transparent);
+  transition: left 0.6s;
 }
 
-.music-toggle.muted {
+.control-btn:hover {
+  background: rgba(60, 120, 200, 0.4);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 139, 255, 0.3), 0 0 20px rgba(110, 255, 178, 0.2);
+  border-color: rgba(110, 255, 178, 0.5);
+}
+
+.control-btn:hover::before {
+  left: 100%;
+}
+
+.control-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.control-btn.muted {
   color: #ff6b6b;
+  border-color: rgba(255, 107, 107, 0.3);
+}
+
+.control-btn.muted:hover {
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
 }
 
 /* Main Content Styles */
@@ -153,20 +181,40 @@ canvas {
 }
 
 .about-btn {
-  background: rgba(10, 20, 60, 0.6);
-  border: 1px solid rgba(150,150,255,0.20);
-  border-radius: 8px;
+  background: rgba(10, 20, 60, 0.7);
+  border: 2px solid rgba(150,150,255,0.2);
+  border-radius: 12px;
   color: #9abfff;
   font-weight: 600;
   font-size: 16px;
   padding: 8px 14px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   margin-top: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(110, 255, 178, 0.2), transparent);
+  transition: left 0.6s;
 }
 
 .about-btn:hover {
-  background: rgba(60, 120, 200, 0.23);
+  background: rgba(60, 120, 200, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 139, 255, 0.3);
+  border-color: rgba(110, 255, 178, 0.5);
+}
+
+.about-btn:hover::before {
+  left: 100%;
 }
 
 .overlay {
@@ -222,26 +270,65 @@ canvas {
   justify-content: center;
   padding: 0px 0px;
   font-size: 14px;
-  background: linear-gradient(to right, #6e9aff, #4db89e);
+  background: linear-gradient(135deg, #6e9aff 0%, #4db89e 100%);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   text-decoration: none;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 60px;
   text-align: center;
   position: relative;
   overflow: hidden;
   word-wrap: break-word;
   hyphens: auto;
+  box-shadow: 0 4px 15px rgba(0, 139, 255, 0.2);
+}
+
+.static-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.static-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: all 0.6s ease;
+  border-radius: 50%;
 }
 
 .static-btn:hover {
-  background: linear-gradient(to right, #4db89e, #6e9aff);
-  transform: scale(1.02);
-  box-shadow: 0 0 15px rgba(0, 139, 255, 0.6);
+  background: linear-gradient(135deg, #4db89e 0%, #6e9aff 100%);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 35px rgba(0, 139, 255, 0.4), 0 0 30px rgba(110, 255, 178, 0.3);
+}
+
+.static-btn:hover::before {
+  opacity: 1;
+}
+
+.static-btn:hover::after {
+  width: 120%;
+  height: 120%;
+}
+
+.static-btn:active {
+  transform: translateY(-1px) scale(0.98);
 }
 
 .static-btn-text {
@@ -250,6 +337,8 @@ canvas {
   word-break: break-word;
   overflow-wrap: break-word;
   max-width: 100%;
+  z-index: 1;
+  position: relative;
 }
 
 @keyframes appear {
@@ -263,12 +352,12 @@ canvas {
   }
 }
 
-/* Warning Info Styles - Orta hizalı */
+/* Warning Info Styles */
 .warning-info {
   position: fixed;
-  bottom: 20px;               /* Sayfa altından biraz boşluk */
-  left: 50%;                  /* Yatayda ortalamak için */
-  transform: translateX(-50%); /* Yarı genişliği sola kaydırarak tam ortala */
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   padding: 12px 20px;
   background: rgba(255, 69, 0, 0.15);
   border-top: 2px solid #ff4500;
@@ -280,11 +369,10 @@ canvas {
   backdrop-filter: blur(4px);
   z-index: 3;
   box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
-  max-width: 600px;           /* İsteğe bağlı: mesaj kutusu genişliği */
+  max-width: 600px;
   text-align: center;
   border-radius: 8px;
 }
-
 
 .warning-icon {
   font-size: 18px;
@@ -304,7 +392,7 @@ canvas {
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* Modal Styles with Animation */
+/* Modal Styles with Enhanced Animation */
 .modal-overlay {
   position: fixed;
   top: 0; 
@@ -318,11 +406,14 @@ canvas {
   justify-content: center;
   backdrop-filter: blur(2px);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .modal-overlay.show {
   opacity: 1;
+  visibility: visible;
+  backdrop-filter: blur(8px);
 }
 
 .modal-bg {
@@ -334,40 +425,171 @@ canvas {
 }
 
 .modal {
-  background: rgba(0,0,30,0.97);
-  border-radius: 14px;
-  box-shadow: 0 0 12px rgba(180,200,255,0.15);
+  background: rgba(0,0,30,0.95);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(180,200,255,0.2);
   padding: 25px 20px;
   min-width: 290px;
   max-width: 97vw;
   color: #9abfff;
-  border: 1px solid rgba(150,150,255,0.35);
+  border: 2px solid rgba(150,150,255,0.3);
   position: relative;
   z-index: 100;
   max-height: 90vh;
   overflow-y: auto;
-  transform: scale(0.7);
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: scale(0.5) rotateX(20deg);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(20px);
 }
 
 .modal-overlay.show .modal {
-  transform: scale(1);
+  transform: scale(1) rotateX(0deg);
 }
 
 .modal-close {
   position: absolute;
-  top: 10px;
-  right: 14px;
-  font-size: 22px;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
   cursor: pointer;
   color: #9abfff;
   background: none;
   border: none;
   font-weight: bold;
+  transition: all 0.3s ease;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-close:hover {
   color: #6effb2;
+  background: rgba(110, 255, 178, 0.1);
+  transform: rotate(90deg);
+}
+
+/* MSP2 Mods Modal Specific Styles */
+.mod-content {
+  text-align: left;
+}
+
+.mod-features ul {
+  text-align: left;
+  margin: 15px 0;
+  padding-left: 20px;
+}
+
+.mod-features li {
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.mod-install {
+  text-align: center;
+  margin: 25px 0 15px 0;
+}
+
+.install-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 25px;
+  background: linear-gradient(135deg, #0ff 0%, #09f 100%);
+  color: #000;
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
+}
+
+.install-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: linear-gradient(135deg, #09f 0%, #0ff 100%);
+  box-shadow: 0 8px 30px rgba(0, 255, 255, 0.5);
+}
+
+.install-note {
+  font-size: 12px;
+  color: #ccc;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* Sound Settings Modal */
+.sound-settings {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.setting-group {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.setting-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: #6effb2;
+  font-weight: 600;
+}
+
+.volume-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 5px;
+  background: rgba(150, 150, 255, 0.2);
+  outline: none;
+  margin: 10px 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ff, #09f);
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.5);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ff, #09f);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 255, 255, 0.3);
+}
+
+.test-btn {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #6effb2, #4db89e);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.test-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(110, 255, 178, 0.3);
 }
 
 #aboutText ul {
@@ -433,7 +655,7 @@ canvas {
     padding: 6px 10px;
   }
   
-  .music-toggle {
+  .control-btn {
     width: 32px;
     height: 32px;
     font-size: 14px;
@@ -496,7 +718,7 @@ canvas {
     padding: 5px 8px;
   }
 
-  .music-toggle {
+  .control-btn {
     width: 28px;
     height: 28px;
     font-size: 12px;
